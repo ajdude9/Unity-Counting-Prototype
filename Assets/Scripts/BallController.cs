@@ -16,19 +16,23 @@ public class BallForward : MonoBehaviour
         mousePos.z = Camera.main.nearClipPlane + 1;
         worldPos = Camera.main.ScreenToWorldPoint(mousePos);
 
-        transform.position = worldPos;
-        ballRb.AddRelativeForce(Vector3.left * 15, ForceMode.Impulse);
-        ballRb.AddRelativeForce(Vector3.up * worldPos.y, ForceMode.Impulse);
+        transform.position = new Vector3(15.6f, 3.2f, -0.22f);
+        ballRb.transform.LookAt(worldPos);
+        ballRb.AddRelativeForce(ballRb.transform.forward * 12, ForceMode.Impulse);
+        ballRb.AddRelativeForce(Vector3.up * (worldPos.y / 2) , ForceMode.Impulse);
+        StartCoroutine(tilDeath());
     }
 
     // Update is called once per frame
     void Update()
     {
-        moveTest();
-    }
-
-    void moveTest()
-    {
         
     }
+
+    IEnumerator tilDeath()
+    {
+        yield return new WaitForSeconds(10);
+        Destroy(gameObject);
+    }
+    
 }
