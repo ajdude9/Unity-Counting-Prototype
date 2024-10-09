@@ -148,3 +148,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldPos: {x: 0, y: 0, z: 0}
+  torque: 10
