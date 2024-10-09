@@ -8,6 +8,7 @@ public class BallForward : MonoBehaviour
     private Rigidbody ballRb;
     private Vector3 mousePos;
     public Vector3 worldPos;
+    public float torque = 50;
     // Start is called before the first frame update
     void Start()
     {                
@@ -20,6 +21,7 @@ public class BallForward : MonoBehaviour
         ballRb.transform.LookAt(worldPos);
         ballRb.AddRelativeForce(ballRb.transform.forward * 12, ForceMode.Impulse);
         ballRb.AddRelativeForce(Vector3.up * (worldPos.y / 2) , ForceMode.Impulse);
+        ballRb.AddTorque(RandomTorque(), RandomTorque(), RandomTorque(), ForceMode.Impulse);
         StartCoroutine(tilDeath());
     }
 
@@ -33,6 +35,11 @@ public class BallForward : MonoBehaviour
     {
         yield return new WaitForSeconds(10);
         Destroy(gameObject);
+    }
+
+    float RandomTorque()
+    {
+        return Random.Range(-torque, torque);
     }
     
 }
