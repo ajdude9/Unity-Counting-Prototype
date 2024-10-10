@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Counter : MonoBehaviour
 {
@@ -15,6 +14,6 @@ public class Counter : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        counterController.addCounter(1);
+        counterController.addCounter(1, "total");
     }
 }

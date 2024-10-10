@@ -25,10 +25,10 @@ public class LaunchController : MonoBehaviour
     void launchHandler()
     {
 
-        if (Input.GetKeyDown(KeyCode.Space) && counterController.getCounter() > 0)
+        if (Input.GetKeyDown(KeyCode.Space) && counterController.getCounter("loaded") > 0)
         {            
             Instantiate(projectilePrefab, transform.position, projectilePrefab.transform.rotation);            
-            counterController.minusCounter(1);
+            counterController.minusCounter(1, "loaded");
         }
     }
 }
