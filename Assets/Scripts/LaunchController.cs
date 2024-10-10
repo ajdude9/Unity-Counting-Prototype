@@ -7,13 +7,13 @@ public class LaunchController : MonoBehaviour
 {
 
     public GameObject projectilePrefab;
-    private CounterController counterController;
+    private CounterController gameManager;
     
 
     // Start is called before the first frame update
     void Start()
     {
-        counterController = GameObject.Find("Counter Observer").GetComponent<CounterController>();
+        gameManager = GameObject.Find("Game Manager").GetComponent<CounterController>();
     }
 
     // Update is called once per frame
@@ -26,26 +26,24 @@ public class LaunchController : MonoBehaviour
     void launchHandler()
     {
 
-        if(Input.GetKeyDown(KeyCode.Space) && counterController.getCounter("loaded") > 0 && !counterController.reloadingStatus)
+        if(Input.GetKeyDown(KeyCode.Space))
         {            
-            Instantiate(projectilePrefab, transform.position, projectilePrefab.transform.rotation);            
-            counterController.minusCounter(1, "loaded");
+            InvokeRepeating("fire", 0f, gameManager.fireRate);
         }
-
-        if(Input.GetKeyDown(KeyCode.Space) && counterController.enableCheats)
+        else if(Input.GetKeyUp(KeyCode.Space)) 
         {
-            InvokeRepeating("autoFire", 0.1f, 0.1f);
-        }
-        else if (Input.GetKeyUp (KeyCode.Space)) {
-            CancelInvoke ("autoFire");
+            CancelInvoke("fire");
         }
 
     }
 
-    void autoFire()
+    void fire()
     {
-        Instantiate(projectilePrefab, transform.position, projectilePrefab.transform.rotation);            
-        counterController.minusCounter(1, "loaded");
+        if(gameManager.getCounter("loaded") > 0 && gameManager.getCounter("loaded") > 0 && !gameManager.reloadingStatus)
+        {
+            Instantiate(projectilePrefab, transform.position, projectilePrefab.transform.rotation);            
+            gameManager.minusCounter(1, "loaded");
+        }
     }
    
 }

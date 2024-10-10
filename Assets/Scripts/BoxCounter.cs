@@ -5,15 +5,15 @@ using UnityEngine;
 
 public class Counter : MonoBehaviour
 {
-    private CounterController counterController;
+    private CounterController gameManager;
 
     private void Start()
     {
-        counterController = GameObject.Find("Counter Observer").GetComponent<CounterController>();
+        gameManager = GameObject.Find("Game Manager").GetComponent<CounterController>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        counterController.addCounter(1, "total");
+        gameManager.addCounter(1, "total");
     }
 }
