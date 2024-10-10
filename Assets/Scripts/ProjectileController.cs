@@ -71,12 +71,12 @@ public class BallForward : MonoBehaviour
         if(mousePosition.x < 1260)
         {
             float difference = 1260 - mousePosition.x;
-            return 1260 + difference;
+            return 1260 + (difference - difference / 2);
         }
         else
         {
             float difference = mousePosition.x - 1260;
-            return 1260 + difference;
+            return 1260 + (difference - difference / 2);
         }
     }
 }

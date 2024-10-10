@@ -6,8 +6,7 @@ public class BoxMovement : MonoBehaviour
 {
 
 
-    private Vector3 leftLocation = new Vector3(0, 0, -16.5f);
-    private Vector3 rightLocation = new Vector3(0, 0, -16.5f);
+    private Vector3 targetLocation = new Vector3(0, 0, -16.5f);    
     public GameObject boxObject;
     public bool direction = true;
     // Start is called before the first frame update
@@ -24,25 +23,15 @@ public class BoxMovement : MonoBehaviour
 
     public void moveBox()
     {
-        int speed = 5;
-        var step = speed * Time.deltaTime;
-        if(direction)
+        float speed = 2.5f;
+        var step = speed * Time.deltaTime;        
+        transform.position = Vector3.MoveTowards(boxObject.transform.position, targetLocation, step);
+        
+        if(boxObject.transform.position == targetLocation)
         {
-            transform.position = Vector3.MoveTowards(boxObject.transform.position, leftLocation, step);
-        }
-        else
-        {
-            transform.position = Vector3.MoveTowards(boxObject.transform.position, rightLocation, step);
-        }
-
-        if(boxObject.transform.position.z <= -16.5)
-        {
-            direction = false;
-        }
-        if(boxObject.transform.position.z >= 16.5)
-        {
-            direction = true;
-        }
+            Debug.Log("Hit wall.");
+            targetLocation.z = -targetLocation.z;
+        }        
     }
    
 }

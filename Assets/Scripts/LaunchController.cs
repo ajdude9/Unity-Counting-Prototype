@@ -19,16 +19,33 @@ public class LaunchController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         launchHandler();
     }
 
     void launchHandler()
     {
 
-        if (Input.GetKeyDown(KeyCode.Space) && counterController.getCounter("loaded") > 0 && !counterController.reloadingStatus)
+        if(Input.GetKeyDown(KeyCode.Space) && counterController.getCounter("loaded") > 0 && !counterController.reloadingStatus)
         {            
             Instantiate(projectilePrefab, transform.position, projectilePrefab.transform.rotation);            
             counterController.minusCounter(1, "loaded");
         }
+
+        if(Input.GetKeyDown(KeyCode.Space) && counterController.enableCheats)
+        {
+            InvokeRepeating("autoFire", 0.1f, 0.1f);
+        }
+        else if (Input.GetKeyUp (KeyCode.Space)) {
+            CancelInvoke ("autoFire");
+        }
+
     }
+
+    void autoFire()
+    {
+        Instantiate(projectilePrefab, transform.position, projectilePrefab.transform.rotation);            
+        counterController.minusCounter(1, "loaded");
+    }
+   
 }

@@ -15,6 +15,7 @@ public class CounterController : MonoBehaviour
     private float reloadSpeed;//How long it takes to reload one projectile
     public String projType;//The name of the projectiles being fired
     public bool reloadingStatus = false;//Whether or not the player is currently 'reloading'
+    public bool enableCheats = false;
     // Start is called before the first frame update
     void Start()
     {        
@@ -27,12 +28,20 @@ public class CounterController : MonoBehaviour
     }
 
     // Update is called once per frame
-    /**
+    
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.BackQuote))
+        {
+            infiniteAmmoCheat();
+        }
     }
-    */
+    public void refreshCounter()
+    {
+        counterText.text = "Available " + projType + ": " + counterTotal;
+        loadedText.text = "Loaded " + projType + ": " + loadedTotal;
+    }
+
     public int getCounter(String type)
     {
         int returnAmount = 0;
@@ -95,7 +104,7 @@ public class CounterController : MonoBehaviour
 
     public void reload()
     {        
-        Debug.Log("Reload function executing");
+        
         if(!reloadingStatus)
         {
             reloadingStatus = true;
@@ -104,7 +113,7 @@ public class CounterController : MonoBehaviour
             {
                 amountToReload = getCounter("total");//Instead reload however many are left
             }
-            Debug.Log("Attempting to reload " + amountToReload + " projectiles.");
+            
             StartCoroutine(reloadTimer(amountToReload));
         }
     }
@@ -112,18 +121,27 @@ public class CounterController : MonoBehaviour
     
     private IEnumerator reloadTimer(int reloadAmount)
     {
-        Debug.Log("reloadTimer function executing");
+        
         for(int i = 0; i < reloadAmount; i++)
         {
-            Debug.Log("Beginning reload.");
+            
             yield return new WaitForSeconds(reloadSpeed);
             addCounter(1, "loaded");
             minusCounter(1, "total");     
-            Debug.Log("Reload executed.");
+            
         }
         reloadingStatus = false;
-        Debug.Log("reloadTimer function finished.");
+        
         yield return null;
     }
     
+    private void infiniteAmmoCheat()
+    {
+        enableCheats = true;
+        counterTotal = 999999;
+        loadedTotal = 999999;
+        reloadMax = 999999;   
+        reloadSpeed = 0.01f;
+        refreshCounter();     
+    }
 }
