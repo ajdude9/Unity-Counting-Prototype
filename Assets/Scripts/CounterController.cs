@@ -12,6 +12,7 @@ public class CounterController : MonoBehaviour
     public Text loadedText;//Text object to display the number of projectiles ready
     private int loadedTotal;//The number of projectiles ready to fire
     private int reloadMax;//The total number of projectiles that can be loaded at once.
+    private float reloadSpeed;//How long it takes to reload one projectile
     public String projType;//The name of the projectiles being fired
     public bool reloadingStatus = false;//Whether or not the player is currently 'reloading'
     // Start is called before the first frame update
@@ -20,6 +21,7 @@ public class CounterController : MonoBehaviour
         counterTotal = 44;
         loadedTotal = 6;
         reloadMax = 6;
+        reloadSpeed = 0.15f;
         counterText.text = "Available " + projType + ": " + counterTotal;
         loadedText.text = "Loaded " + projType + ": " + loadedTotal;
     }
@@ -94,15 +96,17 @@ public class CounterController : MonoBehaviour
     public void reload()
     {        
         Debug.Log("Reload function executing");
-        reloadingStatus = true;
-        int amountToReload = reloadMax - loadedTotal;//The amount of projectiles to reload is the maximum allowed, minus however many are already loaded
-        if(amountToReload > getCounter("total"))//If there isn't enough stored projectiles to reload fully
+        if(!reloadingStatus)
         {
-            amountToReload = getCounter("total");//Instead reload however many are left
+            reloadingStatus = true;
+            int amountToReload = reloadMax - loadedTotal;//The amount of projectiles to reload is the maximum allowed, minus however many are already loaded
+            if(amountToReload > getCounter("total"))//If there isn't enough stored projectiles to reload fully
+            {
+                amountToReload = getCounter("total");//Instead reload however many are left
+            }
+            Debug.Log("Attempting to reload " + amountToReload + " projectiles.");
+            StartCoroutine(reloadTimer(amountToReload));
         }
-        Debug.Log("Attempting to reload " + amountToReload + " projectiles.");
-        StartCoroutine(reloadTimer(amountToReload));
-
     }
 
     
@@ -112,7 +116,7 @@ public class CounterController : MonoBehaviour
         for(int i = 0; i < reloadAmount; i++)
         {
             Debug.Log("Beginning reload.");
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(reloadSpeed);
             addCounter(1, "loaded");
             minusCounter(1, "total");     
             Debug.Log("Reload executed.");

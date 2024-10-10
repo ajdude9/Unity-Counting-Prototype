@@ -10,6 +10,7 @@ public class BallForward : MonoBehaviour
     private Vector3 mousePos;
     public Vector3 worldPos;
     public float torque = 50;
+    private int throwPower;
     public Renderer projRenderer;//The renderer for the projectile's current material
     private Color missColour = new Color(0.6f, 0.6f, 0.6f, 1.0f);
     private Color scoreColour = new Color(1f, 0.93f, 0f, 1.0f);
@@ -20,12 +21,13 @@ public class BallForward : MonoBehaviour
         projRb = gameObject.GetComponent<Rigidbody>();
         projRenderer = gameObject.GetComponent<Renderer>();
         mousePos = Input.mousePosition;
-        mousePos.z = Camera.main.nearClipPlane + 1;
+        mousePos.z = Camera.main.nearClipPlane + 5;
         worldPos = Camera.main.ScreenToWorldPoint(mousePos);
-
+        Debug.Log("Calculated Power: " + (calculateThrowPower(mousePos) / 100));
         transform.position = new Vector3(15.6f, 3.2f, -0.22f);//Set the projectile to the bottom of the screen
         projRb.transform.LookAt(worldPos);//Look toward where the cursor is on the screen
-        projRb.AddRelativeForce(projRb.transform.forward * 12, ForceMode.Impulse);//Launch the projectile forwards
+
+        projRb.AddRelativeForce(projRb.transform.forward * (calculateThrowPower(mousePos) / 100), ForceMode.Impulse);//Launch the projectile forwards
         projRb.AddRelativeForce(Vector3.up * (worldPos.y / 2) , ForceMode.Impulse);//Give the projectile upwards force to lift it
         projRb.AddTorque(RandomTorque(), RandomTorque(), RandomTorque(), ForceMode.Impulse);//Apply random torque to the projectile to make it spin
         
@@ -64,4 +66,17 @@ public class BallForward : MonoBehaviour
         }
     }
     
+    float calculateThrowPower(Vector3 mousePosition)
+    {
+        if(mousePosition.x < 1260)
+        {
+            float difference = 1260 - mousePosition.x;
+            return 1260 + difference;
+        }
+        else
+        {
+            float difference = mousePosition.x - 1260;
+            return 1260 + difference;
+        }
+    }
 }
