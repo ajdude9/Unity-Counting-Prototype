@@ -17,9 +17,13 @@ public class CounterController : MonoBehaviour
     public String projType;//The name of the projectiles being fired
     public bool reloadingStatus = false;//Whether or not the player is currently 'reloading'
     public bool enableCheats = false;
+    private AudioSource gameAudio;
+    public AudioClip reloadSound;   
+    public AudioClip reloadSingle; 
     // Start is called before the first frame update
     void Start()
     {        
+        gameAudio = gameObject.GetComponent<AudioSource>();
         counterTotal = 44;
         loadedTotal = 6;
         reloadMax = 6;
@@ -129,12 +133,19 @@ public class CounterController : MonoBehaviour
             
             yield return new WaitForSeconds(reloadSpeed);
             addCounter(1, "loaded");
-            minusCounter(1, "total");     
+            minusCounter(1, "total"); 
+            gameAudio.PlayOneShot(reloadSingle, 0.8f);
             
         }
         reloadingStatus = false;
-        
+        StartCoroutine(delayedReload());
         yield return null;
+    }
+
+    private IEnumerator delayedReload()
+    {
+        yield return new WaitForSeconds(0.1f);
+        gameAudio.PlayOneShot(reloadSound, 0.8f);
     }
     
     private void infiniteAmmoCheat()

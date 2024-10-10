@@ -9,6 +9,7 @@ public class LaunchController : MonoBehaviour
     public GameObject projectilePrefab;
     private CounterController gameManager;
     
+    
 
     // Start is called before the first frame update
     void Start()
