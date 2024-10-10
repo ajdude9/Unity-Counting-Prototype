@@ -7,17 +7,19 @@ using UnityEngine.UI;
 public class CounterController : MonoBehaviour
 {
 
-    private int counterTotal;
-    public Text counterText;
-    public Text loadedText;
-    private int loadedTotal;
-    public String projType;
-
+    private int counterTotal;//The total number of projectiles
+    public Text counterText;//Text object to display the number of projectiles
+    public Text loadedText;//Text object to display the number of projectiles ready
+    private int loadedTotal;//The number of projectiles ready to fire
+    private int reloadMax;//The total number of projectiles that can be loaded at once.
+    public String projType;//The name of the projectiles being fired
+    public bool reloadingStatus = false;//Whether or not the player is currently 'reloading'
     // Start is called before the first frame update
     void Start()
     {        
         counterTotal = 44;
         loadedTotal = 6;
+        reloadMax = 6;
         counterText.text = "Available " + projType + ": " + counterTotal;
         loadedText.text = "Loaded " + projType + ": " + loadedTotal;
     }
@@ -87,5 +89,37 @@ public class CounterController : MonoBehaviour
                 loadedText.text = "Loaded " + projType + ": " + loadedTotal;
             break;
         }
+    }   
+
+    public void reload()
+    {        
+        Debug.Log("Reload function executing");
+        reloadingStatus = true;
+        int amountToReload = reloadMax - loadedTotal;//The amount of projectiles to reload is the maximum allowed, minus however many are already loaded
+        if(amountToReload > getCounter("total"))//If there isn't enough stored projectiles to reload fully
+        {
+            amountToReload = getCounter("total");//Instead reload however many are left
+        }
+        Debug.Log("Attempting to reload " + amountToReload + " projectiles.");
+        StartCoroutine(reloadTimer(amountToReload));
+
     }
+
+    
+    private IEnumerator reloadTimer(int reloadAmount)
+    {
+        Debug.Log("reloadTimer function executing");
+        for(int i = 0; i < reloadAmount; i++)
+        {
+            Debug.Log("Beginning reload.");
+            yield return new WaitForSeconds(0.2f);
+            addCounter(1, "loaded");
+            minusCounter(1, "total");     
+            Debug.Log("Reload executed.");
+        }
+        reloadingStatus = false;
+        Debug.Log("reloadTimer function finished.");
+        yield return null;
+    }
+    
 }
