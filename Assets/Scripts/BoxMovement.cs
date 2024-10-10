@@ -8,7 +8,7 @@ public class BoxMovement : MonoBehaviour
 
     private Vector3 targetLocation = new Vector3(0, 0, -16.5f);    
     public GameObject boxObject;
-    public bool direction = true;
+    public bool pause = false;
     // Start is called before the first frame update
     void Start()
     {        
@@ -19,13 +19,20 @@ public class BoxMovement : MonoBehaviour
     void Update()
     {
         moveBox();
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            pause = !pause;
+        }
     }
 
     public void moveBox()
     {
         float speed = 2.5f;
         var step = speed * Time.deltaTime;        
-        transform.position = Vector3.MoveTowards(boxObject.transform.position, targetLocation, step);
+        if(!pause)
+        {
+            transform.position = Vector3.MoveTowards(boxObject.transform.position, targetLocation, step);
+        }
         
         if(boxObject.transform.position == targetLocation)
         {

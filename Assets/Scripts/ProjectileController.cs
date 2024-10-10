@@ -12,7 +12,7 @@ public class BallForward : MonoBehaviour
     public float torque = 50;
     private int throwPower;
     public Renderer projRenderer;//The renderer for the projectile's current material
-    private Color missColour = new Color(0.6f, 0.6f, 0.6f, 1.0f);
+    private Color missColour = new Color(0.1f, 0.1f, 0.1f, 1.0f);
     private Color scoreColour = new Color(1f, 0.93f, 0f, 1.0f);
     private bool scored = false;    
     // Start is called before the first frame update
@@ -28,7 +28,7 @@ public class BallForward : MonoBehaviour
         projRb.transform.LookAt(worldPos);//Look toward where the cursor is on the screen
 
         projRb.AddRelativeForce(projRb.transform.forward * (calculateThrowPower(mousePos) / 100), ForceMode.Impulse);//Launch the projectile forwards
-        projRb.AddRelativeForce(Vector3.up * (worldPos.y / 2) , ForceMode.Impulse);//Give the projectile upwards force to lift it
+        projRb.AddRelativeForce(Vector3.up * (worldPos.y / 4) , ForceMode.Impulse);//Give the projectile upwards force to lift it
         projRb.AddTorque(RandomTorque(), RandomTorque(), RandomTorque(), ForceMode.Impulse);//Apply random torque to the projectile to make it spin
         
     }
@@ -62,6 +62,8 @@ public class BallForward : MonoBehaviour
         if(collision.gameObject.CompareTag("Floor") && !scored)//If the projectile touches the floor and hasn't been scored
         {
             projRenderer.material.SetColor("_Color", missColour);
+            projRenderer.material.SetFloat("_Metallic", 0f);
+            projRenderer.material.SetFloat("_Glossiness", 0f);
             StartCoroutine(tilDeath(15));//Destroy the projectile after a set time
         }
     }

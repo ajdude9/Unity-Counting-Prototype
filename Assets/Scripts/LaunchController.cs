@@ -39,7 +39,7 @@ public class LaunchController : MonoBehaviour
 
     void fire()
     {
-        if(gameManager.getCounter("loaded") > 0 && gameManager.getCounter("loaded") > 0 && !gameManager.reloadingStatus)
+        if(gameManager.getCounter("loaded") > 0 && !gameManager.reloadingStatus)
         {
             Instantiate(projectilePrefab, transform.position, projectilePrefab.transform.rotation);            
             gameManager.minusCounter(1, "loaded");
