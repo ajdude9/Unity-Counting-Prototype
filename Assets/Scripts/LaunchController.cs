@@ -8,8 +8,8 @@ public class LaunchController : MonoBehaviour
 
     public GameObject projectilePrefab;
     private CounterController gameManager;
-    
-    
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -27,24 +27,27 @@ public class LaunchController : MonoBehaviour
     void launchHandler()
     {
 
-        if(Input.GetKeyDown(KeyCode.Space))
-        {            
-            InvokeRepeating("fire", 0f, gameManager.fireRate);
-        }
-        else if(Input.GetKeyUp(KeyCode.Space)) 
+        if (gameManager.viewType == "throw")
         {
-            CancelInvoke("fire");
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                InvokeRepeating("fire", 0f, gameManager.fireRate);
+            }
+            else if (Input.GetKeyUp(KeyCode.Space))
+            {
+                CancelInvoke("fire");
+            }
         }
 
     }
 
     void fire()
     {
-        if(gameManager.getCounter("loaded") > 0 && !gameManager.reloadingStatus)
+        if (gameManager.getCounter("loaded") > 0 && !gameManager.reloadingStatus)
         {
-            Instantiate(projectilePrefab, transform.position, projectilePrefab.transform.rotation);            
+            Instantiate(projectilePrefab, transform.position, projectilePrefab.transform.rotation);
             gameManager.minusCounter(1, "loaded");
         }
     }
-   
+
 }
