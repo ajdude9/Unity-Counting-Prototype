@@ -19,24 +19,23 @@ public class CoinDropController : MonoBehaviour
     {
         coinSpawnPylonA = GameObject.Find("CoinSpawnPylonA");
         coinSpawnPylonB = GameObject.Find("CoinSpawnPylonB");
-        coinDropper = GameObject.Find("CoinDropper");   
-        generateCoins(coinSpawnAmount);
+        coinDropper = GameObject.Find("Coin Dropper");        
         gameManager = GameObject.Find("Game Manager").GetComponent<CounterController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(gameManager.viewType == "coin")
+        if (gameManager.viewType == "coin")
         {
-            if(Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 Debug.Log("Space key pressed.");
                 spawnCoin("drop");
             }
         }
     }
-     private void generateCoins(int coinsToGenerate)
+    public void generateCoins(int coinsToGenerate)
     {
         Debug.Log("Generating coins.");
         for (int i = 0; i < coinsToGenerate; i++)
@@ -48,17 +47,17 @@ public class CoinDropController : MonoBehaviour
     private void spawnCoin(String type)
     {
         Debug.Log("Attempting to spawn coinPrefab");
-        switch(type)
+        switch (type)
         {
             case "init":
-            Quaternion spawnRotation = Quaternion.Euler(Random.Range(0, 80), 0, 0);
-            Instantiate(coinPrefab, generateRandomPos(), spawnRotation);
-            break;
+                Quaternion spawnRotation = Quaternion.Euler(Random.Range(0, 80), 0, 0);
+                Instantiate(coinPrefab, generateRandomPos(), spawnRotation);
+                break;
             case "drop":
-            Vector3 dropPos = new Vector3(coinDropper.transform.position.x,coinDropper.transform.position.y,coinDropper.transform.position.z);
-            spawnRotation = Quaternion.Euler(90, 0, 0);
-            Instantiate(coinPrefab, dropPos, spawnRotation);
-            break;
+                Vector3 dropPos = new Vector3(coinDropper.transform.position.x, coinDropper.transform.position.y, coinDropper.transform.position.z);
+                spawnRotation = Quaternion.Euler(90, 0, 0);
+                Instantiate(coinPrefab, dropPos, spawnRotation);
+                break;
         }
     }
 

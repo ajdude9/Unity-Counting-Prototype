@@ -32,7 +32,7 @@ public class BallForward : MonoBehaviour
         mousePos = Input.mousePosition;
         mousePos.z = Camera.main.nearClipPlane + 5;
         worldPos = Camera.main.ScreenToWorldPoint(mousePos);
-        Debug.Log("Calculated Power: " + (calculateThrowPower(mousePos) / 100));
+        //Debug.Log("Calculated Power: " + (calculateThrowPower(mousePos) / 100));
         transform.position = new Vector3(15.6f, 3.2f, -0.22f);//Set the projectile to the bottom of the screen
         projRb.transform.LookAt(worldPos);//Look toward where the cursor is on the screen
 

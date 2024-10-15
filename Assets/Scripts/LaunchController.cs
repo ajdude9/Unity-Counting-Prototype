@@ -36,9 +36,16 @@ public class LaunchController : MonoBehaviour
             else if (Input.GetKeyUp(KeyCode.Space))
             {
                 CancelInvoke("fire");
-            }
+            }            
         }
 
+    }
+
+    void callFade()
+    {
+        Debug.Log("Making call to fade in text");
+        gameManager.fadeValue = 1;
+        gameManager.callFadeIn(0.25f, gameManager.reloadNotify);
     }
 
     void fire()
@@ -48,6 +55,11 @@ public class LaunchController : MonoBehaviour
             Instantiate(projectilePrefab, transform.position, projectilePrefab.transform.rotation);
             gameManager.minusCounter(1, "loaded");
         }
+        else
+        {
+            callFade();
+        }
+
     }
 
 }
