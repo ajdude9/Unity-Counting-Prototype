@@ -57,7 +57,7 @@ public class CounterController : MonoBehaviour
         {
             infiniteAmmoCheat();//Enable cheats
         }
-        if(Input.GetKeyDown(KeyCode.Q))//Switch the camera view
+        if(Input.GetKeyDown(KeyCode.V))//Switch the camera view
         {
             /**
             throwCamera.enabled = !throwCamera.enabled;

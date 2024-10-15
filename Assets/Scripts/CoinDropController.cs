@@ -54,7 +54,7 @@ public class CoinDropController : MonoBehaviour
                 Instantiate(coinPrefab, generateRandomPos(), spawnRotation);
                 break;
             case "drop":
-                Vector3 dropPos = new Vector3(coinDropper.transform.position.x, coinDropper.transform.position.y, coinDropper.transform.position.z);
+                Vector3 dropPos = new Vector3(coinDropper.transform.position.x, coinDropper.transform.position.y, coinDropper.transform.position.z - 0.25f);
                 spawnRotation = Quaternion.Euler(90, 0, 0);
                 Instantiate(coinPrefab, dropPos, spawnRotation);
                 break;

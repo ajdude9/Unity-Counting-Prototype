@@ -28,11 +28,25 @@ public class CoinController : MonoBehaviour
     
     void OnCollisionEnter(Collision collision)//Upon colliding with something
     {
-        Debug.Log("Collided");
+        //Debug.Log("Collided");
         
         projAudio.pitch = Random.Range(0.9f, 1.2f);
         projAudio.PlayOneShot(hitSound1, 0.5f);        
         
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Collector"))
+        {
+            Debug.Log("Collected");
+            Destroy(gameObject);
+        }
+        if(other.CompareTag("Killbox"))
+        {
+            Debug.Log("Destroyed");
+            Destroy(gameObject);
+        }
     }
     
 }
