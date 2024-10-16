@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 7063662059040044180}
   m_Layer: 6
   m_Name: GoldCoin
-  m_TagString: Untagged
+  m_TagString: Coin
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -94,10 +94,10 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8607863099644361100}
-  m_Material: {fileID: 13400000, guid: a566c50987af8076d9681f79cf4429dd, type: 2}
+  m_Material: {fileID: 13400000, guid: 7122569c65745b3aea33dfa358b43418, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -117,7 +117,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8607863099644361100}
   serializedVersion: 4
-  m_Mass: 5
+  m_Mass: 0.001
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -135,7 +135,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 2
+  m_CollisionDetection: 0
 --- !u!82 &8910173440417099674
 AudioSource:
   m_ObjectHideFlags: 0
@@ -245,3 +245,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitSound1: {fileID: 8300000, guid: 3ef02dd99e23132f6b7ec00789b97b2b, type: 3}
+  collectSound: {fileID: 8300000, guid: 434b7f98fb564e8529cc6c74178095d3, type: 3}
+  parentable: 1

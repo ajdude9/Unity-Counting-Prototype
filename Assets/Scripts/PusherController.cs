@@ -15,7 +15,7 @@ public class PusherController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {        
-        boxObject = GameObject.Find("MachinePusher");
+        boxObject = GameObject.Find("MachinePusherParent");
     }
 
     // Update is called once per frame

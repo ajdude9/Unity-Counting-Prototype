@@ -8,6 +8,11 @@ TagManager:
   - Box
   - LeftWall
   - RightWall
+  - Collector
+  - Killbox
+  - Pusher
+  - Coin
+  - Slippery
   layers:
   - Default
   - TransparentFX
