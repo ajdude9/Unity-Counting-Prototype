@@ -14,6 +14,6 @@ public class Counter : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        gameManager.addCounter(1, "total");
+        gameManager.addCounter(3, "coins");
     }
 }

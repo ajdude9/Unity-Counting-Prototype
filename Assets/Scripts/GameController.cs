@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using Debug = UnityEngine.Debug;
 using TMPro;
+using Unity.VisualScripting;
 
 public class CounterController : MonoBehaviour
 {
@@ -15,8 +16,12 @@ public class CounterController : MonoBehaviour
     public Text counterText;//Text object to display the number of projectiles
     public Text loadedText;//Text object to display the number of projectiles ready
     public TextMeshProUGUI reloadNotify;//Text object to tell the player to reload
+    public TextMeshProUGUI coinsSavedText;
+    public TextMeshProUGUI coinsDroppableText;
     private int loadedTotal;//The number of projectiles ready to fire
     private int reloadMax;//The total number of projectiles that can be loaded at once.
+    private int coinsSaved = 0;//The number of coins the player has 'banked'
+    private int coinsDroppable = 0;//The number of coins the player can drop.
     private float reloadSpeed;//How long it takes to reload one projectile
     public float fireRate;//How fast the player can autofire projectiles
     public String projType;//The name of the projectiles being fired
@@ -41,8 +46,12 @@ public class CounterController : MonoBehaviour
         reloadMax = 6;
         reloadSpeed = 0.15f;
         fireRate = 0.35f;
+        counterText.enabled = true;
+        loadedText.enabled = true;
         counterText.text = "Available " + projType + ": " + counterTotal;
         loadedText.text = "Loaded " + projType + ": " + loadedTotal;
+        coinsSavedText.text = "Coins Won: " + coinsSaved;
+        coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;
         reloadNotify.color = new Color(reloadNotify.color.r, reloadNotify.color.g, reloadNotify.color.b, 0);
         throwCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
         coinCamera = GameObject.Find("Machine Watcher").GetComponent<Camera>();
@@ -100,6 +109,12 @@ public class CounterController : MonoBehaviour
             case "loaded"://Get the amount of projectiles able to be fired
                 returnAmount = loadedTotal;
                 break;
+            case "coins":
+                returnAmount = coinsDroppable;
+            break;
+            case "bank":
+                returnAmount = coinsSaved;
+            break;
         }
         return returnAmount;
     }
@@ -116,6 +131,14 @@ public class CounterController : MonoBehaviour
                 loadedTotal = amount;
                 loadedText.text = "Loaded " + projType + ": " + loadedTotal;
                 break;
+            case "coins":
+                coinsDroppable = amount;
+                coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;
+            break;
+            case "bank":
+                coinsSaved = amount;
+                coinsSavedText.text = "Coins Won: " + coinsSaved;
+            break;
         }
     }
 
@@ -131,6 +154,14 @@ public class CounterController : MonoBehaviour
                 loadedTotal += amount;
                 loadedText.text = "Loaded " + projType + ": " + loadedTotal;
                 break;
+            case "coins":
+                coinsDroppable += amount;
+                coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;
+            break;
+            case "bank":
+                coinsSaved += amount;
+                coinsSavedText.text = "Coins Won: " + coinsSaved;
+            break;
         }
     }
 
@@ -146,6 +177,14 @@ public class CounterController : MonoBehaviour
                 loadedTotal -= amount;
                 loadedText.text = "Loaded " + projType + ": " + loadedTotal;
                 break;
+            case "coins":
+                coinsDroppable -= amount;
+                coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;
+            break;
+            case "bank":
+                coinsSaved -= amount;
+                coinsSavedText.text = "Coins Won: " + coinsSaved;
+            break;
         }
     }
 
@@ -208,6 +247,8 @@ public class CounterController : MonoBehaviour
         viewType = "coin";
         counterText.enabled = false;
         loadedText.enabled = false;
+        coinsSavedText.enabled = true;
+        coinsDroppableText.enabled = true;
         if (!firstSwitch)
         {
             firstSwitch = true;
@@ -221,7 +262,14 @@ public class CounterController : MonoBehaviour
         coinCamera.enabled = false;
         counterText.enabled = true;
         loadedText.enabled = true;
+        coinsSavedText.enabled = false;
+        coinsDroppableText.enabled = false;
         viewType = "throw";
+    }
+
+    private void switchToShop()
+    {
+
     }
 
     public void callFadeIn(float time, TextMeshProUGUI text)
