@@ -80,7 +80,7 @@ public class CoinDropController : MonoBehaviour
         switch (type)
         {
             case "init1":
-                Quaternion spawnRotation = Quaternion.Euler(Random.Range(0, 80), 0, 0);
+                Quaternion spawnRotation = Quaternion.Euler(Random.Range(0, 15), Random.Range(0, 15), Random.Range(0, 15));
                 Instantiate(coinPrefab, generateRandomPos(coinSpawnPylonA, coinSpawnPylonB), spawnRotation);
                 break;
             case "init2":

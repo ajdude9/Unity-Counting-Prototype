@@ -91,12 +91,18 @@ public class CounterController : MonoBehaviour
             StartCoroutine(textFadeOut(1f, reloadNotify));
             reload();
         }
+        if(loadedTotal == reloadMax)
+        {
+            textFadeOut(1, reloadNotify);
+        }
     }
     public void refreshCounter()//Update the counters to their current values
     {
         counterText.text = "Available " + projType + ": " + counterTotal;
         loadedText.text = "Loaded " + projType + ": " + loadedTotal;
-    }
+        coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;
+        coinsSavedText.text = "Coins Won: " + coinsSaved;
+    }   
 
     public int getCounter(String type)//Get a specific counter
     {
@@ -237,6 +243,8 @@ public class CounterController : MonoBehaviour
         reloadMax = 1000000;
         reloadSpeed = 0.01f;
         fireRate = 0.05f;
+        coinsDroppable = 1000000;
+        coinsSaved = 1000000;
         refreshCounter();
     }
 

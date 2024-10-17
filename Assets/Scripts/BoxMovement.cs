@@ -15,7 +15,11 @@ public class BoxMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {        
-     
+        int randomSwitch = Random.Range(0, 1);
+        if(Random.Range(0, 2) == 1)
+        {
+            switchPos();
+        }
     }
 
     // Update is called once per frame
@@ -29,7 +33,7 @@ public class BoxMovement : MonoBehaviour
     }
 
     public void moveBox()
-    {        
+    {                
         var step = speed * Time.deltaTime;        
         if(!pause)
         {
@@ -38,11 +42,15 @@ public class BoxMovement : MonoBehaviour
         
         if(boxObject.transform.position == targetLocationA)
         {        
-            targetLocationHold = new Vector3(targetLocationA.x, targetLocationA.y, targetLocationA.z);
-            targetLocationA = targetLocationB;
-            targetLocationB = targetLocationHold;
-
+            switchPos();
         }        
+    }
+
+    public void switchPos()
+    {
+        targetLocationHold = new Vector3(targetLocationA.x, targetLocationA.y, targetLocationA.z);
+        targetLocationA = targetLocationB;
+        targetLocationB = targetLocationHold;
     }
    
 }

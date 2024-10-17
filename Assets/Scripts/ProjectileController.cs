@@ -23,6 +23,7 @@ public class BallForward : MonoBehaviour
     private AudioSource projAudio;
     private bool silent = false;
     private bool landed = false;
+    private GameObject boxFloor;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,11 +33,12 @@ public class BallForward : MonoBehaviour
         mousePos = Input.mousePosition;
         mousePos.z = Camera.main.nearClipPlane + 5;
         worldPos = Camera.main.ScreenToWorldPoint(mousePos);
+        boxFloor = GameObject.Find("Box Floor");
         //Debug.Log("Calculated Power: " + (calculateThrowPower(mousePos) / 100));
         transform.position = new Vector3(15.6f, 3.2f, -0.22f);//Set the projectile to the bottom of the screen
         projRb.transform.LookAt(worldPos);//Look toward where the cursor is on the screen
 
-        projRb.AddRelativeForce(projRb.transform.forward * (calculateThrowPower(mousePos) / 100), ForceMode.Impulse);//Launch the projectile forwards
+        projRb.AddRelativeForce(projRb.transform.forward * calculateThrowPower(mousePos), ForceMode.Impulse);//Launch the projectile forwards
         projRb.AddRelativeForce(Vector3.up * (worldPos.y / 4), ForceMode.Impulse);//Give the projectile upwards force to lift it
         projRb.AddTorque(RandomTorque(), RandomTorque(), RandomTorque(), ForceMode.Impulse);//Apply random torque to the projectile to make it spin
 
@@ -63,36 +65,40 @@ public class BallForward : MonoBehaviour
     {
         if (!landed)
         {
-            projRenderer.material.SetColor("_Color", scoreColour);
-            projAudio.pitch = Random.Range(0.9f, 1.2f);
-            projAudio.PlayOneShot(convertSound, 0.8f);
-
-            scored = true;
-            silent = true;
-            StartCoroutine(tilDeath(5));//Destroy the projectile after a set time
+            if (other.CompareTag("Box"))
+            {
+                projRenderer.material.SetColor("_Color", scoreColour);
+                projAudio.pitch = Random.Range(0.9f, 1.2f);
+                projAudio.PlayOneShot(convertSound, 0.8f);
+                Vector3 towardFloor = boxFloor.transform.position - transform.position;
+                projRb.AddForce(towardFloor * 2, ForceMode.Impulse);
+                scored = true;
+                silent = true;
+                StartCoroutine(tilDeath(30));//Destroy the projectile after a set time
+            }
         }
     }
 
     void OnCollisionEnter(Collision collision)//Upon colliding with something
     {
-        
+
         if (!silent)
         {
             projAudio.pitch = Random.Range(0.8f, 1.2f);
-            switch(Random.Range(0, 4))
+            switch (Random.Range(0, 4))
             {
                 case 0:
-                projAudio.PlayOneShot(hitSound1, 0.5f);
-                break;
+                    projAudio.PlayOneShot(hitSound1, 0.5f);
+                    break;
                 case 1:
-                projAudio.PlayOneShot(hitSound2, 0.5f);
-                break;
+                    projAudio.PlayOneShot(hitSound2, 0.5f);
+                    break;
                 case 2:
-                projAudio.PlayOneShot(hitSound3, 0.5f);
-                break;
+                    projAudio.PlayOneShot(hitSound3, 0.5f);
+                    break;
                 case 3:
-                projAudio.PlayOneShot(hitSound4, 0.5f);
-                break;
+                    projAudio.PlayOneShot(hitSound4, 0.5f);
+                    break;
             }
         }
         if (collision.gameObject.CompareTag("Floor") && !scored)//If the projectile touches the floor and hasn't been scored
@@ -104,19 +110,21 @@ public class BallForward : MonoBehaviour
             StartCoroutine(tilDeath(15));//Destroy the projectile after a set time
         }
     }
-   
+
 
     float calculateThrowPower(Vector3 mousePosition)
     {
+        float finalValue;
+        float difference;
         if (mousePosition.x < 1260)
         {
-            float difference = 1260 - mousePosition.x;
-            return 1260 + (difference - difference / 2);
+            difference = 1260 - mousePosition.x;
         }
         else
         {
-            float difference = mousePosition.x - 1260;
-            return 1260 + (difference - difference / 2);
+            difference = mousePosition.x - 1260;
         }
+        finalValue = (1260 + (difference - difference / 2.5f)) / 90;
+        return finalValue;
     }
 }

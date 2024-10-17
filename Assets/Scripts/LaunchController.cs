@@ -57,7 +57,10 @@ public class LaunchController : MonoBehaviour
         }
         else
         {
-            callFade();
+            if(!gameManager.reloadingStatus)
+            {
+                callFade();
+            }
         }
 
     }
