@@ -32,6 +32,7 @@ public class CounterController : MonoBehaviour
     public AudioClip reloadSingle;//Reloading sound (single projectile)
     private Camera throwCamera;//The camera for throwing projectiles into a box
     private Camera coinCamera;//The camera for putting coins in a machine
+    private Camera shopCamera;//The camera for viewing the shop
     public String viewType;//Which camera is currently being viewed
     public bool firstSwitch = false;//Whether the switch to the coin camera is the first one since the game started
     public int fadeValue;
@@ -55,6 +56,7 @@ public class CounterController : MonoBehaviour
         reloadNotify.color = new Color(reloadNotify.color.r, reloadNotify.color.g, reloadNotify.color.b, 0);
         throwCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
         coinCamera = GameObject.Find("Machine Watcher").GetComponent<Camera>();
+        shopCamera = GameObject.Find("Shop Camera").GetComponent<Camera>();
         viewType = "throw";
     }
 
@@ -62,47 +64,64 @@ public class CounterController : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.BackQuote))
+        keycodeController();
+        if (loadedTotal == reloadMax)
+        {
+            textFadeOut(1, reloadNotify);
+        }
+    }
+
+    private void keycodeController()
+    {
+        if (Input.GetKeyDown(KeyCode.BackQuote))
         {
             infiniteAmmoCheat();//Enable cheats
         }
-        if(Input.GetKeyDown(KeyCode.V))//Switch the camera view
+        if (Input.GetKeyDown(KeyCode.V))//Switch the camera view forwards along the list
         {
-            /**
-            throwCamera.enabled = !throwCamera.enabled;
-            coinCamera.enabled = !coinCamera.enabled;
-            */
             switch (viewType)
             {
                 case "throw":
                     switchToCoin();
                     break;
                 case "coin":
-                    switchToThrow();
+                    switchToShop();
                     break;
                 case "shop":
-
+                    switchToThrow();
                     break;
             }
         }
-        if(Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.C))//Switch the camera view backwards along the list
+        {
+            switch (viewType)
+            {
+                case "throw":
+                    switchToShop();
+                    break;
+                case "coin":
+                    switchToThrow();
+                    break;
+                case "shop":
+                    switchToCoin();
+                    break;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.R))
         {
             fadeValue = 0;
             StartCoroutine(textFadeOut(1f, reloadNotify));
             reload();
         }
-        if(loadedTotal == reloadMax)
-        {
-            textFadeOut(1, reloadNotify);
-        }
     }
+
     public void refreshCounter()//Update the counters to their current values
     {
         counterText.text = "Available " + projType + ": " + counterTotal;
         loadedText.text = "Loaded " + projType + ": " + loadedTotal;
         coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;
         coinsSavedText.text = "Coins Won: " + coinsSaved;
-    }   
+    }
 
     public int getCounter(String type)//Get a specific counter
     {
@@ -117,10 +136,10 @@ public class CounterController : MonoBehaviour
                 break;
             case "coins":
                 returnAmount = coinsDroppable;
-            break;
+                break;
             case "bank":
                 returnAmount = coinsSaved;
-            break;
+                break;
         }
         return returnAmount;
     }
@@ -140,11 +159,11 @@ public class CounterController : MonoBehaviour
             case "coins":
                 coinsDroppable = amount;
                 coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;
-            break;
+                break;
             case "bank":
                 coinsSaved = amount;
                 coinsSavedText.text = "Coins Won: " + coinsSaved;
-            break;
+                break;
         }
     }
 
@@ -163,11 +182,11 @@ public class CounterController : MonoBehaviour
             case "coins":
                 coinsDroppable += amount;
                 coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;
-            break;
+                break;
             case "bank":
                 coinsSaved += amount;
                 coinsSavedText.text = "Coins Won: " + coinsSaved;
-            break;
+                break;
         }
     }
 
@@ -186,11 +205,11 @@ public class CounterController : MonoBehaviour
             case "coins":
                 coinsDroppable -= amount;
                 coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;
-            break;
+                break;
             case "bank":
                 coinsSaved -= amount;
                 coinsSavedText.text = "Coins Won: " + coinsSaved;
-            break;
+                break;
         }
     }
 
@@ -200,9 +219,9 @@ public class CounterController : MonoBehaviour
         if (!reloadingStatus)//If the player isn't already reloading
         {
             int amountToReload = reloadMax - loadedTotal;//The amount of projectiles to reload is the maximum allowed, minus however many are already loaded
-            if(amountToReload > 0)
+            if (amountToReload > 0)
             {
-                reloadingStatus = true;            
+                reloadingStatus = true;
                 if (amountToReload > getCounter("total"))//If there isn't enough stored projectiles to reload fully
                 {
                     amountToReload = getCounter("total");//Instead reload however many are left
@@ -225,9 +244,9 @@ public class CounterController : MonoBehaviour
             minusCounter(1, "total");
             gameAudio.PlayOneShot(reloadSingle, 0.8f);
 
-        }        
+        }
         yield return new WaitForSeconds(0.1f);
-        if(reloadingStatus)
+        if (reloadingStatus)
         {
             gameAudio.PlayOneShot(reloadSound, 0.8f);
             reloadingStatus = false;
@@ -252,11 +271,13 @@ public class CounterController : MonoBehaviour
     {
         throwCamera.enabled = false;
         coinCamera.enabled = true;
+        shopCamera.enabled = false;
         viewType = "coin";
         counterText.enabled = false;
         loadedText.enabled = false;
         coinsSavedText.enabled = true;
         coinsDroppableText.enabled = true;
+        coinsSavedText.transform.position = new Vector3(coinsSavedText.transform.position.x, 1000, coinsSavedText.transform.position.z);
         if (!firstSwitch)
         {
             firstSwitch = true;
@@ -268,6 +289,7 @@ public class CounterController : MonoBehaviour
     {
         throwCamera.enabled = true;
         coinCamera.enabled = false;
+        shopCamera.enabled = false;
         counterText.enabled = true;
         loadedText.enabled = true;
         coinsSavedText.enabled = false;
@@ -277,7 +299,16 @@ public class CounterController : MonoBehaviour
 
     private void switchToShop()
     {
-
+        throwCamera.enabled = false;
+        coinCamera.enabled = false;
+        shopCamera.enabled = true;
+        counterText.enabled = false;
+        loadedText.enabled = false;
+        coinsSavedText.enabled = true;
+        coinsDroppableText.enabled = false;
+        coinsSavedText.transform.position = new Vector3(coinsSavedText.transform.position.x, 1100, coinsSavedText.transform.position.z);
+        coinsSavedText.text = "Coins Available: " + coinsSaved;
+        viewType = "shop";
     }
 
     public void callFadeIn(float time, TextMeshProUGUI text)
@@ -312,5 +343,5 @@ public class CounterController : MonoBehaviour
             yield return null;
         }
     }
-    
+
 }
