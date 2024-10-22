@@ -8,6 +8,7 @@ using Random = UnityEngine.Random;
 using Debug = UnityEngine.Debug;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEngine.UIElements;
 
 public class CounterController : MonoBehaviour
 {
@@ -120,7 +121,14 @@ public class CounterController : MonoBehaviour
         counterText.text = "Available " + projType + ": " + counterTotal;
         loadedText.text = "Loaded " + projType + ": " + loadedTotal;
         coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;
-        coinsSavedText.text = "Coins Won: " + coinsSaved;
+        if(viewType == "shop")
+        {
+            coinsSavedText.text = "Coins Available: " + coinsSaved;
+        }
+        else
+        {
+            coinsSavedText.text = "Coins Won: " + coinsSaved;
+        }
     }
 
     public int getCounter(String type)//Get a specific counter
@@ -150,19 +158,19 @@ public class CounterController : MonoBehaviour
         {
             case "total":
                 counterTotal = amount;
-                counterText.text = "Available " + projType + ": " + counterTotal;
+                refreshCounter();
                 break;
             case "loaded":
                 loadedTotal = amount;
-                loadedText.text = "Loaded " + projType + ": " + loadedTotal;
+                refreshCounter();
                 break;
             case "coins":
                 coinsDroppable = amount;
-                coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;
+                refreshCounter();
                 break;
             case "bank":
                 coinsSaved = amount;
-                coinsSavedText.text = "Coins Won: " + coinsSaved;
+                refreshCounter();
                 break;
         }
     }
@@ -173,19 +181,19 @@ public class CounterController : MonoBehaviour
         {
             case "total":
                 counterTotal += amount;
-                counterText.text = "Available " + projType + ": " + counterTotal;
+                refreshCounter();
                 break;
             case "loaded":
                 loadedTotal += amount;
-                loadedText.text = "Loaded " + projType + ": " + loadedTotal;
+                refreshCounter();
                 break;
             case "coins":
                 coinsDroppable += amount;
-                coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;
+                refreshCounter();
                 break;
             case "bank":
                 coinsSaved += amount;
-                coinsSavedText.text = "Coins Won: " + coinsSaved;
+                refreshCounter();
                 break;
         }
     }
@@ -196,19 +204,19 @@ public class CounterController : MonoBehaviour
         {
             case "total":
                 counterTotal -= amount;
-                counterText.text = "Available " + projType + ": " + counterTotal;
+                refreshCounter();
                 break;
             case "loaded":
                 loadedTotal -= amount;
-                loadedText.text = "Loaded " + projType + ": " + loadedTotal;
+                refreshCounter();
                 break;
             case "coins":
                 coinsDroppable -= amount;
-                coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;
+                refreshCounter();
                 break;
             case "bank":
                 coinsSaved -= amount;
-                coinsSavedText.text = "Coins Won: " + coinsSaved;
+                refreshCounter();
                 break;
         }
     }
