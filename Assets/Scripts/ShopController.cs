@@ -9,6 +9,7 @@ public class ShopController : MonoBehaviour
 {
     private AudioSource shopAudio;
     public AudioClip buySFX;
+    public AudioClip poorSFX;
     private CounterController gameManager;
     // Start is called before the first frame update
     void Start()
@@ -25,10 +26,12 @@ public class ShopController : MonoBehaviour
 
     public void purchaseItem(String itemType, int value, int quantity)
     {
-        if (gameManager.getCounter("bank") > value)
+        if (gameManager.getCounter("bank") >= value)
         {
+            shopAudio.pitch = 1f;
             switch (itemType)
             {
+                
                 case "redGem":
                     gameManager.addCounter(quantity, "total");
                     gameManager.minusCounter(value, "bank");
@@ -38,8 +41,8 @@ public class ShopController : MonoBehaviour
         }
         else
         {
-            shopAudio.pitch = 0.5f;
-            shopAudio.PlayOneShot(buySFX, 0.2f);
+            shopAudio.pitch = 0.85f;
+            shopAudio.PlayOneShot(poorSFX, 0.2f);
         }
     }
 

@@ -12,13 +12,15 @@ public class CoinController : MonoBehaviour
     private Rigidbody coinRb;
     public bool parentable = true;
     private CounterController gameManager;
+    public AudioController audioController;
     
     // Start is called before the first frame update
     void Start()
     {
         coinAudio = gameObject.GetComponent<AudioSource>();
         coinRb = gameObject.GetComponent<Rigidbody>();
-        gameManager = GameObject.Find("Game Manager").GetComponent<CounterController>();        
+        gameManager = GameObject.Find("Game Manager").GetComponent<CounterController>();
+        audioController = GameObject.Find("Audio Manager").GetComponent<AudioController>();
     }
 
     // Update is called once per frame
@@ -63,19 +65,22 @@ public class CoinController : MonoBehaviour
     {
         if (other.CompareTag("Collector"))
         {
-            Debug.Log("Collected");
-            coinAudio.pitch = Random.Range(0.9f, 1.2f);
-            coinAudio.PlayOneShot(collectSound, 0.8f);
+            
             gameManager.addCounter(1, "bank");
-            Destroy(gameObject);
+            StartCoroutine("destroyDelay");
         }
         if (other.CompareTag("Killbox"))
         {
-            Debug.Log("Destroyed");
             coinAudio.pitch = Random.Range(0.2f, 0.6f);
             coinAudio.PlayOneShot(collectSound, 0.8f);
             Destroy(gameObject);
         }
+    }
+
+    IEnumerator destroyDelay()
+    {
+        yield return new WaitForSeconds(1);
+        audioController.playAudio(0, 0.8f, 0.8f);
     }
 
 }
