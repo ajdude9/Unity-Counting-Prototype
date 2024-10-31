@@ -4742,10 +4742,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coinPrefab: {fileID: 8607863099644361100, guid: b96291ac6ecdbc212a462eeca8619f16, type: 3}
-  coinSpawnAmount: 180
   rightBoundLocation: {x: 73.97, y: 37.21, z: 53.121}
+  coinSpawnAmount: 180
   leftBoundLocation: {x: 59.73465, y: 37.21, z: 53.121}
   speed: 8
+  checkRadius: 0.5
 --- !u!1 &1229469375
 GameObject:
   m_ObjectHideFlags: 0
@@ -7204,7 +7205,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 86c311a54b6689b43963d0314c766c17, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

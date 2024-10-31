@@ -12,13 +12,15 @@ public class CoinDropController : MonoBehaviour
     private GameObject coinSpawnPylonC;
     private GameObject coinSpawnPylonD;
     private GameObject coinDropper;
-    public GameObject coinPrefab;
+    [SerializeField] private GameObject coinPrefab;
     private GameObject rampWall;
     private CounterController gameManager;
-    public int coinSpawnAmount;
-    public Vector3 rightBoundLocation; 
-    public Vector3 leftBoundLocation;   
-    public float speed;
+    [SerializeField] private Vector3 rightBoundLocation; 
+    [SerializeField] private int coinSpawnAmount;
+    [SerializeField] private Vector3 leftBoundLocation;   
+    [SerializeField] private float speed;
+    [SerializeField] private float checkRadius;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -44,11 +46,24 @@ public class CoinDropController : MonoBehaviour
 
     void inputManager()
     {
-        var step = speed * Time.deltaTime; 
-        if (Input.GetKeyDown(KeyCode.Space))
+        var step = speed * Time.deltaTime;         
+        if (Input.GetKey(KeyCode.Space))
         {
+            bool spawnable = true;
             Debug.Log("Space key pressed.");
-            spawnCoin("drop");
+            Collider[] overlappingColliders = Physics.OverlapSphere(transform.position, checkRadius);
+            foreach(var overlap in overlappingColliders)
+            {
+                if(overlap.gameObject.CompareTag("Coin"))
+                {
+                    spawnable = false;
+                    Debug.Log("Found overlapping coin.");
+                }
+            }
+            if(spawnable)
+            {
+                spawnCoin("drop");
+            }
         }
         if(Input.GetKey(KeyCode.D))
         {            
@@ -110,5 +125,10 @@ public class CoinDropController : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         Destroy(rampWall);
+    }
+
+    public int getCoinSpawnAmount()
+    {
+        return coinSpawnAmount;
     }
 }

@@ -127,4 +127,9 @@ public class BallForward : MonoBehaviour
         finalValue = (1260 + (difference - difference / 2.5f)) / 90;
         return finalValue;
     }
+
+    void setSilent(bool value)
+    {
+        silent = value;
+    }
 }

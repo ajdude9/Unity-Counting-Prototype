@@ -13,6 +13,8 @@ public class CoinController : MonoBehaviour
     public bool parentable = true;
     private CounterController gameManager;
     public AudioController audioController;
+    private bool collected = false;
+    private bool silent = true;
     
     // Start is called before the first frame update
     void Start()
@@ -38,8 +40,8 @@ public class CoinController : MonoBehaviour
     void OnCollisionEnter(Collision collision)//Upon colliding with something
     {
         //Debug.Log("Collided");
-        if(!collision.gameObject.CompareTag("Coin"))
-        {
+        if(!collision.gameObject.CompareTag("Coin") && !silent)
+        {            
             coinAudio.pitch = Random.Range(0.9f, 1.2f);
             coinAudio.PlayOneShot(hitSound1, 0.5f);
         }
@@ -64,23 +66,30 @@ public class CoinController : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Collector"))
-        {
-            
+        {            
             gameManager.addCounter(1, "bank");
             StartCoroutine("destroyDelay");
+            collected = true;
         }
         if (other.CompareTag("Killbox"))
         {
-            coinAudio.pitch = Random.Range(0.2f, 0.6f);
-            coinAudio.PlayOneShot(collectSound, 0.8f);
+            if(!collected)  
+            {          
             Destroy(gameObject);
+            }
         }
     }
 
     IEnumerator destroyDelay()
     {
-        yield return new WaitForSeconds(1);
-        audioController.playAudio(0, 0.8f, 0.8f);
+        coinAudio.PlayOneShot(collectSound, 0.8f);     
+        yield return new WaitForSeconds(1.202f);         
+        Destroy(gameObject);
+    }
+
+    void setSilent(bool value)
+    {
+        silent = value;
     }
 
 }

@@ -43,7 +43,7 @@ public class CounterController : MonoBehaviour
         //get the game audio and set the default values for variabls
         gameAudio = gameObject.GetComponent<AudioSource>();
         coinDropController = GameObject.Find("Coin Dropper").GetComponent<CoinDropController>();
-        counterTotal = 44;
+        counterTotal = 54;
         loadedTotal = 6;
         reloadMax = 6;
         reloadSpeed = 0.15f;
@@ -59,6 +59,7 @@ public class CounterController : MonoBehaviour
         coinCamera = GameObject.Find("Machine Watcher").GetComponent<Camera>();
         shopCamera = GameObject.Find("Shop Camera").GetComponent<Camera>();
         viewType = "throw";
+        switchToThrow();
     }
 
     // Update is called once per frame
@@ -289,8 +290,10 @@ public class CounterController : MonoBehaviour
         if (!firstSwitch)
         {
             firstSwitch = true;
-            coinDropController.generateCoins(coinDropController.coinSpawnAmount);
+            coinDropController.generateCoins(coinDropController.getCoinSpawnAmount());
         }
+
+        
     }
 
     private void switchToThrow()
