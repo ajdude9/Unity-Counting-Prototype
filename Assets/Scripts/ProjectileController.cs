@@ -9,21 +9,33 @@ public class BallForward : MonoBehaviour
     private Rigidbody projRb;
     private Vector3 mousePos;
     public Vector3 worldPos;
+
     public float torque = 50;
     private int throwPower;
+
     public Renderer projRenderer;//The renderer for the projectile's current material
+
     private Color missColour = new Color(0.1f, 0.1f, 0.1f, 1.0f);
     private Color scoreColour = new Color(1f, 0.93f, 0f, 1.0f);
     private bool scored = false;
+
+    // The audio clips for the sounds when the projectile hits something
     public AudioClip hitSound1;
     public AudioClip hitSound2;
     public AudioClip hitSound3;
     public AudioClip hitSound4;
+    //The audio clip for when the projectile is scored
     public AudioClip convertSound;
     private AudioSource projAudio;
-    private bool silent = false;
-    private bool landed = false;
+    private bool silent = false;//If the projectile should make sound or not
+
+    private bool landed = false;//If the projectile has landed
     private GameObject boxFloor;
+
+    private int scoreValue;
+    private string projType;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -131,5 +143,10 @@ public class BallForward : MonoBehaviour
     void setSilent(bool value)
     {
         silent = value;
+    }
+
+    void getType()
+    {
+        
     }
 }

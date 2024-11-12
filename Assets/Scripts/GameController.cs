@@ -9,6 +9,8 @@ using Debug = UnityEngine.Debug;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine.UIElements;
+using System.Linq;
+using Unity.VisualScripting.FullSerializer;
 
 public class CounterController : MonoBehaviour
 {
@@ -37,13 +39,16 @@ public class CounterController : MonoBehaviour
     public String viewType;//Which camera is currently being viewed
     public bool firstSwitch = false;//Whether the switch to the coin camera is the first one since the game started
     public int fadeValue;
+    private string projectileType;
+    private List<KeyValuePair<int, string>> heldProjectiles = new List<KeyValuePair<int, string>>();//A key:value list to contain the number of a projectile and its name
     // Start is called before the first frame update
     void Start()
     {
         //get the game audio and set the default values for variabls
         gameAudio = gameObject.GetComponent<AudioSource>();
         coinDropController = GameObject.Find("Coin Dropper").GetComponent<CoinDropController>();
-        counterTotal = 54;
+        heldProjectiles.Add(new KeyValuePair<int, string>(54, "red"));//Set the number of red gems to 54
+        counterTotal = heldProjectiles.FirstOrDefault(x => x.Value == "red").Key;//Get the key value of value 'red' as the number of red gems stored
         loadedTotal = 6;
         reloadMax = 6;
         reloadSpeed = 0.15f;
