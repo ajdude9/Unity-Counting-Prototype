@@ -14,7 +14,7 @@ public class CoinController : MonoBehaviour
     private CounterController gameManager;
     public AudioController audioController;
     private bool collected = false;
-    private bool silent = true;
+    private bool silent = false;
     
     // Start is called before the first frame update
     void Start()
@@ -43,7 +43,7 @@ public class CoinController : MonoBehaviour
         if(!collision.gameObject.CompareTag("Coin") && !silent)
         {            
             coinAudio.pitch = Random.Range(0.9f, 1.2f);
-            coinAudio.PlayOneShot(hitSound1, 0.5f);
+            coinAudio.PlayOneShot(hitSound1, 0.5f);        
         }
         if (collision.gameObject.CompareTag("Pusher") && parentable)
         {
@@ -87,7 +87,7 @@ public class CoinController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void setSilent(bool value)
+    public void setSilent(bool value)
     {
         silent = value;
     }

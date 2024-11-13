@@ -15,7 +15,6 @@ using Unity.VisualScripting.FullSerializer;
 public class CounterController : MonoBehaviour
 {
     private CoinDropController coinDropController;
-    private int counterTotal;//The total number of projectiles
     public Text counterText;//Text object to display the number of projectiles
     public Text loadedText;//Text object to display the number of projectiles ready
     public TextMeshProUGUI reloadNotify;//Text object to tell the player to reload
@@ -36,26 +35,38 @@ public class CounterController : MonoBehaviour
     private Camera throwCamera;//The camera for throwing projectiles into a box
     private Camera coinCamera;//The camera for putting coins in a machine
     private Camera shopCamera;//The camera for viewing the shop
+    private Camera gemSelectCamera;//The camera for viewing the gem select UI
     public String viewType;//Which camera is currently being viewed
     public bool firstSwitch = false;//Whether the switch to the coin camera is the first one since the game started
     public int fadeValue;
-    private string projectileType;
-    private List<KeyValuePair<int, string>> heldProjectiles = new List<KeyValuePair<int, string>>();//A key:value list to contain the number of a projectile and its name
+    private string projectileType;//The type of projectile that has been selected
+    private Dictionary<string, int> heldProjectiles;//A key:value list to contain the number of a projectile and its name
+    private UnityEngine.UIElements.Button changeGemButton;
+    private Color emeraldColor = new Color(0f, 1.0f, 0f, 0f);//A green colour
+    private Color amethystColor = new Color(1.0f, 0f, 1.0f, 0f);//A purple colour
     // Start is called before the first frame update
     void Start()
     {
-        //get the game audio and set the default values for variabls
+        //get the game audio and set the default values for variables
+        configureUI();
+
+        projectileType = "redGem";
         gameAudio = gameObject.GetComponent<AudioSource>();
         coinDropController = GameObject.Find("Coin Dropper").GetComponent<CoinDropController>();
-        heldProjectiles.Add(new KeyValuePair<int, string>(54, "red"));//Set the number of red gems to 54
-        counterTotal = heldProjectiles.FirstOrDefault(x => x.Value == "red").Key;//Get the key value of value 'red' as the number of red gems stored
+        heldProjectiles = new Dictionary<string, int>()
+        {
+            {"redGem", 56},
+            {"greenGem", 0},
+            {"purpleGem", 0}
+        };
+        Debug.Log(heldProjectiles[projectileType]);
         loadedTotal = 6;
         reloadMax = 6;
         reloadSpeed = 0.15f;
         fireRate = 0.35f;
         counterText.enabled = true;
         loadedText.enabled = true;
-        counterText.text = "Available " + projType + ": " + counterTotal;
+        counterText.text = "Available " + projType + ": " + heldProjectiles[projectileType];
         loadedText.text = "Loaded " + projType + ": " + loadedTotal;
         coinsSavedText.text = "Coins Won: " + coinsSaved;
         coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;
@@ -63,6 +74,8 @@ public class CounterController : MonoBehaviour
         throwCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
         coinCamera = GameObject.Find("Machine Watcher").GetComponent<Camera>();
         shopCamera = GameObject.Find("Shop Camera").GetComponent<Camera>();
+        gemSelectCamera = GameObject.Find("Select Camera").GetComponent<Camera>();
+        //changeGemButton = GameObject.Find("Change Button").GetComponent<UnityEngine.UIElements.Button>();
         viewType = "throw";
         switchToThrow();
     }
@@ -124,7 +137,7 @@ public class CounterController : MonoBehaviour
 
     public void refreshCounter()//Update the counters to their current values
     {
-        counterText.text = "Available " + projType + ": " + counterTotal;
+        counterText.text = "Available " + projType + ": " + heldProjectiles[projectileType];
         loadedText.text = "Loaded " + projType + ": " + loadedTotal;
         coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;
         if(viewType == "shop")
@@ -143,7 +156,7 @@ public class CounterController : MonoBehaviour
         switch (type)
         {
             case "total"://Get the total amount of projectiles
-                returnAmount = counterTotal;
+                returnAmount = heldProjectiles[projectileType];
                 break;
             case "loaded"://Get the amount of projectiles able to be fired
                 returnAmount = loadedTotal;
@@ -163,7 +176,7 @@ public class CounterController : MonoBehaviour
         switch (type)
         {
             case "total":
-                counterTotal = amount;
+                heldProjectiles[projectileType] = amount;
                 refreshCounter();
                 break;
             case "loaded":
@@ -186,7 +199,7 @@ public class CounterController : MonoBehaviour
         switch (type)
         {
             case "total":
-                counterTotal += amount;
+                heldProjectiles[projectileType] += amount;
                 refreshCounter();
                 break;
             case "loaded":
@@ -209,7 +222,7 @@ public class CounterController : MonoBehaviour
         switch (type)
         {
             case "total":
-                counterTotal -= amount;
+                heldProjectiles[projectileType] -= amount;
                 refreshCounter();
                 break;
             case "loaded":
@@ -271,7 +284,7 @@ public class CounterController : MonoBehaviour
     private void infiniteAmmoCheat()//Enable cheats, setting status to immensely high values
     {
         enableCheats = true;
-        counterTotal = 1000000;
+        heldProjectiles[projectileType] = 1000000;
         loadedTotal = 1000000;
         reloadMax = 1000000;
         reloadSpeed = 0.01f;
@@ -360,4 +373,16 @@ public class CounterController : MonoBehaviour
         }
     }
 
+    public void toggleGemCamera()
+    {
+        gemSelectCamera.enabled = !gemSelectCamera.enabled;
+    }
+
+    public void configureUI()
+    {
+        GameObject.Find("UIEmerald").GetComponent<Renderer>().material.SetColor("_Color", emeraldColor);
+        GameObject.Find("Shop Emerald").GetComponent<Renderer>().material.SetColor("_Color", emeraldColor);
+        GameObject.Find("UIAmethyst").GetComponent<Renderer>().material.SetColor("_Color", amethystColor);
+        GameObject.Find("Shop Amethyst").GetComponent<Renderer>().material.SetColor("_Color", amethystColor);
+    }
 }
