@@ -35,17 +35,31 @@ public class BallForward : MonoBehaviour
     private int scoreValue;
     private string projType;
 
+    private CounterController gameManager;
+
+    private Dictionary<string, Material> materials;//A key:value list to store all the materials used for projectiles
 
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.Find("Game Manager").GetComponent<CounterController>();
+        projType = gameManager.getProjectileType();
+
+        materials = new Dictionary<string, Material>()
+        {
+            {"ruby", Resources.Load("Ruby", typeof(Material)) as Material},
+            {"emerald", Resources.Load("Emerald", typeof(Material)) as Material},
+            {"amethyst", Resources.Load("Amethyst", typeof(Material)) as Material},
+            {"diamond", Resources.Load("Diamond", typeof(Material)) as Material},
+        };
+        setProjectileStats();
         projRb = gameObject.GetComponent<Rigidbody>();
         projRenderer = gameObject.GetComponent<Renderer>();
         projAudio = gameObject.GetComponent<AudioSource>();
         mousePos = Input.mousePosition;
         mousePos.z = Camera.main.nearClipPlane + 5;
         worldPos = Camera.main.ScreenToWorldPoint(mousePos);
-        boxFloor = GameObject.Find("Box Floor");
+        boxFloor = GameObject.Find("Box Floor");        
         //Debug.Log("Calculated Power: " + (calculateThrowPower(mousePos) / 100));
         transform.position = new Vector3(15.6f, 3.2f, -0.22f);//Set the projectile to the bottom of the screen
         projRb.transform.LookAt(worldPos);//Look toward where the cursor is on the screen
@@ -60,6 +74,29 @@ public class BallForward : MonoBehaviour
     void Update()
     {
 
+    }
+
+    void setProjectileStats()
+    {
+        switch(projType)
+        {
+            case "redGem":
+                scoreValue = 1;
+                gameObject.GetComponent<Renderer>().material = materials["ruby"];
+            break;
+            case "greenGem":
+                scoreValue = 2;
+                gameObject.GetComponent<Renderer>().material = materials["emerald"];
+            break;
+            case "purpleGem":
+                scoreValue = 5;
+                gameObject.GetComponent<Renderer>().material = materials["amethyst"];
+            break;
+            case "blueGem":
+                scoreValue = 20;
+                gameObject.GetComponent<Renderer>().material = materials["diamond"];
+            break;
+        }
     }
 
     IEnumerator tilDeath(int lifetime)//Destroy the game object after a certain amount of time
@@ -86,7 +123,8 @@ public class BallForward : MonoBehaviour
                 projRb.AddForce(towardFloor * 2, ForceMode.Impulse);
                 scored = true;
                 silent = true;
-                StartCoroutine(tilDeath(30));//Destroy the projectile after a set time
+                StartCoroutine(tilDeath(30));//Destroy the projectile after a set time                
+                gameManager.addCounter(scoreValue, "coins");
             }
         }
     }
@@ -143,10 +181,5 @@ public class BallForward : MonoBehaviour
     void setSilent(bool value)
     {
         silent = value;
-    }
-
-    void getType()
-    {
-        
     }
 }

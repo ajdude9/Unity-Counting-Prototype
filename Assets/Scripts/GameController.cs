@@ -11,6 +11,7 @@ using Unity.VisualScripting;
 using UnityEngine.UIElements;
 using System.Linq;
 using Unity.VisualScripting.FullSerializer;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 public class CounterController : MonoBehaviour
 {
@@ -431,11 +432,6 @@ public class CounterController : MonoBehaviour
         }
     }
 
-    
-
-    
-   
-
     public void changeProjectile(string newProjectile)
     {
         if(projectileType != newProjectile && !reloadingStatus)
@@ -446,4 +442,10 @@ public class CounterController : MonoBehaviour
             refreshCounter();            
         }
     }
+
+    public string getProjectileType()
+    {
+        return projectileType;
+    }
+
 }
