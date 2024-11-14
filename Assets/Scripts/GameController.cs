@@ -41,24 +41,35 @@ public class CounterController : MonoBehaviour
     public int fadeValue;
     private string projectileType;//The type of projectile that has been selected
     private Dictionary<string, int> heldProjectiles;//A key:value list to contain the number of a projectile and its name
+    private Dictionary<string, GameObject> gemObjects;//A key:value list to contain all the gem objects used in the scene
     private UnityEngine.UIElements.Button changeGemButton;
-    private Color emeraldColor = new Color(0f, 1.0f, 0f, 0f);//A green colour
-    private Color amethystColor = new Color(1.0f, 0f, 1.0f, 0f);//A purple colour
+    private Color emptyColour = new Color(0.0f, 0.0f, 0.0f, 0f);//A black colour
     // Start is called before the first frame update
     void Start()
     {
         //get the game audio and set the default values for variables
-        configureUI();
-
         projectileType = "redGem";
         gameAudio = gameObject.GetComponent<AudioSource>();
         coinDropController = GameObject.Find("Coin Dropper").GetComponent<CoinDropController>();
         heldProjectiles = new Dictionary<string, int>()
         {
-            {"redGem", 56},
-            {"greenGem", 0},
-            {"purpleGem", 0}
+            {"redGem", 54},
+            {"greenGem", 7},
+            {"purpleGem", 0},
+            {"blueGem", 3}
         };
+        gemObjects = new Dictionary<string, GameObject>()
+        {
+            {"UIRuby", GameObject.Find("UIRuby")},
+            {"ShopRuby", GameObject.Find("Shop Ruby")},
+            {"UIEmerald", GameObject.Find("UIEmerald")},
+            {"ShopEmerald", GameObject.Find("Shop Emerald")},
+            {"UIAmethyst", GameObject.Find("UIAmethyst")},
+            {"ShopAmethyst", GameObject.Find("Shop Amethyst")},
+            {"UIDiamond", GameObject.Find("UIDiamond")},
+            {"ShopDiamond", GameObject.Find("Shop Diamond")}
+        };
+        
         Debug.Log(heldProjectiles[projectileType]);
         loadedTotal = 6;
         reloadMax = 6;
@@ -314,15 +325,17 @@ public class CounterController : MonoBehaviour
         
     }
 
-    private void switchToThrow()
+    public void switchToThrow()
     {
         throwCamera.enabled = true;
+        gemSelectCamera.enabled = false;
         coinCamera.enabled = false;
         shopCamera.enabled = false;
         counterText.enabled = true;
         loadedText.enabled = true;
         coinsSavedText.enabled = false;
         coinsDroppableText.enabled = false;
+        GameObject.Find("Change Button").SetActive(true);
         viewType = "throw";
     }
 
@@ -336,8 +349,49 @@ public class CounterController : MonoBehaviour
         coinsSavedText.enabled = true;
         coinsDroppableText.enabled = false;
         coinsSavedText.transform.position = new Vector3(coinsSavedText.transform.position.x, 1100, coinsSavedText.transform.position.z);
+        
         coinsSavedText.text = "Coins Available: " + coinsSaved;
         viewType = "shop";
+    }
+
+    public void switchToAmmo()
+    {
+        gemSelectCamera.enabled = true;
+        counterText.enabled = false;
+        loadedText.enabled = false;
+        
+        viewType = "ammo";
+        checkEmpty();
+    }
+
+    private void checkEmpty()
+    {
+        foreach(KeyValuePair<string, int> entry in heldProjectiles)
+        {
+            if(entry.Value == 0)
+            {
+                emptyColor(entry.Key);
+            }
+        }
+    }
+
+    private void emptyColor(string keyString)
+    {
+        switch(keyString)
+        {
+            case "redGem":
+                gemObjects["UIRuby"].GetComponent<Renderer>().material.SetColor("_Color", emptyColour);
+            break;
+            case "greenGem":
+                gemObjects["UIEmerald"].GetComponent<Renderer>().material.SetColor("_Color", emptyColour);
+            break;
+            case "purpleGem":
+                gemObjects["UIAmethyst"].GetComponent<Renderer>().material.SetColor("_Color", emptyColour);
+            break;
+            case "blueGem":
+                gemObjects["UIDiamond"].GetComponent<Renderer>().material.SetColor("_Color", emptyColour);
+            break;
+        }
     }
 
     public void callFadeIn(float time, TextMeshProUGUI text)
@@ -373,16 +427,19 @@ public class CounterController : MonoBehaviour
         }
     }
 
-    public void toggleGemCamera()
-    {
-        gemSelectCamera.enabled = !gemSelectCamera.enabled;
-    }
+    
 
-    public void configureUI()
+    
+   
+
+    public void changeProjectile(string newProjectile)
     {
-        GameObject.Find("UIEmerald").GetComponent<Renderer>().material.SetColor("_Color", emeraldColor);
-        GameObject.Find("Shop Emerald").GetComponent<Renderer>().material.SetColor("_Color", emeraldColor);
-        GameObject.Find("UIAmethyst").GetComponent<Renderer>().material.SetColor("_Color", amethystColor);
-        GameObject.Find("Shop Amethyst").GetComponent<Renderer>().material.SetColor("_Color", amethystColor);
+        if(projectileType != newProjectile && !reloadingStatus)
+        {
+            heldProjectiles[projectileType] = heldProjectiles[projectileType] + loadedTotal;
+            loadedTotal = 0;
+            projectileType = newProjectile;
+            refreshCounter();            
+        }
     }
 }
