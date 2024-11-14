@@ -316,6 +316,7 @@ public class CounterController : MonoBehaviour
         loadedText.enabled = false;
         coinsSavedText.enabled = true;
         coinsDroppableText.enabled = true;
+        returnButton.gameObject.SetActive(false);
         coinsSavedText.transform.position = new Vector3(coinsSavedText.transform.position.x, 1000, coinsSavedText.transform.position.z);
         if (!firstSwitch)
         {
@@ -350,6 +351,7 @@ public class CounterController : MonoBehaviour
         loadedText.enabled = false;
         coinsSavedText.enabled = true;
         coinsDroppableText.enabled = false;
+        returnButton.gameObject.SetActive(false);
         coinsSavedText.transform.position = new Vector3(coinsSavedText.transform.position.x, 1100, coinsSavedText.transform.position.z);        
         coinsSavedText.text = "Coins Available: " + coinsSaved;
         viewType = "shop";
