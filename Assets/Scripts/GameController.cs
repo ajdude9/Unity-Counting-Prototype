@@ -44,6 +44,7 @@ public class CounterController : MonoBehaviour
     private Dictionary<string, GameObject> gemObjects;//A key:value list to contain all the gem objects used in the scene
     private UnityEngine.UIElements.Button changeGemButton;
     private Color emptyColour = new Color(0.0f, 0.0f, 0.0f, 0f);//A black colour
+    private UnityEngine.UI.Button returnButton;
     // Start is called before the first frame update
     void Start()
     {
@@ -69,8 +70,7 @@ public class CounterController : MonoBehaviour
             {"UIDiamond", GameObject.Find("UIDiamond")},
             {"ShopDiamond", GameObject.Find("Shop Diamond")}
         };
-        
-        Debug.Log(heldProjectiles[projectileType]);
+        returnButton = GameObject.Find("Change Button").GetComponent<UnityEngine.UI.Button>();
         loadedTotal = 6;
         reloadMax = 6;
         reloadSpeed = 0.15f;
@@ -335,6 +335,7 @@ public class CounterController : MonoBehaviour
         loadedText.enabled = true;
         coinsSavedText.enabled = false;
         coinsDroppableText.enabled = false;
+        returnButton.gameObject.SetActive(true);
         GameObject.Find("Change Button").SetActive(true);
         viewType = "throw";
     }
@@ -348,8 +349,7 @@ public class CounterController : MonoBehaviour
         loadedText.enabled = false;
         coinsSavedText.enabled = true;
         coinsDroppableText.enabled = false;
-        coinsSavedText.transform.position = new Vector3(coinsSavedText.transform.position.x, 1100, coinsSavedText.transform.position.z);
-        
+        coinsSavedText.transform.position = new Vector3(coinsSavedText.transform.position.x, 1100, coinsSavedText.transform.position.z);        
         coinsSavedText.text = "Coins Available: " + coinsSaved;
         viewType = "shop";
     }
@@ -359,7 +359,7 @@ public class CounterController : MonoBehaviour
         gemSelectCamera.enabled = true;
         counterText.enabled = false;
         loadedText.enabled = false;
-        
+        returnButton.gameObject.SetActive(false);
         viewType = "ammo";
         checkEmpty();
     }
@@ -377,21 +377,25 @@ public class CounterController : MonoBehaviour
 
     private void emptyColor(string keyString)
     {
+        string selectedGem = "";
         switch(keyString)
         {
             case "redGem":
-                gemObjects["UIRuby"].GetComponent<Renderer>().material.SetColor("_Color", emptyColour);
+                selectedGem = "UIRuby";
             break;
             case "greenGem":
-                gemObjects["UIEmerald"].GetComponent<Renderer>().material.SetColor("_Color", emptyColour);
+                selectedGem = "UIEmerald";
             break;
             case "purpleGem":
-                gemObjects["UIAmethyst"].GetComponent<Renderer>().material.SetColor("_Color", emptyColour);
+                selectedGem = "UIAmethyst";
             break;
             case "blueGem":
-                gemObjects["UIDiamond"].GetComponent<Renderer>().material.SetColor("_Color", emptyColour);
+                selectedGem = "UIDiamond";
             break;
         }
+        gemObjects[selectedGem].GetComponent<Renderer>().material.SetColor("_Color", emptyColour);
+        gemObjects[selectedGem].GetComponent<Renderer>().material.SetFloat("_Metallic", 0f);
+        gemObjects[selectedGem].GetComponent<Renderer>().material.SetFloat("_Glossiness", 0f);
     }
 
     public void callFadeIn(float time, TextMeshProUGUI text)
