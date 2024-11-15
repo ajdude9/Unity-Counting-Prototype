@@ -105,12 +105,12 @@ public class CoinDropController : MonoBehaviour
                 break;
             }
             case "drop":
-                if (gameManager.getCounter("coins") > 0)
+                if (gameManager.getCounter("coins", "") > 0)
                 {
                     Vector3 dropPos = new Vector3(coinDropper.transform.position.x, coinDropper.transform.position.y, coinDropper.transform.position.z - 0.15f);
                     spawnRotation = Quaternion.Euler(90, 0, 0);
                     Instantiate(coinPrefab, dropPos, spawnRotation);
-                    gameManager.minusCounter(1, "coins");
+                    gameManager.minusCounter(1, "coins", "");
                 }
                 break;
         }

@@ -24,16 +24,15 @@ public class PegBouncer : MonoBehaviour
             Vector3 awayFromPeg = collision.gameObject.transform.position - transform.position;
             Rigidbody coinRb = collision.gameObject.GetComponent<Rigidbody>();
             coinRb.AddForce(awayFromPeg * 0.005f, ForceMode.Impulse);
-            StartCoroutine(forcePush(awayFromPeg, coinRb));
+            forcePush(awayFromPeg, coinRb);
         }
     }
     public void OnCollisionExit(UnityEngine.Collision collision)
     {
         StopAllCoroutines();
     }
-    private IEnumerator forcePush(Vector3 direction, Rigidbody rb)
+    private void forcePush(Vector3 direction, Rigidbody rb)
     {
-        yield return new WaitForSeconds(1);
-        rb.AddForce(direction * 0.05f, ForceMode.Impulse);
+        rb.AddForce(direction * 0.005f, ForceMode.Impulse);
     }
 }

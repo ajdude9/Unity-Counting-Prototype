@@ -52,7 +52,8 @@ public class BallForward : MonoBehaviour
             {"amethyst", Resources.Load("Amethyst", typeof(Material)) as Material},
             {"diamond", Resources.Load("Diamond", typeof(Material)) as Material},
         };
-        setProjectileStats();
+        scoreValue = gameManager.getProjectileValue(projType);
+        gameObject.GetComponent<Renderer>().material = materials[projType];
         projRb = gameObject.GetComponent<Rigidbody>();
         projRenderer = gameObject.GetComponent<Renderer>();
         projAudio = gameObject.GetComponent<AudioSource>();
@@ -76,29 +77,6 @@ public class BallForward : MonoBehaviour
 
     }
 
-    void setProjectileStats()
-    {
-        switch(projType)
-        {
-            case "redGem":
-                scoreValue = 1;
-                gameObject.GetComponent<Renderer>().material = materials["ruby"];
-            break;
-            case "greenGem":
-                scoreValue = 2;
-                gameObject.GetComponent<Renderer>().material = materials["emerald"];
-            break;
-            case "purpleGem":
-                scoreValue = 5;
-                gameObject.GetComponent<Renderer>().material = materials["amethyst"];
-            break;
-            case "blueGem":
-                scoreValue = 20;
-                gameObject.GetComponent<Renderer>().material = materials["diamond"];
-            break;
-        }
-    }
-
     IEnumerator tilDeath(int lifetime)//Destroy the game object after a certain amount of time
     {
         yield return new WaitForSeconds(lifetime);
@@ -116,6 +94,7 @@ public class BallForward : MonoBehaviour
         {
             if (other.CompareTag("Box"))
             {
+                //Debug.Log("Box trigger activated.");
                 projRenderer.material.SetColor("_Color", scoreColour);
                 projAudio.pitch = Random.Range(0.9f, 1.2f);
                 projAudio.PlayOneShot(convertSound, 0.8f);
@@ -123,8 +102,9 @@ public class BallForward : MonoBehaviour
                 projRb.AddForce(towardFloor * 2, ForceMode.Impulse);
                 scored = true;
                 silent = true;
-                StartCoroutine(tilDeath(30));//Destroy the projectile after a set time                
-                gameManager.addCounter(scoreValue, "coins");
+                StartCoroutine(tilDeath(30));//Destroy the projectile after a set time  
+                //Debug.Log("Scored, adding " + scoreValue + " coins.");
+                gameManager.addCounter(scoreValue, "coins", "");
             }
         }
     }

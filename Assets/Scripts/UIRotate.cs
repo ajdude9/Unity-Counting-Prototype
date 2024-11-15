@@ -11,13 +11,21 @@ public class UIRotate : MonoBehaviour
     //Which direction the speed change is going; true = up, false = down.
     private bool[] spinDirections = { false, false, false };
 
-    
-
     // Start is called before the first frame update
     void Start()
     {
-        
+        calculateSpeeds();
+        InvokeRepeating("adjustSpeeds", 0, 1);
+    }
 
+    // Update is called once per frame
+    void Update()
+    {
+        transform.Rotate(spinSpeeds[0] * Time.deltaTime / 2, spinSpeeds[1] * Time.deltaTime / 2, spinSpeeds[2] * Time.deltaTime / 2);
+    }
+
+    public void calculateSpeeds()
+    {
         spinSpeeds[0] = Random.Range(-spinSpeedBoundary, spinSpeedBoundary);
         spinSpeeds[1] = Random.Range(-spinSpeedBoundary, spinSpeedBoundary);
         spinSpeeds[2] = Random.Range(-spinSpeedBoundary, spinSpeedBoundary);
@@ -32,13 +40,6 @@ public class UIRotate : MonoBehaviour
                 spinDirections[i] = false;
             }
         }
-        InvokeRepeating("adjustSpeeds", 0, 1);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        transform.Rotate(spinSpeeds[0] * Time.deltaTime / 2, spinSpeeds[1] * Time.deltaTime / 2, spinSpeeds[2] * Time.deltaTime / 2);
     }
 
     void adjustSpeeds()

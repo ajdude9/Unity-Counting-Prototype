@@ -67,7 +67,7 @@ public class CoinController : MonoBehaviour
     {
         if (other.CompareTag("Collector"))
         {            
-            gameManager.addCounter(1, "bank");
+            gameManager.addCounter(1, "bank", "");
             StartCoroutine("destroyDelay");
             collected = true;
         }

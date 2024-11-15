@@ -26,15 +26,14 @@ public class ShopController : MonoBehaviour
 
     public void purchaseItem(String itemType, int value, int quantity)
     {
-        if (gameManager.getCounter("bank") >= value)
+        if (gameManager.getCounter("bank", "") >= value)
         {
             shopAudio.pitch = 1f;
             switch (itemType)
-            {
-                
-                case "redGem":
-                    gameManager.addCounter(quantity, "total");
-                    gameManager.minusCounter(value, "bank");
+            {                
+                case "ruby":
+                    gameManager.addCounter(quantity, "total", itemType);
+                    gameManager.minusCounter(value, "bank", "");
                     shopAudio.PlayOneShot(buySFX, 0.2f);
                     break;
             }
