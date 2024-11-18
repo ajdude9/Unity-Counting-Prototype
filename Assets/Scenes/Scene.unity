@@ -10818,7 +10818,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 293364f8a1caa9b1a909e19847c33c3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: redGem
+  itemName: ruby
   itemValue: 1
   itemQuantity: 3
 --- !u!114 &1827599972

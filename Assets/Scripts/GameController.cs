@@ -50,7 +50,7 @@ public class CounterController : MonoBehaviour
     private Color emptyColour = new Color(0.0f, 0.0f, 0.0f, 0f);//A black colour
     private UnityEngine.UI.Button changeButton;
     private UnityEngine.UI.Button[] inventoryButtons;
-
+    private Dictionary<string, Material> materials;//A key:value list to store all the materials used for projectiles
     // Start is called before the first frame update
     void Start()
     {
@@ -58,6 +58,38 @@ public class CounterController : MonoBehaviour
         projectileType = "ruby";
         gameAudio = gameObject.GetComponent<AudioSource>();
         coinDropController = GameObject.Find("Coin Dropper").GetComponent<CoinDropController>();
+        writeDictionaries();//Fill out all the dictionary variables.
+        changeButton = GameObject.Find("Change Button").GetComponent<UnityEngine.UI.Button>();
+        GameObject[] inventoryButtonHolder = GameObject.FindGameObjectsWithTag("Inventory Button");
+        
+        for(int i = 0; i < inventoryButtonHolder.Length; i++)
+        {
+            Debug.Log(inventoryButtonHolder[i]);
+            //inventoryButtons[i] = inventoryButtonHolder[i].GetComponent<UnityEngine.UI.Button>();
+        }
+        loadedTotal = 6;
+        reloadMax = 6;
+        reloadSpeed = 0.15f;
+        fireRate = 0.35f;
+        counterText.enabled = true;
+        loadedText.enabled = true;
+        counterText.text = "Available " + projType + ": " + heldProjectiles[projectileType];
+        loadedText.text = "Loaded " + projType + ": " + loadedTotal;
+        coinsSavedText.text = "Coins Won: " + coinsSaved;
+        coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;
+        reloadNotify.color = new Color(reloadNotify.color.r, reloadNotify.color.g, reloadNotify.color.b, 0);
+        throwCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+        coinCamera = GameObject.Find("Machine Watcher").GetComponent<Camera>();
+        shopCamera = GameObject.Find("Shop Camera").GetComponent<Camera>();
+        gemSelectCamera = GameObject.Find("Select Camera").GetComponent<Camera>();
+        //changeGemButton = GameObject.Find("Change Button").GetComponent<UnityEngine.UIElements.Button>();
+        viewType = "throw";
+        switchToThrow();
+        
+    }
+
+    void writeDictionaries()
+    {
         heldProjectiles = new Dictionary<string, int>()
         {
             {"ruby", 54},
@@ -94,35 +126,14 @@ public class CounterController : MonoBehaviour
             {"diamondHeld", GameObject.Find("Diamond Held").GetComponent<TextMeshProUGUI>()},
             {"diamondValue", GameObject.Find("Diamond Value").GetComponent<TextMeshProUGUI>()},
         };
-        changeButton = GameObject.Find("Change Button").GetComponent<UnityEngine.UI.Button>();
-        GameObject[] inventoryButtonHolder = GameObject.FindGameObjectsWithTag("Inventory Button");
-        
-        for(int i = 0; i < inventoryButtonHolder.Length; i++)
+        materials = new Dictionary<string, Material>()
         {
-            Debug.Log(inventoryButtonHolder[i]);
-            //inventoryButtons[i] = inventoryButtonHolder[i].GetComponent<UnityEngine.UI.Button>();
-        }
-        loadedTotal = 6;
-        reloadMax = 6;
-        reloadSpeed = 0.15f;
-        fireRate = 0.35f;
-        counterText.enabled = true;
-        loadedText.enabled = true;
-        counterText.text = "Available " + projType + ": " + heldProjectiles[projectileType];
-        loadedText.text = "Loaded " + projType + ": " + loadedTotal;
-        coinsSavedText.text = "Coins Won: " + coinsSaved;
-        coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;
-        reloadNotify.color = new Color(reloadNotify.color.r, reloadNotify.color.g, reloadNotify.color.b, 0);
-        throwCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
-        coinCamera = GameObject.Find("Machine Watcher").GetComponent<Camera>();
-        shopCamera = GameObject.Find("Shop Camera").GetComponent<Camera>();
-        gemSelectCamera = GameObject.Find("Select Camera").GetComponent<Camera>();
-        //changeGemButton = GameObject.Find("Change Button").GetComponent<UnityEngine.UIElements.Button>();
-        viewType = "throw";
-        switchToThrow();
-        
+            {"ruby", Resources.Load("Ruby", typeof(Material)) as Material},
+            {"emerald", Resources.Load("Emerald", typeof(Material)) as Material},
+            {"amethyst", Resources.Load("Amethyst", typeof(Material)) as Material},
+            {"diamond", Resources.Load("Diamond", typeof(Material)) as Material},
+        };
     }
-
     // Update is called once per frame
 
     void Update()
@@ -458,14 +469,18 @@ public class CounterController : MonoBehaviour
     {
         foreach (KeyValuePair<string, int> entry in heldProjectiles)
         {
-            if (entry.Value == 0)
+            if (entry.Value < 1)
             {
-                modifyColor(entry.Key, true);
+                modifyColour(entry.Key, true);
+            }
+            else
+            {
+                modifyColour(entry.Key, false);
             }
         }
     }
 
-    private void modifyColor(string keyString, bool empty)
+    private void modifyColour(string keyString, bool empty)
     {
         string selectedGem = "";
         switch (keyString)
@@ -491,7 +506,7 @@ public class CounterController : MonoBehaviour
         }
         else
         {
-
+            gemObjects[selectedGem].GetComponent<Renderer>().material = materials[keyString];
         }
     }
 
@@ -560,5 +575,7 @@ public class CounterController : MonoBehaviour
     {
         return projectileValues[projectileType];
     }    
-
+    
+    
+    
 }
