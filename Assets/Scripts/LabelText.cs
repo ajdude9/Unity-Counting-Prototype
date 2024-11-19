@@ -6,14 +6,12 @@ public class LabelText : MonoBehaviour
 {
 
     [SerializeField] private string text;
-    private GameObject parentLabel;
-    [SerializeField] private string parentLabelName;
     // Start is called before the first frame update
     void Start()
     {
 
         GameObject label = new GameObject();
-        label.name = parentLabelName + " label";
+        
         TextMesh labelText = label.AddComponent<TextMesh>();
         labelText.text = text;
         labelText.fontSize = 20;

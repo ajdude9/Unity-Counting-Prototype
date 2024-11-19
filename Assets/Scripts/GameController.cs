@@ -93,9 +93,9 @@ public class CounterController : MonoBehaviour
         heldProjectiles = new Dictionary<string, int>()
         {
             {"ruby", 54},
-            {"emerald", 7},
+            {"emerald", 0},
             {"amethyst", 0},
-            {"diamond", 3}
+            {"diamond", 0}
         };
         projectileValues = new Dictionary<string, int>()
         {
