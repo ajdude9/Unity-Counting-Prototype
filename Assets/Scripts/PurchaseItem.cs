@@ -7,9 +7,7 @@ public class PurchaseItem : MonoBehaviour
 {
 
     private ShopController shop;
-    [SerializeField] private String itemName;
-    [SerializeField] private int itemValue;
-    [SerializeField] private int itemQuantity;
+
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +23,6 @@ public class PurchaseItem : MonoBehaviour
 
     void OnMouseDown()
     {
-        shop.purchaseItem(itemName, itemValue, itemQuantity);
+        shop.purchaseItem(gameObject.name);
     }
 }
