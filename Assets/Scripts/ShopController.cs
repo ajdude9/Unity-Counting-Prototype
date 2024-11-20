@@ -68,7 +68,7 @@ public class ShopController : MonoBehaviour
                 gemType = "diamond";
             break;
         }
-        if(gameManager.getCounter("bank", "") > value)//If the player has more money than the purchase costs
+        if(gameManager.getCounter("bank", "") >= value)//If the player has more money than the purchase costs
         {
             gameManager.addCounter(quantity, "total", gemType);
             gameManager.minusCounter(value, "bank", "");

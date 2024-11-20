@@ -28,12 +28,14 @@ public class CoinController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /**
         if (Input.GetKeyDown(KeyCode.W))
         {
             Debug.Log("Adding force");
             coinRb.AddForce(Vector3.up * 0.05f, ForceMode.Impulse);
         }
         coinRb.AddForce(Vector3.down * 0.0001f, ForceMode.Impulse);//Stops coin from becoming completely still and not registering collisions and adds extra gravity
+        */
     }
 
 

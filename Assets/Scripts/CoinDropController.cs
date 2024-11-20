@@ -15,12 +15,11 @@ public class CoinDropController : MonoBehaviour
     [SerializeField] private GameObject coinPrefab;
     private GameObject rampWall;
     private CounterController gameManager;
-    [SerializeField] private Vector3 rightBoundLocation; 
+    [SerializeField] private Vector3 rightBoundLocation;
     [SerializeField] private int coinSpawnAmount;
-    [SerializeField] private Vector3 leftBoundLocation;   
+    [SerializeField] private Vector3 leftBoundLocation;
     [SerializeField] private float speed;
-    [SerializeField] private float checkRadius;
-    
+
 
     // Start is called before the first frame update
     void Start()
@@ -46,30 +45,25 @@ public class CoinDropController : MonoBehaviour
 
     void inputManager()
     {
-        var step = speed * Time.deltaTime;         
+        var step = speed * Time.deltaTime;
         if (Input.GetKey(KeyCode.Space))
         {
             bool spawnable = true;
             Debug.Log("Space key pressed.");
-            Collider[] overlappingColliders = Physics.OverlapSphere(transform.position, checkRadius);
-            foreach(var overlap in overlappingColliders)
+            if(checkOverlap(transform.position, 0.5f))
             {
-                if(overlap.gameObject.CompareTag("Coin"))
-                {
-                    spawnable = false;
-                    Debug.Log("Found overlapping coin.");
-                }
+                spawnable = false;
             }
-            if(spawnable)
+            if (spawnable)
             {
                 spawnCoin("drop");
             }
         }
-        if(Input.GetKey(KeyCode.D))
-        {            
+        if (Input.GetKey(KeyCode.D))
+        {
             transform.position = Vector3.MoveTowards(coinDropper.transform.position, rightBoundLocation, step);
         }
-        if(Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A))
         {
             transform.position = Vector3.MoveTowards(coinDropper.transform.position, leftBoundLocation, step);
         }
@@ -91,24 +85,33 @@ public class CoinDropController : MonoBehaviour
 
     private void spawnCoin(String type)
     {
+        float spawnCheckRadius = 0.33f;
         Debug.Log("Attempting to spawn coinPrefab");
         switch (type)
         {
             case "init1":
-                Quaternion spawnRotation = Quaternion.Euler(Random.Range(0, 15), Random.Range(0, 15), Random.Range(0, 15));
-                Instantiate(coinPrefab, generateRandomPos(coinSpawnPylonA, coinSpawnPylonB), spawnRotation);
+                Vector3 spawnPosition = generateRandomPos(coinSpawnPylonA, coinSpawnPylonB);
+                if(!checkOverlap(spawnPosition, spawnCheckRadius))
+                {
+                    Quaternion spawnRotation = Quaternion.Euler(Random.Range(0, 15), Random.Range(0, 15), Random.Range(0, 15));                
+                    Instantiate(coinPrefab, spawnPosition, spawnRotation);
+                }
                 break;
             case "init2":
-            {
-                spawnRotation = Quaternion.Euler(Random.Range(0, 80), 0, 0);
-                Instantiate(coinPrefab, generateRandomPos(coinSpawnPylonC, coinSpawnPylonD), spawnRotation);
-                break;
-            }
+                {
+                    spawnPosition = generateRandomPos(coinSpawnPylonC, coinSpawnPylonD);
+                    if(!checkOverlap(spawnPosition, spawnCheckRadius))
+                    {
+                        Quaternion spawnRotation = Quaternion.Euler(Random.Range(0, 80), 0, 0);
+                        Instantiate(coinPrefab, spawnPosition, spawnRotation);
+                    }
+                    break;
+                }
             case "drop":
                 if (gameManager.getCounter("coins", "") > 0)
                 {
                     Vector3 dropPos = new Vector3(coinDropper.transform.position.x, coinDropper.transform.position.y, coinDropper.transform.position.z - 0.15f);
-                    spawnRotation = Quaternion.Euler(90, 0, 0);
+                    Quaternion spawnRotation = Quaternion.Euler(90, 0, 0);
                     Instantiate(coinPrefab, dropPos, spawnRotation);
                     gameManager.minusCounter(1, "coins", "");
                 }
@@ -130,5 +133,20 @@ public class CoinDropController : MonoBehaviour
     public int getCoinSpawnAmount()
     {
         return coinSpawnAmount;
+    }
+
+    public bool checkOverlap(Vector3 pos, float checkRadius)
+    {
+        bool overlapping = false;
+        Collider[] overlappingColliders = Physics.OverlapSphere(pos, checkRadius);
+        foreach (var overlap in overlappingColliders)
+        {
+            if (overlap.gameObject.CompareTag("Coin"))
+            {
+                overlapping = true;
+                Debug.Log("Found overlapping coin.");
+            }
+        }
+        return overlapping;
     }
 }
