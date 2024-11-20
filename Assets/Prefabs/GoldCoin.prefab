@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7866163447543516762}
   - component: {fileID: 8910173440417099674}
   - component: {fileID: 7063662059040044180}
+  - component: {fileID: -8901464084972459072}
   m_Layer: 6
   m_Name: GoldCoin
   m_TagString: Coin
@@ -247,3 +248,26 @@ MonoBehaviour:
   hitSound1: {fileID: 8300000, guid: 3ef02dd99e23132f6b7ec00789b97b2b, type: 3}
   collectSound: {fileID: 8300000, guid: 434b7f98fb564e8529cc6c74178095d3, type: 3}
   parentable: 1
+  audioController: {fileID: 0}
+--- !u!64 &-8901464084972459072
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8607863099644361100}
+  m_Material: {fileID: 13400000, guid: 7122569c65745b3aea33dfa358b43418, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 5f9ee1799e7f21548ba0dd65ac83ea7f, type: 3}

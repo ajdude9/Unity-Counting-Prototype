@@ -47,9 +47,17 @@ public class CoinController : MonoBehaviour
             coinAudio.pitch = Random.Range(0.9f, 1.2f);
             coinAudio.PlayOneShot(hitSound1, 0.5f);        
         }
-        if (collision.gameObject.CompareTag("Pusher") && parentable)
+        if (collision.gameObject.CompareTag("Pusher"))
         {
-            transform.parent = collision.transform.parent;            
+            if(parentable)
+            {
+                transform.parent = collision.transform.parent;                        
+            }
+            else
+            {
+                Vector3 awayFromPusher = collision.gameObject.transform.position - transform.position;
+                coinRb.AddForce(awayFromPusher * 0.0005f, ForceMode.Impulse);
+            }
         }
         if (collision.gameObject.CompareTag("Floor"))
         {
@@ -80,6 +88,11 @@ public class CoinController : MonoBehaviour
             Destroy(gameObject);
             }
         }
+        if(other.CompareTag("PusherTrigger") && !parentable)
+        {
+            Vector3 awayFromPusher = other.gameObject.transform.position - transform.position;
+            coinRb.AddForce(awayFromPusher * 0.0005f, ForceMode.Impulse);
+        }
     }
 
     IEnumerator destroyDelay()
@@ -92,6 +105,11 @@ public class CoinController : MonoBehaviour
     public void setSilent(bool value)
     {
         silent = value;
+    }
+
+    public bool getParentable()
+    {
+        return parentable;
     }
 
 }
