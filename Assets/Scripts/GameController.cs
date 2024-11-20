@@ -46,9 +46,12 @@ public class CounterController : MonoBehaviour
     private Dictionary<string, int> projectileValues;//A key:value list to contain the name of a projectile and its value in coins when scored
     private Dictionary<string, GameObject> gemObjects;//A key:value list to contain all the gem objects used in the scene
     private Dictionary<string, TextMeshProUGUI> inventoryText;//A key:value list to contain the text of how many gems the player holds and their values
-    private UnityEngine.UIElements.Button changeGemButton;
     private Color emptyColour = new Color(0.0f, 0.0f, 0.0f, 0f);//A black colour
-    private UnityEngine.UI.Button changeButton;
+    private UnityEngine.UI.Button changeButton;//The button for opening the menu for changing gems
+    private UnityEngine.UI.Button rubyButton;
+    private UnityEngine.UI.Button emeraldButton;
+    private UnityEngine.UI.Button amethystButton;
+    private UnityEngine.UI.Button diamondButton;
     private UnityEngine.UI.Button[] inventoryButtons;
     private Dictionary<string, Material> materials;//A key:value list to store all the materials used for projectiles
     // Start is called before the first frame update
@@ -60,13 +63,24 @@ public class CounterController : MonoBehaviour
         coinDropController = GameObject.Find("Coin Dropper").GetComponent<CoinDropController>();
         writeDictionaries();//Fill out all the dictionary variables.
         changeButton = GameObject.Find("Change Button").GetComponent<UnityEngine.UI.Button>();
-        GameObject[] inventoryButtonHolder = GameObject.FindGameObjectsWithTag("Inventory Button");
-        
+        rubyButton = GameObject.Find("Ruby Select Button").GetComponent<UnityEngine.UI.Button>();
+        emeraldButton = GameObject.Find("Emerald Select Button").GetComponent<UnityEngine.UI.Button>();
+        amethystButton = GameObject.Find("Amethyst Select Button").GetComponent<UnityEngine.UI.Button>();
+        diamondButton = GameObject.Find("Diamond Select Button").GetComponent<UnityEngine.UI.Button>();
+        /**
+        inventoryButtons[0] = rubyButton;
+        inventoryButtons[1] = emeraldButton;
+        inventoryButtons[2] = amethystButton;
+        inventoryButtons[3] = diamondButton;
+        */
+        //GameObject[] inventoryButtonHolder = GameObject.FindGameObjectsWithTag("Inventory Button");
+        /**
         for(int i = 0; i < inventoryButtonHolder.Length; i++)
         {
             Debug.Log(inventoryButtonHolder[i]);
             //inventoryButtons[i] = inventoryButtonHolder[i].GetComponent<UnityEngine.UI.Button>();
         }
+        */
         loadedTotal = 6;
         reloadMax = 6;
         reloadSpeed = 0.15f;
@@ -82,7 +96,7 @@ public class CounterController : MonoBehaviour
         coinCamera = GameObject.Find("Machine Watcher").GetComponent<Camera>();
         shopCamera = GameObject.Find("Shop Camera").GetComponent<Camera>();
         gemSelectCamera = GameObject.Find("Select Camera").GetComponent<Camera>();
-        //changeGemButton = GameObject.Find("Change Button").GetComponent<UnityEngine.UIElements.Button>();
+        
         viewType = "throw";
         switchToThrow();
         
@@ -394,6 +408,7 @@ public class CounterController : MonoBehaviour
         coinsDroppableText.enabled = true;
         changeButton.gameObject.SetActive(false);
         coinsSavedText.transform.position = new Vector3(coinsSavedText.transform.position.x, 1000, coinsSavedText.transform.position.z);
+        toggleInentoryButtons(false);
         if (!firstSwitch)
         {
             firstSwitch = true;
@@ -418,8 +433,8 @@ public class CounterController : MonoBehaviour
         coinsSavedText.enabled = false;
         coinsDroppableText.enabled = false;
         changeButton.gameObject.SetActive(true);
-        GameObject.Find("Change Button").SetActive(true);
         viewType = "throw";
+        toggleInentoryButtons(false);
     }
 
     private void switchToShop()
@@ -435,6 +450,7 @@ public class CounterController : MonoBehaviour
         coinsSavedText.transform.position = new Vector3(coinsSavedText.transform.position.x, 1100, coinsSavedText.transform.position.z);
         coinsSavedText.text = "Coins Available: " + coinsSaved;
         viewType = "shop";
+        toggleInentoryButtons(false);
     }
 
     public void switchToAmmo()
@@ -447,6 +463,7 @@ public class CounterController : MonoBehaviour
             changeButton.gameObject.SetActive(false);
             viewType = "ammo";
             updateInventory();
+            toggleInentoryButtons(true);
         }
     }
 
@@ -512,10 +529,17 @@ public class CounterController : MonoBehaviour
 
     void toggleInentoryButtons(bool activeStatus)
     {
+        rubyButton.gameObject.SetActive(activeStatus);
+        emeraldButton.gameObject.SetActive(activeStatus);
+        amethystButton.gameObject.SetActive(activeStatus);
+        diamondButton.gameObject.SetActive(activeStatus);
+        /**
         for(int i = 0; i < inventoryButtons.Length; i++)
         {
             inventoryButtons[i].gameObject.SetActive(activeStatus);
         }
+        */
+        
     }
 
     public void callFadeIn(float time, TextMeshProUGUI text)
