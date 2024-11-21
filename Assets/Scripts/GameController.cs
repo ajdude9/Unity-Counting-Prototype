@@ -349,13 +349,13 @@ public class CounterController : MonoBehaviour
                 StartCoroutine(reloadTimer(amountToReload));
             }
             else
-            {                
+            {
                 gameAudio.PlayOneShot(reloadFail, 0.6f);
             }
         }
         else
-        {   
-            if(enableCheats)             
+        {
+            if (enableCheats)
             {
                 gameAudio.PlayOneShot(reloadFail, 0.6f);
             }
@@ -410,7 +410,7 @@ public class CounterController : MonoBehaviour
 
     private void infiniteAmmoCheat()//Enable cheats, setting status to immensely high values
     {
-        if(!enableCheats)
+        if (!enableCheats)
         {
             gameAudio.PlayOneShot(cheater);
         }
@@ -439,6 +439,8 @@ public class CounterController : MonoBehaviour
             firstSwitch = true;
             coinDropController.generateCoins(coinDropController.getCoinSpawnAmount());
         }
+        silence("coin", false);
+        silence("gem", true);
 
 
     }
@@ -460,6 +462,8 @@ public class CounterController : MonoBehaviour
         changeButton.gameObject.SetActive(true);
         viewType = "throw";
         toggleInentoryButtons(false);
+        silence("coin", true);
+        silence("gem", false);
     }
 
     private void switchToShop()
@@ -476,6 +480,8 @@ public class CounterController : MonoBehaviour
         coinsSavedText.text = "Coins Available: " + coinsSaved;
         viewType = "shop";
         toggleInentoryButtons(false);
+        silence("coin", true);
+        silence("gem", true);
     }
 
     public void switchToAmmo()
@@ -489,6 +495,8 @@ public class CounterController : MonoBehaviour
             viewType = "ammo";
             updateInventory();
             toggleInentoryButtons(true);
+            silence("coin", true);
+            silence("gem", false);
         }
     }
 
@@ -585,12 +593,41 @@ public class CounterController : MonoBehaviour
 
     }
 
-    public void callFadeIn(float time, TextMeshProUGUI text)
+    public void silence(string silentType, bool silentStatus)
+    {
+        switch (silentType)
+        {
+            case "gem":
+                GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");
+                foreach (GameObject gems in allGems)
+                {
+                    BallForward gem = gems.GetComponent<BallForward>();//"BallForward" is ProjectileController
+                    if(!gem.getScored())
+                    {
+                        gem.setSilent(silentStatus);
+                    }
+                }
+            break;
+            case "coin":
+                GameObject[] allCoins = GameObject.FindGameObjectsWithTag("Coin");
+                foreach (GameObject coins in allCoins)
+                {
+                    CoinController coin = coins.GetComponent<CoinController>();
+                    coin.setSilent(silentStatus);
+                }
+            break;
+
+
+        }
+
+    }
+
+    public void callFadeIn(float time, TextMeshProUGUI text)//Start to fade in the reload text
     {
         StartCoroutine(textFadeIn(time, text));
     }
 
-    private IEnumerator textFadeIn(float time, TextMeshProUGUI text)
+    private IEnumerator textFadeIn(float time, TextMeshProUGUI text)//Fade out the reload text
     {
         //Debug.Log("Attempting to fade in text");
         text.color = new Color(text.color.r, text.color.g, text.color.b, text.color.a);
@@ -601,12 +638,12 @@ public class CounterController : MonoBehaviour
         }
     }
 
-    public void callFadeOut(float time, TextMeshProUGUI text)
+    public void callFadeOut(float time, TextMeshProUGUI text)//Start to fade out the reload text
     {
         StartCoroutine(textFadeOut(time, text));
     }
 
-    private IEnumerator textFadeOut(float time, TextMeshProUGUI text)
+    private IEnumerator textFadeOut(float time, TextMeshProUGUI text)//Fade out the reload text
     {
         //Debug.Log("Attempting to fade out text");
 

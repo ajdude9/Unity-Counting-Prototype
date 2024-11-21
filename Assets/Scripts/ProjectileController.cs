@@ -96,8 +96,11 @@ public class BallForward : MonoBehaviour
             {
                 //Debug.Log("Box trigger activated.");
                 projRenderer.material.SetColor("_Color", scoreColour);
-                projAudio.pitch = Random.Range(0.9f, 1.2f);
-                projAudio.PlayOneShot(convertSound, 0.8f);
+                if(!silent)
+                {
+                    projAudio.pitch = Random.Range(0.9f, 1.2f);
+                    projAudio.PlayOneShot(convertSound, 0.8f);
+                }
                 Vector3 towardFloor = boxFloor.transform.position - transform.position;
                 projRb.AddForce(towardFloor * 2, ForceMode.Impulse);
                 scored = true;
@@ -158,8 +161,13 @@ public class BallForward : MonoBehaviour
         return finalValue;
     }
 
-    void setSilent(bool value)
+    public void setSilent(bool value)
     {
         silent = value;
+    }
+
+    public bool getScored()
+    {
+        return scored;
     }
 }
