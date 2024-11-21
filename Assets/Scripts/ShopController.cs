@@ -68,10 +68,13 @@ public class ShopController : MonoBehaviour
                 gemType = "diamond";
             break;
         }
-        if(gameManager.getCounter("bank", "") >= value)//If the player has more money than the purchase costs
+        if(gameManager.getCounter("bank", "") >= value || gameManager.getCheatStatus())//If the player has more money than the purchase costs, or if they're cheating
         {
-            gameManager.addCounter(quantity, "total", gemType);
-            gameManager.minusCounter(value, "bank", "");
+            if(!gameManager.getCheatStatus())
+            {
+                gameManager.addCounter(quantity, "total", gemType);
+                gameManager.minusCounter(value, "bank", "");
+            }
             shopAudio.PlayOneShot(buySFX);
         }
         else

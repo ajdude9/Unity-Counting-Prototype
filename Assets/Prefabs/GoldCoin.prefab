@@ -95,7 +95,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8607863099644361100}
-  m_Material: {fileID: 13400000, guid: 7122569c65745b3aea33dfa358b43418, type: 2}
+  m_Material: {fileID: 13400000, guid: c80554c4c83088ee7ad34be59b3ba31f, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -247,8 +247,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitSound1: {fileID: 8300000, guid: 3ef02dd99e23132f6b7ec00789b97b2b, type: 3}
   collectSound: {fileID: 8300000, guid: 434b7f98fb564e8529cc6c74178095d3, type: 3}
-  parentable: 1
   audioController: {fileID: 0}
+  highFriction: {fileID: 13400000, guid: 6d9fe2965b3f0d3e4994704c75a65bcb, type: 2}
+  repelling: {fileID: 13400000, guid: c80554c4c83088ee7ad34be59b3ba31f, type: 2}
 --- !u!64 &-8901464084972459072
 MeshCollider:
   m_ObjectHideFlags: 0

@@ -14,6 +14,7 @@ public class CoinDropController : MonoBehaviour
     private GameObject coinDropper;
     [SerializeField] private GameObject coinPrefab;
     private GameObject rampWall;
+    private GameObject parentableTrigger;
     private CounterController gameManager;
     [SerializeField] private Vector3 rightBoundLocation;
     [SerializeField] private int coinSpawnAmount;
@@ -29,6 +30,7 @@ public class CoinDropController : MonoBehaviour
         coinSpawnPylonC = GameObject.Find("CoinSpawnPylonC");
         coinSpawnPylonD = GameObject.Find("CoinSpawnPylonD");
         rampWall = GameObject.Find("Ramp Wall");
+        parentableTrigger = GameObject.Find("Parentable Trigger");
         coinDropper = GameObject.Find("Coin Dropper");
         gameManager = GameObject.Find("Game Manager").GetComponent<CounterController>();
     }
@@ -80,6 +82,7 @@ public class CoinDropController : MonoBehaviour
         {
             spawnCoin("init2");
         }
+
         StartCoroutine(breakWall());
     }
 
@@ -94,7 +97,7 @@ public class CoinDropController : MonoBehaviour
                 if(!checkOverlap(spawnPosition, spawnCheckRadius))
                 {
                     Quaternion spawnRotation = Quaternion.Euler(Random.Range(0, 15), Random.Range(0, 15), Random.Range(0, 15));                
-                    Instantiate(coinPrefab, spawnPosition, spawnRotation);
+                    Instantiate(coinPrefab, spawnPosition, spawnRotation);                    
                 }
                 break;
             case "init2":
@@ -108,12 +111,15 @@ public class CoinDropController : MonoBehaviour
                     break;
                 }
             case "drop":
-                if (gameManager.getCounter("coins", "") > 0)
+                if (gameManager.getCounter("coins", "") > 0 || gameManager.getCheatStatus())
                 {
                     Vector3 dropPos = new Vector3(coinDropper.transform.position.x, coinDropper.transform.position.y, coinDropper.transform.position.z - 0.15f);
                     Quaternion spawnRotation = Quaternion.Euler(90, 0, 0);
                     Instantiate(coinPrefab, dropPos, spawnRotation);
-                    gameManager.minusCounter(1, "coins", "");
+                    if(!gameManager.getCheatStatus())
+                    {
+                        gameManager.minusCounter(1, "coins", "");
+                    }
                 }
                 break;
         }
@@ -128,6 +134,7 @@ public class CoinDropController : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         Destroy(rampWall);
+        Destroy(parentableTrigger);
     }
 
     public int getCoinSpawnAmount()

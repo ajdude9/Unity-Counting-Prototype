@@ -23,7 +23,6 @@ public class PegBouncer : MonoBehaviour
             Debug.Log("Pushing Away.");
             Vector3 awayFromPeg = collision.gameObject.transform.position - transform.position;
             Rigidbody coinRb = collision.gameObject.GetComponent<Rigidbody>();
-            coinRb.AddForce(awayFromPeg * 0.005f, ForceMode.Impulse);
             forcePush(awayFromPeg, coinRb);
         }
     }
@@ -33,6 +32,6 @@ public class PegBouncer : MonoBehaviour
     }
     private void forcePush(Vector3 direction, Rigidbody rb)
     {
-        rb.AddForce(direction * 0.005f, ForceMode.Impulse);
+        rb.AddForce(direction * 0.0025f, ForceMode.Impulse);
     }
 }
