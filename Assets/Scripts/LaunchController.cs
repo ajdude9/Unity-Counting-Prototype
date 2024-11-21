@@ -38,6 +38,10 @@ public class LaunchController : MonoBehaviour
                 CancelInvoke("fire");
             }            
         }
+        if(gameManager.viewType != "throw")
+        {
+            CancelInvoke("fire");
+        }
 
     }
 
