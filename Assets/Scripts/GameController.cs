@@ -12,6 +12,7 @@ using UnityEngine.UIElements;
 using System.Linq;
 using Unity.VisualScripting.FullSerializer;
 using System.Runtime.InteropServices.WindowsRuntime;
+using UnityEngine.Audio;
 
 public class CounterController : MonoBehaviour
 {
@@ -34,6 +35,7 @@ public class CounterController : MonoBehaviour
     public AudioClip reloadSound;//Reloading sound (fully reloaded)
     public AudioClip reloadSingle;//Reloading sound (single projectile)
     public AudioClip reloadFail;//Reloading fail sound (no ammo)
+    public AudioClip cheater;//Cheating sound
     private Camera throwCamera;//The camera for throwing projectiles into a box
     private Camera coinCamera;//The camera for putting coins in a machine
     private Camera shopCamera;//The camera for viewing the shop
@@ -333,7 +335,7 @@ public class CounterController : MonoBehaviour
     public void reload()//Reload projectiles
     {
 
-        if (!reloadingStatus && !enableCheats)//If the player isn't already reloading
+        if (!reloadingStatus && !enableCheats)//If the player isn't already reloading and not cheating
         {
             int amountToReload = reloadMax - loadedTotal;//The amount of projectiles to reload is the maximum allowed, minus however many are already loaded
             if (amountToReload > 0 && getCounter("total", projectileType) > 0)
@@ -347,6 +349,13 @@ public class CounterController : MonoBehaviour
                 StartCoroutine(reloadTimer(amountToReload));
             }
             else
+            {                
+                gameAudio.PlayOneShot(reloadFail, 0.6f);
+            }
+        }
+        else
+        {   
+            if(enableCheats)             
             {
                 gameAudio.PlayOneShot(reloadFail, 0.6f);
             }
@@ -401,22 +410,15 @@ public class CounterController : MonoBehaviour
 
     private void infiniteAmmoCheat()//Enable cheats, setting status to immensely high values
     {
+        if(!enableCheats)
+        {
+            gameAudio.PlayOneShot(cheater);
+        }
         enableCheats = true;
-        /**   
-        heldProjectiles["ruby"] = 1000000;
-        heldProjectiles["emerald"] = 1000000;
-        heldProjectiles["amethyst"] = 1000000;
-        heldProjectiles["diamond"] = 1000000;
-        loadedTotal = 1000000;
-        reloadMax = 1000000;
-        */
         reloadSpeed = 0.01f;
         fireRate = 0.05f;
-        /**
-        coinsDroppable = 1000000;
-        coinsSaved = 1000000;
-        */
         refreshCounter();
+        updateInventory();
     }
 
     private void switchToCoin()
