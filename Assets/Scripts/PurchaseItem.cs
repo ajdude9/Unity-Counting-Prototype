@@ -12,7 +12,7 @@ public class PurchaseItem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        shop = GameObject.Find("Shop").GetComponent<ShopController>();
+        shop = GameObject.Find("Shop").GetComponent<ShopController>();//Find the shop controller
     }
 
     // Update is called once per frame
@@ -21,8 +21,8 @@ public class PurchaseItem : MonoBehaviour
         
     }
 
-    void OnMouseDown()
+    void OnMouseDown()//When the object this script is attached to is clicked
     {
-        shop.purchaseItem(gameObject.name);
+        shop.purchaseItem(gameObject.name);//Run the shop's purchaseItem script, and send it this object's name
     }
 }

@@ -16,12 +16,12 @@ using UnityEngine.Audio;
 
 public class CounterController : MonoBehaviour
 {
-    private CoinDropController coinDropController;
+    private CoinDropController coinDropController;//The coin drop controller
     public Text counterText;//Text object to display the number of projectiles
     public Text loadedText;//Text object to display the number of projectiles ready
     public TextMeshProUGUI reloadNotify;//Text object to tell the player to reload
-    public TextMeshProUGUI coinsSavedText;
-    public TextMeshProUGUI coinsDroppableText;
+    public TextMeshProUGUI coinsSavedText;//The text saying how many coins the player has saved
+    public TextMeshProUGUI coinsDroppableText;//The text saying how many coins the player can drop
     private int loadedTotal;//The number of projectiles ready to fire
     private int reloadMax;//The total number of projectiles that can be loaded at once.
     private int coinsSaved = 0;//The number of coins the player has 'banked'
@@ -42,7 +42,7 @@ public class CounterController : MonoBehaviour
     private Camera gemSelectCamera;//The camera for viewing the gem select UI
     public String viewType;//Which camera is currently being viewed
     public bool firstSwitch = false;//Whether the switch to the coin camera is the first one since the game started
-    public int fadeValue;
+    public int fadeValue;//The opacity of the reload notification text
     private string projectileType;//The type of projectile that has been selected
     private Dictionary<string, int> heldProjectiles;//A key:value list to contain the number of a projectile and its name
     private Dictionary<string, int> projectileValues;//A key:value list to contain the name of a projectile and its value in coins when scored
@@ -50,25 +50,26 @@ public class CounterController : MonoBehaviour
     private Dictionary<string, TextMeshProUGUI> inventoryText;//A key:value list to contain the text of how many gems the player holds and their values
     private Color emptyColour = new Color(0.0f, 0.0f, 0.0f, 0f);//A black colour
     private UnityEngine.UI.Button changeButton;//The button for opening the menu for changing gems
-    private UnityEngine.UI.Button rubyButton;
-    private UnityEngine.UI.Button emeraldButton;
-    private UnityEngine.UI.Button amethystButton;
-    private UnityEngine.UI.Button diamondButton;
-    private UnityEngine.UI.Button[] inventoryButtons;
+    private UnityEngine.UI.Button rubyButton;//The button for changing to rubies
+    private UnityEngine.UI.Button emeraldButton;//The button for changing to emeralds
+    private UnityEngine.UI.Button amethystButton;//The button for changing to amethysts
+    private UnityEngine.UI.Button diamondButton;//The button for changing to diamonds
+    private UnityEngine.UI.Button[] inventoryButtons;//An array containing each button for ease of access (unused due to buggy behaviour)
     private Dictionary<string, Material> materials;//A key:value list to store all the materials used for projectiles
     // Start is called before the first frame update
     void Start()
     {
         //get the game audio and set the default values for variables
-        projectileType = "ruby";
-        gameAudio = gameObject.GetComponent<AudioSource>();
-        coinDropController = GameObject.Find("Coin Dropper").GetComponent<CoinDropController>();
+        projectileType = "ruby";//Set the default projectile to ruby
+        gameAudio = gameObject.GetComponent<AudioSource>();//Find the game's audio source
+        coinDropController = GameObject.Find("Coin Dropper").GetComponent<CoinDropController>();//Find the coin drop controller
         writeDictionaries();//Fill out all the dictionary variables.
-        changeButton = GameObject.Find("Change Button").GetComponent<UnityEngine.UI.Button>();
-        rubyButton = GameObject.Find("Ruby Select Button").GetComponent<UnityEngine.UI.Button>();
-        emeraldButton = GameObject.Find("Emerald Select Button").GetComponent<UnityEngine.UI.Button>();
-        amethystButton = GameObject.Find("Amethyst Select Button").GetComponent<UnityEngine.UI.Button>();
-        diamondButton = GameObject.Find("Diamond Select Button").GetComponent<UnityEngine.UI.Button>();
+        changeButton = GameObject.Find("Change Button").GetComponent<UnityEngine.UI.Button>();//The button for changing gems
+        rubyButton = GameObject.Find("Ruby Select Button").GetComponent<UnityEngine.UI.Button>();//The button for changing to rubies
+        emeraldButton = GameObject.Find("Emerald Select Button").GetComponent<UnityEngine.UI.Button>();//The button for changing to emeralds
+        amethystButton = GameObject.Find("Amethyst Select Button").GetComponent<UnityEngine.UI.Button>();//The button for changing to amethysts
+        diamondButton = GameObject.Find("Diamond Select Button").GetComponent<UnityEngine.UI.Button>();//The button for changing to diamonds
+        //Unused inventory buttons array assignment text, as accessing an object in an array to disable it does not properly disable it and instead bugs out
         /**
         inventoryButtons[0] = rubyButton;
         inventoryButtons[1] = emeraldButton;
@@ -83,44 +84,43 @@ public class CounterController : MonoBehaviour
             //inventoryButtons[i] = inventoryButtonHolder[i].GetComponent<UnityEngine.UI.Button>();
         }
         */
-        loadedTotal = 6;
-        reloadMax = 6;
-        reloadSpeed = 0.15f;
-        fireRate = 0.35f;
-        counterText.enabled = true;
-        loadedText.enabled = true;
-        counterText.text = "Available " + projType + ": " + heldProjectiles[projectileType];
-        loadedText.text = "Loaded " + projType + ": " + loadedTotal;
-        coinsSavedText.text = "Coins Won: " + coinsSaved;
-        coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;
-        reloadNotify.color = new Color(reloadNotify.color.r, reloadNotify.color.g, reloadNotify.color.b, 0);
-        throwCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
-        coinCamera = GameObject.Find("Machine Watcher").GetComponent<Camera>();
-        shopCamera = GameObject.Find("Shop Camera").GetComponent<Camera>();
-        gemSelectCamera = GameObject.Find("Select Camera").GetComponent<Camera>();
+        loadedTotal = 6;//Set the total amount of projectiles the player currently has loaded to 6
+        reloadMax = 6;//Set the maximum amount of projectiles that can be reloaded to 6
+        reloadSpeed = 0.15f;//Set the reload speed to 0.15
+        fireRate = 0.35f;//Set the firerate to 0.35
+        counterText.enabled = true;//Enable the counter text
+        loadedText.enabled = true;//Enable the loaded text
+        counterText.text = "Available " + projType + ": " + heldProjectiles[projectileType];//Change the counter text to show how many of the currently selected projectile type the player has
+        loadedText.text = "Loaded " + projType + ": " + loadedTotal;//Change the loaded text to show how many of the currently loaded projectile are loaded
+        coinsSavedText.text = "Coins Won: " + coinsSaved;//Change the coins saved text to show how many coins the player has won
+        coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;//Change the coins droppable text to show how many coins the player can drop
+        reloadNotify.color = new Color(reloadNotify.color.r, reloadNotify.color.g, reloadNotify.color.b, 0);//Chane the reload notify colour to red
+        throwCamera = GameObject.Find("Main Camera").GetComponent<Camera>();//Find the camera for viewing the box to throw gems into
+        coinCamera = GameObject.Find("Machine Watcher").GetComponent<Camera>();//Find the camera for viewing the coin pushing machine
+        shopCamera = GameObject.Find("Shop Camera").GetComponent<Camera>();//Find the camera for viewing the shop
+        gemSelectCamera = GameObject.Find("Select Camera").GetComponent<Camera>();//Find the camera for changing the currently selected gem
 
-        viewType = "throw";
-        switchToThrow();
+        switchToThrow();//Switch to the throw viewtype, if it wasn't already being viewed.
 
     }
 
-    void writeDictionaries()
+    void writeDictionaries()//Set up the dictionary variables
     {
-        heldProjectiles = new Dictionary<string, int>()
+        heldProjectiles = new Dictionary<string, int>()//Set up each projectile the player can hold, and give the player 54 rubies to start (with 6 already loaded, for 60 total)
         {
             {"ruby", 54},
             {"emerald", 0},
             {"amethyst", 0},
             {"diamond", 0}
         };
-        projectileValues = new Dictionary<string, int>()
+        projectileValues = new Dictionary<string, int>()//Set up each projectile's value when scored
         {
             {"ruby", 1},
             {"emerald", 2},
             {"amethyst", 5},
             {"diamond", 20}
         };
-        gemObjects = new Dictionary<string, GameObject>()
+        gemObjects = new Dictionary<string, GameObject>()//Find each display gem object in the UI and the shop
         {
             {"UIRuby", GameObject.Find("UIRuby")},
             {"ShopRuby", GameObject.Find("Shop Ruby")},
@@ -131,7 +131,7 @@ public class CounterController : MonoBehaviour
             {"UIDiamond", GameObject.Find("UIDiamond")},
             {"ShopDiamond", GameObject.Find("Shop Diamond")}
         };
-        inventoryText = new Dictionary<string, TextMeshProUGUI>()
+        inventoryText = new Dictionary<string, TextMeshProUGUI>()//Find each text object in the gem switch UI, stating how many the player has and how much each is worth when scored
         {
             {"rubyHeld", GameObject.Find("Ruby Held").GetComponent<TextMeshProUGUI>()},
             {"rubyValue", GameObject.Find("Ruby Value").GetComponent<TextMeshProUGUI>()},
@@ -142,7 +142,7 @@ public class CounterController : MonoBehaviour
             {"diamondHeld", GameObject.Find("Diamond Held").GetComponent<TextMeshProUGUI>()},
             {"diamondValue", GameObject.Find("Diamond Value").GetComponent<TextMeshProUGUI>()},
         };
-        materials = new Dictionary<string, Material>()
+        materials = new Dictionary<string, Material>()//Find and load each material for each gem
         {
             {"ruby", Resources.Load("Ruby", typeof(Material)) as Material},
             {"emerald", Resources.Load("Emerald", typeof(Material)) as Material},
@@ -154,38 +154,38 @@ public class CounterController : MonoBehaviour
 
     void Update()
     {
-        keycodeController();
-        if (loadedTotal == reloadMax)
+        keycodeController();//Control the inputs
+        if (loadedTotal == reloadMax)//If the player's loaded projectiles matches the maximum amount that can be loaded
         {
-            textFadeOut(1, reloadNotify);
+            textFadeOut(1, reloadNotify);//Fade out the reload notification text, if it's there
         }
     }
 
-    private void keycodeController()
+    private void keycodeController()//Control the player's inputs
     {
-        if (Input.GetKeyDown(KeyCode.BackQuote))
+        if (Input.GetKeyDown(KeyCode.BackQuote))//If the player hits the grave key or "backquote" key
         {
-            infiniteAmmoCheat();//Enable cheats
+            infiniteAmmoCheat();//Enable cheats, giving the player infinite ammo, coins, and spendable coins
         }
         if (Input.GetKeyDown(KeyCode.V))//Switch the camera view forwards along the list
         {
-            switch (viewType)
+            switch (viewType)//Based on the current viewtype
             {
-                case "throw":
+                case "throw"://If looking at the throw view, move rightwards to the coin pusher
                     switchToCoin();
                     break;
-                case "coin":
+                case "coin"://If looking at the coin view, move rightwards to the shop
                     switchToShop();
                     break;
-                case "shop":
+                case "shop"://If looking at the shop view, move rightwards to the box throwing view
                     switchToThrow();
                     break;
             }
-            refreshCounter();
+            refreshCounter();//Refresh the UI elements to update them
         }
         if (Input.GetKeyDown(KeyCode.C))//Switch the camera view backwards along the list
         {
-            switch (viewType)
+            switch (viewType)//See above, simply moves the other direction
             {
                 case "throw":
                     switchToShop();
@@ -197,63 +197,63 @@ public class CounterController : MonoBehaviour
                     switchToCoin();
                     break;
             }
-            refreshCounter();
+            refreshCounter();//See above
         }
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R))//If the player hits R to reload
         {
-            fadeValue = 0;
-            StartCoroutine(textFadeOut(1f, reloadNotify));
-            reload();
+            fadeValue = 0;//Set the fade value of the text to 0
+            StartCoroutine(textFadeOut(1f, reloadNotify));//Start to fade out the reload text
+            reload();//Reload the projectiles to the maximum amount
         }
     }
 
     public void refreshCounter()//Update the counters to their current values
     {
-        if (enableCheats)
+        if (enableCheats)//If cheats are enabled
         {
-            counterText.text = "Available " + projType + ": ∞";
+            counterText.text = "Available " + projType + ": ∞";//Set them all to the infinity symbol - since they are effectively infinite
             loadedText.text = "Loaded " + projType + ": ∞";
             coinsDroppableText.text = "Droppable Coins: ∞";
-            if (viewType == "shop")
+            if (viewType == "shop")//If the player is looking at the shop
             {
-                coinsSavedText.text = "Coins Available: ∞";
+                coinsSavedText.text = "Coins Available: ∞";//Say the coins won from the pusher are available
             }
             else
             {
-                coinsSavedText.text = "Coins Won: ∞";
+                coinsSavedText.text = "Coins Won: ∞";//Say the coins won from the pusher are won
             }
         }
         else
         {
-            counterText.text = "Available " + projType + ": " + heldProjectiles[projectileType];
-            loadedText.text = "Loaded " + projType + ": " + loadedTotal;
-            coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;
+            counterText.text = "Available " + projType + ": " + heldProjectiles[projectileType];//Show how many projectiles are available to be loaded
+            loadedText.text = "Loaded " + projType + ": " + loadedTotal;//Show how many projectiles are loaded and able to be fired
+            coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;//Show how many coins can be dropped
             if (viewType == "shop")
             {
-                coinsSavedText.text = "Coins Available: " + coinsSaved;
+                coinsSavedText.text = "Coins Available: " + coinsSaved;//Say the coins won from the pusher are available
             }
             else
             {
-                coinsSavedText.text = "Coins Won: " + coinsSaved;
+                coinsSavedText.text = "Coins Won: " + coinsSaved;//Say the coins won from the pusher are won
             }
         }
     }
 
     public int getCounter(String type, String gemType)//Get a specific counter
     {
-        int returnAmount = 0;
-        switch (type)
+        int returnAmount = 0;//Return 0 as a failsafe
+        switch (type)//Based on the type input
         {
             case "total"://Get the total amount of projectiles
-                returnAmount = heldProjectiles[gemType];
+                returnAmount = heldProjectiles[gemType];//Use the supplied gem type to get the specific projectile
                 break;
             case "loaded"://Get the amount of projectiles able to be fired
                 returnAmount = loadedTotal;
                 break;
-            case "coins":
+            case "coins"://Get the total amount of coins that can be dropped into the machine
                 returnAmount = coinsDroppable;
                 break;
-            case "bank":
+            case "bank"://Get the total amount of coins won from the machine, but cannot be dropped
                 returnAmount = coinsSaved;
                 break;
         }
@@ -346,18 +346,18 @@ public class CounterController : MonoBehaviour
                     amountToReload = getCounter("total", projectileType);//Instead reload however many are left
                 }
 
-                StartCoroutine(reloadTimer(amountToReload));
+                StartCoroutine(reloadTimer(amountToReload));//Start to reload a set number of projectiles with a delay between each reload
             }
-            else
+            else//If the player is out of ammo to load, or is fully loaded
             {
-                gameAudio.PlayOneShot(reloadFail, 0.6f);
+                gameAudio.PlayOneShot(reloadFail, 0.6f);//Play a sound to notify them of this
             }
         }
         else
         {
-            if (enableCheats)
+            if (enableCheats)//If the player is cheating
             {
-                gameAudio.PlayOneShot(reloadFail, 0.6f);
+                gameAudio.PlayOneShot(reloadFail, 0.6f);//Play the reload failure sound - as they don't need to reload due to having infinite ammo loaded
             }
         }
     }
@@ -380,8 +380,8 @@ public class CounterController : MonoBehaviour
             }
             if (amountToReload > 0)//If the player has ammo to reload
             {
-                addCounter(amountToReload, "loaded", "");
-                minusCounter(amountToReload, "total", projectileType);
+                addCounter(amountToReload, "loaded", "");//Add the amount to reload to the loaded variable
+                minusCounter(amountToReload, "total", projectileType);//Remove the amount to reload from the total variable
             }
         }
 
@@ -390,67 +390,74 @@ public class CounterController : MonoBehaviour
     private IEnumerator reloadTimer(int reloadAmount)//Reload projectiles on a timer rather than all at once
     {
 
-        for (int i = 0; i < reloadAmount; i++)
+        for (int i = 0; i < reloadAmount; i++)//For each projectile to reload
         {
 
             yield return new WaitForSeconds(reloadSpeed);//Delay based on reload speed
-            addCounter(1, "loaded", "");
-            minusCounter(1, "total", projectileType);
-            gameAudio.PlayOneShot(reloadSingle, 0.8f);
+            addCounter(1, "loaded", "");//Add one to the loaded counter
+            minusCounter(1, "total", projectileType);//Remove from from the total counter
+            gameAudio.PlayOneShot(reloadSingle, 0.8f);//Play a sound for reloading a single projectile
 
         }
         yield return new WaitForSeconds(0.1f);
-        if (reloadingStatus)
+        if (reloadingStatus)//If the player is indeed reloading
         {
-            gameAudio.PlayOneShot(reloadSound, 0.8f);
-            reloadingStatus = false;
+            gameAudio.PlayOneShot(reloadSound, 0.8f);//Play the sound for being fully reloaded
+            reloadingStatus = false;//State the player is no longer reloading
         }
         yield return null;
     }
 
-    private void infiniteAmmoCheat()//Enable cheats, setting status to immensely high values
+    private void infiniteAmmoCheat()//Enable cheats, setting status to immensely high values; dev function used for debugging purposes.
     {
-        if (!enableCheats)
+        if (!enableCheats)//If cheats aren't already enabled
         {
-            gameAudio.PlayOneShot(cheater);
+            gameAudio.PlayOneShot(cheater);//Tell the player 'You cheated!'
         }
-        enableCheats = true;
-        reloadSpeed = 0.01f;
-        fireRate = 0.05f;
-        refreshCounter();
-        updateInventory();
+        enableCheats = true;//Set the cheat value to true
+        reloadSpeed = 0.01f;//Set the reload value to 0.01 (outdated value; no longer necessary)
+        fireRate = 0.05f;//Set the firerate to 0.05 (any faster and gems start to spawn inside of each other and go crazy)
+        refreshCounter();//Refresh all the counters to set their values to be infinite
+        updateInventory();//Update the inventory to do the same
     }
 
-    private void switchToCoin()
+    private void switchToCoin()//Switch to the coin view
     {
+        //Disable all the cameras except the coin camera
+        //-
         throwCamera.enabled = false;
         coinCamera.enabled = true;
         shopCamera.enabled = false;
-        viewType = "coin";
+        //-
+        viewType = "coin";//Set the viewtype to be coin
+        //Disable all UI elements except the relevant coin drop text
+        //-
         counterText.enabled = false;
         loadedText.enabled = false;
         coinsSavedText.enabled = true;
-        coinsDroppableText.enabled = true;
+        coinsDroppableText.enabled = true;        
         changeButton.gameObject.SetActive(false);
-        coinsSavedText.transform.position = new Vector3(coinsSavedText.transform.position.x, 1000, coinsSavedText.transform.position.z);
-        toggleInentoryButtons(false);
-        if (!firstSwitch)
+        //-
+        coinsSavedText.transform.position = new Vector3(coinsSavedText.transform.position.x, 1000, coinsSavedText.transform.position.z);//Adjust the coins saved text's position
+        toggleInentoryButtons(false);//Disable the inventory buttons so they can't be clicked
+        if (!firstSwitch)//If this is the first time the player is switching to this view
         {
-            firstSwitch = true;
-            coinDropController.generateCoins(coinDropController.getCoinSpawnAmount());
+            firstSwitch = true;//Say they've now switched to the view once
+            coinDropController.generateCoins(coinDropController.getCoinSpawnAmount());//Generate a bunch of coins for the machine
         }
-        silence("coin", false);
-        silence("gem", true);
+        silence("coin", false);//Unsilence all coins
+        silence("gem", true);//Silence all gems
 
 
     }
 
-    public void switchToThrow()
+    public void switchToThrow()//Switch to the throw view
     {
-        if (viewType == "ammo")
+        if (viewType == "ammo")//If the player was last looking at the ammo view
         {
-            quickReload();
+            quickReload();//Quickly reload their ammo to the maximum possible
         }
+        //Same as switchToCoin
         throwCamera.enabled = true;
         gemSelectCamera.enabled = false;
         coinCamera.enabled = false;
@@ -466,8 +473,9 @@ public class CounterController : MonoBehaviour
         silence("gem", false);
     }
 
-    private void switchToShop()
+    private void switchToShop()//Switch to the shop view
     {
+        //Same as switchToCoin
         throwCamera.enabled = false;
         coinCamera.enabled = false;
         shopCamera.enabled = true;
@@ -484,28 +492,29 @@ public class CounterController : MonoBehaviour
         silence("gem", true);
     }
 
-    public void switchToAmmo()
+    public void switchToAmmo()//Switch to the ammo view
     {
-        if (!reloadingStatus)
+        if (!reloadingStatus)//If the player isn't actively reloading (to prevent quickReload bugs and cheese)
         {
-            gemSelectCamera.enabled = true;
-            counterText.enabled = false;
+            gemSelectCamera.enabled = true;//Enable the gem selection camera on top of the throw view camera
+            counterText.enabled = false;//Disable the total and loaded texts
             loadedText.enabled = false;
-            changeButton.gameObject.SetActive(false);
+            changeButton.gameObject.SetActive(false);//Disable the button the player just pressed to access this view
             viewType = "ammo";
-            updateInventory();
-            toggleInentoryButtons(true);
+            updateInventory();//Update the player's inventory
+            toggleInentoryButtons(true);//Enable the buttons for the inventory
             silence("coin", true);
             silence("gem", false);
         }
     }
 
-    private void updateInventory()
+    private void updateInventory()//Update the player's inventory in the ammo view
     {
-        if (!enableCheats)
+        if (!enableCheats)//If the player isn't cheating
         {
-            heldProjectiles[projectileType] = heldProjectiles[projectileType] + loadedTotal;
-            loadedTotal = 0;
+            heldProjectiles[projectileType] = heldProjectiles[projectileType] + loadedTotal;//Take all the loaded projectiles and add them back to the total of the currently selected projectile type
+            loadedTotal = 0;//Set the loaded total to 0, as the player has just unloaded
+            //Set the text of the inventory to show how many gems the player is holding and their current score value
             inventoryText["rubyHeld"].text = "Held: " + heldProjectiles["ruby"];
             inventoryText["emeraldHeld"].text = "Held: " + heldProjectiles["emerald"];
             inventoryText["amethystHeld"].text = "Held: " + heldProjectiles["amethyst"];
@@ -514,10 +523,11 @@ public class CounterController : MonoBehaviour
             inventoryText["emeraldValue"].text = "Value: " + projectileValues["emerald"];
             inventoryText["amethystValue"].text = "Value: " + projectileValues["amethyst"];
             inventoryText["diamondValue"].text = "Value: " + projectileValues["diamond"];
-            checkEmpty();
+            checkEmpty();//See if the player has 0 of any of the gems, and if so, change their colour
         }
-        else
+        else//If the player is cheating
         {
+            //Show the player has infinite of every gem, and "set" their "value" to 0 - as the player has an infinite amount of money and thus has no need of earning more; truly a cruel twist of fate to have an infinite amount of valueless gems
             inventoryText["rubyHeld"].text = "Held: ∞";
             inventoryText["emeraldHeld"].text = "Held: ∞";
             inventoryText["amethystHeld"].text = "Held: ∞";
@@ -526,6 +536,7 @@ public class CounterController : MonoBehaviour
             inventoryText["emeraldValue"].text = "Value: 0";
             inventoryText["amethystValue"].text = "Value: 0";
             inventoryText["diamondValue"].text = "Value: 0";
+            //Set all the gems to their 'active' colours, as the player has an "infinite" amount
             modifyColour("ruby", false);
             modifyColour("emerald", false);
             modifyColour("amethyst", false);
@@ -533,25 +544,25 @@ public class CounterController : MonoBehaviour
         }
     }
 
-    private void checkEmpty()
+    private void checkEmpty()//Check if the player has run out of gems of a certain type
     {
-        foreach (KeyValuePair<string, int> entry in heldProjectiles)
+        foreach (KeyValuePair<string, int> entry in heldProjectiles)//For every gem that exists
         {
-            if (entry.Value < 1)
+            if (entry.Value < 1)//If there's more than one held
             {
-                modifyColour(entry.Key, true);
+                modifyColour(entry.Key, true);//Set it to its appropriate colour
             }
-            else
+            else//Otherwise
             {
-                modifyColour(entry.Key, false);
+                modifyColour(entry.Key, false);//Set it to an empty, transparent colour
             }
         }
     }
 
-    private void modifyColour(string keyString, bool empty)
+    private void modifyColour(string keyString, bool empty)//Change the material of a UI object
     {
-        string selectedGem = "";
-        switch (keyString)
+        string selectedGem = "";//Set the selected gem to an empty value as a failsafe
+        switch (keyString)//Based on the keyString input, select the matching gem object
         {
             case "ruby":
                 selectedGem = "UIRuby";
@@ -566,24 +577,35 @@ public class CounterController : MonoBehaviour
                 selectedGem = "UIDiamond";
                 break;
         }
-        if (empty)
+        if (empty)//If the player doesn't hold any of the selected gem, set it to the defined emptyColour
         {
             gemObjects[selectedGem].GetComponent<Renderer>().material.SetColor("_Color", emptyColour);
             gemObjects[selectedGem].GetComponent<Renderer>().material.SetFloat("_Metallic", 0f);
             gemObjects[selectedGem].GetComponent<Renderer>().material.SetFloat("_Glossiness", 0f);
         }
-        else
+        else//Otherwise, set it to its relevant active material
         {
             gemObjects[selectedGem].GetComponent<Renderer>().material = materials[keyString];
         }
     }
 
-    void toggleInentoryButtons(bool activeStatus)
+    void toggleInentoryButtons(bool activeStatus)//Toggle the active status of all inventory buttons, so they can or cannot be interacted with
     {
         rubyButton.gameObject.SetActive(activeStatus);
         emeraldButton.gameObject.SetActive(activeStatus);
         amethystButton.gameObject.SetActive(activeStatus);
         diamondButton.gameObject.SetActive(activeStatus);
+
+        /**
+            Dev Note:
+            This was originally intended to iterate through an array containing each button and set them to the supplied active status
+            either enabling them or disabling them. However, attempting to change the active status of a game object accessed through
+            an array appears to not work and throws a null object reference error. Each button has instead been hard coded to toggle
+            its active status instead. Ineffecient and not scalable, but strangely it works despite accesing it in the same way.
+
+            May return to this at a later date to try to bugfix.
+        */
+
         /**
         for(int i = 0; i < inventoryButtons.Length; i++)
         {
@@ -593,22 +615,22 @@ public class CounterController : MonoBehaviour
 
     }
 
-    public void silence(string silentType, bool silentStatus)
+    public void silence(string silentType, bool silentStatus)//Silence all objects of a certain type, provided they have a function in their attached script to do so
     {
-        switch (silentType)
+        switch (silentType)//Depending on the string provided
         {
-            case "gem":
-                GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");
-                foreach (GameObject gems in allGems)
+            case "gem"://If it's gems
+                GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");//Find all the projectiles and put them in an array
+                foreach (GameObject gems in allGems)//For each game object in the array
                 {
-                    BallForward gem = gems.GetComponent<BallForward>();//"BallForward" is ProjectileController
-                    if(!gem.getScored())
+                    BallForward gem = gems.GetComponent<BallForward>();//Set 'gem' to the BallForward script of the currently selected gem in the loop ("BallForward" is ProjectileController)
+                    if(!gem.getScored())//If the gem hasn't already been scored
                     {
-                        gem.setSilent(silentStatus);
+                        gem.setSilent(silentStatus);//Set the silent status of the gem to the supplied value
                     }
                 }
             break;
-            case "coin":
+            case "coin"://Same as above but with coins
                 GameObject[] allCoins = GameObject.FindGameObjectsWithTag("Coin");
                 foreach (GameObject coins in allCoins)
                 {
@@ -655,34 +677,34 @@ public class CounterController : MonoBehaviour
         }
     }
 
-    public void changeProjectile(string newProjectile)
+    public void changeProjectile(string newProjectile)//Change the projectile type
     {
-        if (projectileType != newProjectile && !reloadingStatus)
+        if (projectileType != newProjectile && !reloadingStatus)//If the new projectile isn't the same as the one currently selected, and the player isn't currently reloading
         {
-            projectileType = newProjectile;
-            gameAudio.PlayOneShot(reloadSound, 0.8f);
-            refreshCounter();
+            projectileType = newProjectile;//The currently selected projectile is now the new projectile
+            gameAudio.PlayOneShot(reloadSound, 0.8f);//Play the reloading sound
+            refreshCounter();//Refresh the counters to reflect the change
         }
     }
 
-    public string getProjectileType()
+    public string getProjectileType()//Get the currently selected projectile that will be fired with the spacebar
     {
         return projectileType;
     }
 
-    private void setProjectileValue(string projectileType, int newValue)
+    private void setProjectileValue(string projectileType, int newValue)//Set the worth of a certain projectile to a new value
     {
         projectileValues[projectileType] = newValue;
     }
 
-    public int getProjectileValue(string projectileType)
+    public int getProjectileValue(string projectileType)//Get the current worth of a certain projectile
     {
         return projectileValues[projectileType];
     }
 
-    public bool getCheatStatus()
+    public bool getCheatStatus()//See if the player has enabled cheats or not
     {
-        return enableCheats;
+        return enableCheats;//Returns 'true' if cheats are enabled.
     }
 
 }

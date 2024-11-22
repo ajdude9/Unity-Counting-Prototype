@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PegBouncer : MonoBehaviour
 {
+
+    //Pegbouncer is designed to push coins away from pegs with a small amount of force, making it harder for them to perfectly balance or get stuck
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,22 +19,19 @@ public class PegBouncer : MonoBehaviour
         
     }
 
-    public void OnCollisionEnter(UnityEngine.Collision collision)
+    public void OnCollisionEnter(UnityEngine.Collision collision)//Upon having something collide with it
     {
-        if(collision.gameObject.CompareTag("Coin"))
+        if(collision.gameObject.CompareTag("Coin"))//If the collision is a coin
         {
-            Debug.Log("Pushing Away.");
-            Vector3 awayFromPeg = collision.gameObject.transform.position - transform.position;
-            Rigidbody coinRb = collision.gameObject.GetComponent<Rigidbody>();
-            forcePush(awayFromPeg, coinRb);
+            //Debug.Log("Pushing Away.");
+            Vector3 awayFromPeg = collision.gameObject.transform.position - transform.position;//Calculate the opposite direction from the point of impact
+            Rigidbody coinRb = collision.gameObject.GetComponent<Rigidbody>();//Find the coin's rigidbody
+            forcePush(awayFromPeg, coinRb);//Run the function with the direction and rigidbody to push it away
         }
     }
-    public void OnCollisionExit(UnityEngine.Collision collision)
+    
+    private void forcePush(Vector3 direction, Rigidbody rb)//Push a rigidbody away
     {
-        StopAllCoroutines();
-    }
-    private void forcePush(Vector3 direction, Rigidbody rb)
-    {
-        rb.AddForce(direction * 0.0025f, ForceMode.Impulse);
+        rb.AddForce(direction * 0.0025f, ForceMode.Impulse);//Add a small amount of force to the supplied rigidbody in the supplied direction
     }
 }
