@@ -14,7 +14,6 @@ public class CoinController : MonoBehaviour
     private bool parentable = false;//If the object can be made the child of another object
     private bool pushable = false;//If the object can be pushed by a pusher object
     private CounterController gameManager;
-    public AudioController audioController;
     private bool collected = false;
     private bool silent = false;
     private RaycastHit hit;
@@ -29,8 +28,7 @@ public class CoinController : MonoBehaviour
         coinRb = gameObject.GetComponent<Rigidbody>();
         coinCollider = gameObject.GetComponent<Collider>();
         coinCollider.material = highFriction;
-        gameManager = GameObject.Find("Game Manager").GetComponent<CounterController>();
-        audioController = GameObject.Find("Audio Manager").GetComponent<AudioController>();
+        gameManager = GameObject.Find("Game Manager").GetComponent<CounterController>();        
         StartCoroutine(stuckPrevention());
     }
 
@@ -112,7 +110,10 @@ public class CoinController : MonoBehaviour
 
     IEnumerator destroyDelay()
     {
-        coinAudio.PlayOneShot(collectSound, 0.8f);
+        if(!silent)
+        {
+            coinAudio.PlayOneShot(collectSound, 0.8f);
+        }
         yield return new WaitForSeconds(1.202f);
         Destroy(gameObject);
     }
