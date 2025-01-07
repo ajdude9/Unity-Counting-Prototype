@@ -11,7 +11,7 @@ public class MenuGemProjectile : MonoBehaviour
     public Vector3 worldPos;//Where the mouse is relative to the world
 
     public float torque = 50;//The amount of torque to apply
-    private int throwPower = 2000;//How much power to put behind a fired projectile
+    private int throwPower = 20;//How much power to put behind a fired projectile
 
     public Renderer projRenderer;//The renderer for the projectile's current material
 
@@ -42,8 +42,8 @@ public class MenuGemProjectile : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameManager = GameObject.Find("Game Manager").GetComponent<CounterController>();//Find the game controller
-        projType = gameManager.getProjectileType();//Get the currently selected projectile from the game controller
+        //gameManager = GameObject.Find("Game Manager").GetComponent<CounterController>();//Find the game controller
+        //projType = gameManager.getProjectileType();//Get the currently selected projectile from the game controller
 
         materials = new Dictionary<string, Material>()//Set up the material list of gem materials
         {
@@ -52,20 +52,21 @@ public class MenuGemProjectile : MonoBehaviour
             {"amethyst", Resources.Load("Amethyst", typeof(Material)) as Material},
             {"diamond", Resources.Load("Diamond", typeof(Material)) as Material},
         };
-        scoreValue = gameManager.getProjectileValue(projType);//Get the current projectile's value from the game manager by using the current projectile type
-        gameObject.GetComponent<Renderer>().material = materials[projType];//Get the current material for the projectile from the game manager using the the material key:value list as reference
+        //scoreValue = gameManager.getProjectileValue(projType);//Get the current projectile's value from the game manager by using the current projectile type
+        //gameObject.GetComponent<Renderer>().material = materials[projType];//Get the current material for the projectile from the game manager using the the material key:value list as reference
         projRb = gameObject.GetComponent<Rigidbody>();//Get the projectile's rigidbody
         projRenderer = gameObject.GetComponent<Renderer>();//Get the projectile's material renderer
         projAudio = gameObject.GetComponent<AudioSource>();//Get the projectile's audio source
         mousePos = Input.mousePosition;//The current mouse position is the literal position on the screen
         mousePos.z = Camera.main.nearClipPlane + 5;//Set the mouse position's z axis to be slightly forward, for accuracy purposes
-        worldPos = Camera.main.ScreenToWorldPoint(mousePos);//Figure out where the mouse is actually pointing in the 3D environment
+        //worldPos = Camera.main.ScreenToWorldPoint(mousePos);//Figure out where the mouse is actually pointing in the 3D environment
         boxFloor = GameObject.Find("Box Floor");//Find the box's bottom face
         //Debug.Log("Calculated Power: " + (calculateThrowPower(mousePos) / 100));
-        transform.position = new Vector3(15.6f, 3.2f, -0.22f);//Set the projectile to the bottom of the screen
-        projRb.transform.LookAt(worldPos);//Look toward where the cursor is on the screen
-
+        //transform.position = new Vector3(15.6f, 3.2f, -0.22f);//Set the projectile to the bottom of the screen
+        //projRb.transform.LookAt(worldPos);//Look toward where the cursor is on the screen
+        Debug.Log("Attempting to add force.");
         projRb.AddRelativeForce(projRb.transform.up * throwPower, ForceMode.Impulse);//Launch the projectile upwards
+        Debug.Log("Force added.");
         //projRb.AddRelativeForce(Vector3.up * (worldPos.y / 4), ForceMode.Impulse);//Give the projectile upwards force to lift it
         projRb.AddTorque(RandomTorque(), RandomTorque(), RandomTorque(), ForceMode.Impulse);//Apply random torque to the projectile to make it spin
 
@@ -87,7 +88,7 @@ public class MenuGemProjectile : MonoBehaviour
     {
         return Random.Range(-torque, torque);//The random torque value is anywhere between the negative amount of torque and its positive counterpart (i.e. -50 to 50)
     }
-
+/**
     private void OnTriggerEnter(Collider other)//Upon touching a trigger
     {
         if (!landed)//If the projectile hasn't already landed
@@ -107,11 +108,11 @@ public class MenuGemProjectile : MonoBehaviour
                 silent = true;//Make the projectile silent so it stops making noise after being scored
                 StartCoroutine(tilDeath(30));//Destroy the projectile after a set time  
                 //Debug.Log("Scored, adding " + scoreValue + " coins.");
-                gameManager.addCounter(scoreValue, "coins", "");//Add the value of the projectile to the amount of coins the player can drop
+                //gameManager.addCounter(scoreValue, "coins", "");//Add the value of the projectile to the amount of coins the player can drop
             }
         }
     }
-
+*/
     void OnCollisionEnter(Collision collision)//Upon colliding with something
     {
 

@@ -918,7 +918,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fb3cbb9892c20834961868bd6da18bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gemPrefab: {fileID: 8419925198574976218, guid: f9e67930e6daf1f1797f12bf930acf2b, type: 3}
+  gemPrefab: {fileID: 3338714581922955634, guid: 1d7aa1e5e062f557fb7cef976adf3deb, type: 3}
 --- !u!1 &793042405
 GameObject:
   m_ObjectHideFlags: 0
