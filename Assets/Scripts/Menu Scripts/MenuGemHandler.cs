@@ -15,7 +15,7 @@ public class MenuGems : MonoBehaviour
     {
         spawnPylonA = GameObject.Find("SpawnPylonA");
         spawnPylonB = GameObject.Find("SpawnPylonB");
-        InvokeRepeating("spawnGem", 0, 0.5f);
+        InvokeRepeating("spawnGem", 0, 0.3f);
 
     }
 

@@ -7,6 +7,7 @@ public class MenuGemProjectile : MonoBehaviour
 {
 
     private Rigidbody projRb;//The projectile's rigidbody
+    private Collider projCol;
     private Vector3 mousePos;//Where the mouse is
     public Vector3 worldPos;//Where the mouse is relative to the world
 
@@ -29,7 +30,7 @@ public class MenuGemProjectile : MonoBehaviour
     private AudioSource projAudio;//The audiosource for the projectiles
     private bool silent = false;//If the projectile should make sound or not
 
-    private bool landed = false;//If the projectile has landed
+    private bool hasCollision = false;//If the projectile has collision
     private GameObject boxFloor;//The bottom face of the box, so the projectile knows where to aim itself
 
     private int scoreValue;//How valuable the gem is when scored
@@ -55,6 +56,8 @@ public class MenuGemProjectile : MonoBehaviour
         //scoreValue = gameManager.getProjectileValue(projType);//Get the current projectile's value from the game manager by using the current projectile type
         //gameObject.GetComponent<Renderer>().material = materials[projType];//Get the current material for the projectile from the game manager using the the material key:value list as reference
         projRb = gameObject.GetComponent<Rigidbody>();//Get the projectile's rigidbody
+        projCol = gameObject.GetComponent<Collider>();
+        projCol.isTrigger = true;
         projRenderer = gameObject.GetComponent<Renderer>();//Get the projectile's material renderer
         projAudio = gameObject.GetComponent<AudioSource>();//Get the projectile's audio source
         mousePos = Input.mousePosition;//The current mouse position is the literal position on the screen
@@ -69,7 +72,7 @@ public class MenuGemProjectile : MonoBehaviour
         Debug.Log("Force added.");
         //projRb.AddRelativeForce(Vector3.up * (worldPos.y / 4), ForceMode.Impulse);//Give the projectile upwards force to lift it
         projRb.AddTorque(RandomTorque(), RandomTorque(), RandomTorque(), ForceMode.Impulse);//Apply random torque to the projectile to make it spin
-
+        StartCoroutine(tilDeath(6));
     }
 
     // Update is called once per frame
@@ -88,14 +91,21 @@ public class MenuGemProjectile : MonoBehaviour
     {
         return Random.Range(-torque, torque);//The random torque value is anywhere between the negative amount of torque and its positive counterpart (i.e. -50 to 50)
     }
-/**
+
     private void OnTriggerEnter(Collider other)//Upon touching a trigger
     {
-        if (!landed)//If the projectile hasn't already landed
+        if (!hasCollision)//If the projectile hasn't got collision
+        {
+            if (other.CompareTag("Collector"))//If it flies above the box
+            {
+                projCol.isTrigger = false;
+            }            
+        }
+        else
         {
             if (other.CompareTag("Box"))//If lands in the box's trigger zone
             {
-                //Debug.Log("Box trigger activated.");
+                Debug.Log("Box trigger activated.");
                 projRenderer.material.SetColor("_Color", scoreColour);//Set the colour to the score colour
                 if(!silent)//If its not been silenced
                 {
@@ -112,7 +122,7 @@ public class MenuGemProjectile : MonoBehaviour
             }
         }
     }
-*/
+
     void OnCollisionEnter(Collision collision)//Upon colliding with something
     {
 
@@ -135,6 +145,7 @@ public class MenuGemProjectile : MonoBehaviour
                     break;
             }
         }
+        /**
         if (collision.gameObject.CompareTag("Floor") && !scored)//If the projectile touches the floor and hasn't been scored
         {
             landed = true;//State the projectile has landed
@@ -143,6 +154,7 @@ public class MenuGemProjectile : MonoBehaviour
             projRenderer.material.SetFloat("_Glossiness", 0f);//Remove the projectile's glossiness
             StartCoroutine(tilDeath(15));//Destroy the projectile after a set time
         }
+        */
     }
 
 
