@@ -13,6 +13,7 @@ using System.Linq;
 using Unity.VisualScripting.FullSerializer;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine.Audio;
+using UnityEngine.Rendering;
 
 public class CounterController : MonoBehaviour
 {
@@ -28,7 +29,7 @@ public class CounterController : MonoBehaviour
     private int coinsDroppable = 0;//The number of coins the player can drop.
     private float reloadSpeed;//How long it takes to reload one projectile
     public float fireRate;//How fast the player can autofire projectiles
-    public String projType;//The name of the projectiles being fired
+    public string projType;//The name of the projectiles being fired
     public bool reloadingStatus = false;//Whether the player is currently 'reloading'
     public bool enableCheats = false;//Whether cheats are enabled
     private AudioSource gameAudio;//Source for the universal game audio
@@ -40,7 +41,9 @@ public class CounterController : MonoBehaviour
     private Camera coinCamera;//The camera for putting coins in a machine
     private Camera shopCamera;//The camera for viewing the shop
     private Camera gemSelectCamera;//The camera for viewing the gem select UI
-    public String viewType;//Which camera is currently being viewed
+    private Camera pauseCamera;//The camera for viewing the pause menu
+    public string viewType;//Which camera is currently being viewed
+    private string lastView;//The camera that was viewed last when paused
     public bool firstSwitch = false;//Whether the switch to the coin camera is the first one since the game started
     public int fadeValue;//The opacity of the reload notification text
     private string projectileType;//The type of projectile that has been selected
@@ -99,6 +102,7 @@ public class CounterController : MonoBehaviour
         coinCamera = GameObject.Find("Machine Watcher").GetComponent<Camera>();//Find the camera for viewing the coin pushing machine
         shopCamera = GameObject.Find("Shop Camera").GetComponent<Camera>();//Find the camera for viewing the shop
         gemSelectCamera = GameObject.Find("Select Camera").GetComponent<Camera>();//Find the camera for changing the currently selected gem
+        pauseCamera = GameObject.Find("Pause Camera").GetComponent<Camera>();//Find the camera for viewing the pause menu
 
         switchToThrow();//Switch to the throw viewtype, if it wasn't already being viewed.
 
@@ -204,6 +208,17 @@ public class CounterController : MonoBehaviour
             fadeValue = 0;//Set the fade value of the text to 0
             StartCoroutine(textFadeOut(1f, reloadNotify));//Start to fade out the reload text
             reload();//Reload the projectiles to the maximum amount
+        }
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            if(viewType != "paused")
+            {                
+                toggleGamePause(true);
+            }
+            else
+            {
+                toggleGamePause(false);
+            }
         }
     }
 
@@ -439,7 +454,7 @@ public class CounterController : MonoBehaviour
         changeButton.gameObject.SetActive(false);
         //-
         coinsSavedText.transform.position = new Vector3(coinsSavedText.transform.position.x, 1000, coinsSavedText.transform.position.z);//Adjust the coins saved text's position
-        toggleInentoryButtons(false);//Disable the inventory buttons so they can't be clicked
+        toggleInventoryButtons(false);//Disable the inventory buttons so they can't be clicked
         if (!firstSwitch)//If this is the first time the player is switching to this view
         {
             firstSwitch = true;//Say they've now switched to the view once
@@ -468,7 +483,7 @@ public class CounterController : MonoBehaviour
         coinsDroppableText.enabled = false;
         changeButton.gameObject.SetActive(true);
         viewType = "throw";
-        toggleInentoryButtons(false);
+        toggleInventoryButtons(false);
         silence("coin", true);
         silence("gem", false);
     }
@@ -487,7 +502,7 @@ public class CounterController : MonoBehaviour
         coinsSavedText.transform.position = new Vector3(coinsSavedText.transform.position.x, 1100, coinsSavedText.transform.position.z);
         coinsSavedText.text = "Coins Available: " + coinsSaved;
         viewType = "shop";
-        toggleInentoryButtons(false);
+        toggleInventoryButtons(false);
         silence("coin", true);
         silence("gem", true);
     }
@@ -502,10 +517,56 @@ public class CounterController : MonoBehaviour
             changeButton.gameObject.SetActive(false);//Disable the button the player just pressed to access this view
             viewType = "ammo";
             updateInventory();//Update the player's inventory
-            toggleInentoryButtons(true);//Enable the buttons for the inventory
+            toggleInventoryButtons(true);//Enable the buttons for the inventory
             silence("coin", true);
             silence("gem", false);
         }
+    }
+
+    private void toggleGamePause(bool status)
+    {        
+
+        if(status)
+        {
+            storeView(true);
+            viewType = "paused";
+            gemSelectCamera.enabled = false;
+            pauseCamera.enabled = true;
+            silence("coin", true);
+            silence("gem", true);
+            toggleInventoryButtons(false);            
+        }
+        else
+        {
+            pauseCamera.enabled = false;
+            switch(storeView(false))
+            {
+                case "throw":
+                    switchToThrow();
+                    break;
+                case "coin":
+                    switchToCoin();
+                    break;
+                case "shop":
+                    switchToShop();
+                    break;
+                case "ammo":
+                    switchToAmmo();
+                    break;
+            }
+        }
+
+
+    }
+
+    private string storeView(bool function)
+    {                
+        if(function)//If true, meaning you are storing the view
+        {
+            lastView = viewType;
+        }
+        
+        return lastView;
     }
 
     private void updateInventory()//Update the player's inventory in the ammo view
@@ -589,7 +650,7 @@ public class CounterController : MonoBehaviour
         }
     }
 
-    void toggleInentoryButtons(bool activeStatus)//Toggle the active status of all inventory buttons, so they can or cannot be interacted with
+    void toggleInventoryButtons(bool activeStatus)//Toggle the active status of all inventory buttons, so they can or cannot be interacted with
     {
         rubyButton.gameObject.SetActive(activeStatus);
         emeraldButton.gameObject.SetActive(activeStatus);
