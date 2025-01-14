@@ -103,7 +103,7 @@ public class CounterController : MonoBehaviour
         shopCamera = GameObject.Find("Shop Camera").GetComponent<Camera>();//Find the camera for viewing the shop
         gemSelectCamera = GameObject.Find("Select Camera").GetComponent<Camera>();//Find the camera for changing the currently selected gem
         pauseCamera = GameObject.Find("Pause Camera").GetComponent<Camera>();//Find the camera for viewing the pause menu
-
+        pauseCamera.enabled = false;
         switchToThrow();//Switch to the throw viewtype, if it wasn't already being viewed.
 
     }
