@@ -22,7 +22,7 @@ public class MenuController : MonoBehaviour
 
     public void StartNew()
     {
-        SceneManager.LoadScene(0);//Load the main scene
+        SceneManager.LoadScene(1);//Load the main scene
     }
 
     public void changeScene(int scenePos)
@@ -30,7 +30,7 @@ public class MenuController : MonoBehaviour
         SceneManager.LoadScene(scenePos);
     }
 
-    public void Exit()
+    public void exit()
     {
         #if UNITY_EDITOR//Specialised compiler if statement to detected editor mode
             EditorApplication.ExitPlaymode();//Exit playmode if viewing the editor

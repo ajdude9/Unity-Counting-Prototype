@@ -14,6 +14,10 @@ using Unity.VisualScripting.FullSerializer;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
 
 public class CounterController : MonoBehaviour
 {
@@ -59,6 +63,7 @@ public class CounterController : MonoBehaviour
     private UnityEngine.UI.Button diamondButton;//The button for changing to diamonds
     private UnityEngine.UI.Button[] inventoryButtons;//An array containing each button for ease of access (unused due to buggy behaviour)
     private Dictionary<string, Material> materials;//A key:value list to store all the materials used for projectiles
+    private Canvas pauseMenu;
     // Start is called before the first frame update
     void Start()
     {
@@ -104,6 +109,8 @@ public class CounterController : MonoBehaviour
         gemSelectCamera = GameObject.Find("Select Camera").GetComponent<Camera>();//Find the camera for changing the currently selected gem
         pauseCamera = GameObject.Find("Pause Camera").GetComponent<Camera>();//Find the camera for viewing the pause menu
         pauseCamera.enabled = false;
+        pauseMenu = GameObject.Find("Pause Canvas").GetComponent<Canvas>();
+        pauseMenu.enabled = false;
         switchToThrow();//Switch to the throw viewtype, if it wasn't already being viewed.
 
     }
@@ -525,13 +532,15 @@ public class CounterController : MonoBehaviour
 
     private void toggleGamePause(bool status)
     {        
-
+        pauseMenu.enabled = status;
         if(status)
         {
+            
             storeView(true);
             viewType = "paused";
             gemSelectCamera.enabled = false;
             pauseCamera.enabled = true;
+            changeButton.gameObject.SetActive(false);
             silence("coin", true);
             silence("gem", true);
             toggleInventoryButtons(false);            
@@ -557,6 +566,11 @@ public class CounterController : MonoBehaviour
         }
 
 
+    }
+
+    public void unpause()
+    {
+        toggleGamePause(false);
     }
 
     private string storeView(bool function)
@@ -676,6 +690,7 @@ public class CounterController : MonoBehaviour
 
     }
 
+
     public void silence(string silentType, bool silentStatus)//Silence all objects of a certain type, provided they have a function in their attached script to do so
     {
         switch (silentType)//Depending on the string provided
@@ -766,6 +781,22 @@ public class CounterController : MonoBehaviour
     public bool getCheatStatus()//See if the player has enabled cheats or not
     {
         return enableCheats;//Returns 'true' if cheats are enabled.
+    }
+
+
+    public void changeScene(int scenePos)
+    {
+        SceneManager.LoadScene(scenePos);
+    }
+
+    public void exit()
+    {
+        #if UNITY_EDITOR//Specialised compiler if statement to detected editor mode
+            EditorApplication.ExitPlaymode();//Exit playmode if viewing the editor
+        #else
+            Application.Quit();//Quit the game and close the window
+        #endif
+        
     }
 
 }
