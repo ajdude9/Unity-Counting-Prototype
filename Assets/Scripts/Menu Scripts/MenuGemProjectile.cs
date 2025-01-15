@@ -68,6 +68,22 @@ public class MenuGemProjectile : MonoBehaviour
         //transform.position = new Vector3(15.6f, 3.2f, -0.22f);//Set the projectile to the bottom of the screen
         //projRb.transform.LookAt(worldPos);//Look toward where the cursor is on the screen
         Debug.Log("Attempting to add force.");
+        int randomInt = Random.Range(0, 4);
+        switch(randomInt)
+        {
+            case 0:
+                projRenderer.material = materials["ruby"];
+            break;
+            case 1:
+                projRenderer.material = materials["emerald"];
+            break;
+            case 2:
+                projRenderer.material = materials["amethyst"];
+            break;
+            case 3:
+                projRenderer.material = materials["diamond"];
+            break;
+        }
         projRb.AddRelativeForce(projRb.transform.up * throwPower, ForceMode.Impulse);//Launch the projectile upwards
         Debug.Log("Force added.");
         //projRb.AddRelativeForce(Vector3.up * (worldPos.y / 4), ForceMode.Impulse);//Give the projectile upwards force to lift it

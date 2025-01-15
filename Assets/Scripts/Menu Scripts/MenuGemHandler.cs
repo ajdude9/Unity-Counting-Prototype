@@ -28,7 +28,7 @@ public class MenuGems : MonoBehaviour
     void spawnGem()
     {
         float placement = Random.Range(spawnPylonA.transform.position.x, spawnPylonB.transform.position.x);    
-        this.gameObject.transform.position = new Vector3(placement, transform.position.y, transform.position.z);
+        gameObject.transform.position = new Vector3(placement, transform.position.y, transform.position.z);
         Instantiate(gemPrefab, transform.position, gemPrefab.transform.rotation);
     }
 }
