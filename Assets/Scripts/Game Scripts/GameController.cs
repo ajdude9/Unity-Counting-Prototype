@@ -33,7 +33,7 @@ public class CounterController : MonoBehaviour
     private int coinsDroppable = 0;//The number of coins the player can drop.
     private float reloadSpeed;//How long it takes to reload one projectile
     public float fireRate;//How fast the player can autofire projectiles
-    public string projType;//The name of the projectiles being fired
+    public string projName;//The name of the projectiles being fired
     public bool reloadingStatus = false;//Whether the player is currently 'reloading'
     public bool enableCheats = false;//Whether cheats are enabled
     private AudioSource gameAudio;//Source for the universal game audio
@@ -55,6 +55,7 @@ public class CounterController : MonoBehaviour
     private Dictionary<string, int> projectileValues;//A key:value list to contain the name of a projectile and its value in coins when scored
     private Dictionary<string, GameObject> gemObjects;//A key:value list to contain all the gem objects used in the scene
     private Dictionary<string, TextMeshProUGUI> inventoryText;//A key:value list to contain the text of how many gems the player holds and their values
+    private string[] gemNames;//An array containing the names all gems that exist
     private Color emptyColour = new Color(0.0f, 0.0f, 0.0f, 0f);//A black colour
     private UnityEngine.UI.Button changeButton;//The button for opening the menu for changing gems
     private UnityEngine.UI.Button rubyButton;//The button for changing to rubies
@@ -69,6 +70,7 @@ public class CounterController : MonoBehaviour
     {
         //get the game audio and set the default values for variables
         projectileType = "ruby";//Set the default projectile to ruby
+        projName = "Gems";
         gameAudio = gameObject.GetComponent<AudioSource>();//Find the game's audio source
         coinDropController = GameObject.Find("Coin Dropper").GetComponent<CoinDropController>();//Find the coin drop controller
         writeDictionaries();//Fill out all the dictionary variables.
@@ -98,8 +100,8 @@ public class CounterController : MonoBehaviour
         fireRate = 0.35f;//Set the firerate to 0.35
         counterText.enabled = true;//Enable the counter text
         loadedText.enabled = true;//Enable the loaded text
-        counterText.text = "Available " + projType + ": " + heldProjectiles[projectileType];//Change the counter text to show how many of the currently selected projectile type the player has
-        loadedText.text = "Loaded " + projType + ": " + loadedTotal;//Change the loaded text to show how many of the currently loaded projectile are loaded
+        counterText.text = "Available " + projName + ": " + heldProjectiles[projectileType];//Change the counter text to show how many of the currently selected projectile type the player has
+        loadedText.text = "Loaded " + projName + ": " + loadedTotal;//Change the loaded text to show how many of the currently loaded projectile are loaded
         coinsSavedText.text = "Coins Won: " + coinsSaved;//Change the coins saved text to show how many coins the player has won
         coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;//Change the coins droppable text to show how many coins the player can drop
         reloadNotify.color = new Color(reloadNotify.color.r, reloadNotify.color.g, reloadNotify.color.b, 0);//Chane the reload notify colour to red
@@ -117,6 +119,8 @@ public class CounterController : MonoBehaviour
 
     void writeDictionaries()//Set up the dictionary variables
     {
+        string[] gemNameList = {"ruby", "emerald", "amethyst", "diamond"};
+        gemNames = gemNameList;
         heldProjectiles = new Dictionary<string, int>()//Set up each projectile the player can hold, and give the player 54 rubies to start (with 6 already loaded, for 60 total)
         {
             {"ruby", 54},
@@ -233,8 +237,8 @@ public class CounterController : MonoBehaviour
     {
         if (enableCheats)//If cheats are enabled
         {
-            counterText.text = "Available " + projType + ": ∞";//Set them all to the infinity symbol - since they are effectively infinite
-            loadedText.text = "Loaded " + projType + ": ∞";
+            counterText.text = "Available " + projName + ": ∞";//Set them all to the infinity symbol - since they are effectively infinite
+            loadedText.text = "Loaded " + projName + ": ∞";
             coinsDroppableText.text = "Droppable Coins: ∞";
             if (viewType == "shop")//If the player is looking at the shop
             {
@@ -247,8 +251,8 @@ public class CounterController : MonoBehaviour
         }
         else
         {
-            counterText.text = "Available " + projType + ": " + heldProjectiles[projectileType];//Show how many projectiles are available to be loaded
-            loadedText.text = "Loaded " + projType + ": " + loadedTotal;//Show how many projectiles are loaded and able to be fired
+            counterText.text = "Available " + projName + ": " + heldProjectiles[projectileType];//Show how many projectiles are available to be loaded
+            loadedText.text = "Loaded " + projName + ": " + loadedTotal;//Show how many projectiles are loaded and able to be fired
             coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;//Show how many coins can be dropped
             if (viewType == "shop")
             {
@@ -768,6 +772,11 @@ public class CounterController : MonoBehaviour
         return projectileType;
     }
 
+    public void setProjectileType(string newProjectileType)//Get the currently selected projectile that will be fired with the spacebar
+    {
+        projectileType = newProjectileType;
+    }
+
     private void setProjectileValue(string projectileType, int newValue)//Set the worth of a certain projectile to a new value
     {
         projectileValues[projectileType] = newValue;
@@ -797,6 +806,20 @@ public class CounterController : MonoBehaviour
             Application.Quit();//Quit the game and close the window
         #endif
         
+    }
+
+    public int[] gatherGems()
+    {
+        int[] returnList = {getCounter("total", "ruby"), getCounter("total", "emerald"), getCounter("total", "amethyst"), getCounter("total", "diamond")};        
+        return returnList;
+    }
+
+    public void depositGems(int[] gemList)
+    {
+        for(int i = 0; i < gemNames.Length; i++)
+        {
+            setCounter(gemList[i], "total", gemNames[i]);
+        }
     }
 
 }

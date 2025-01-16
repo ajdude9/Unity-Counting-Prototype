@@ -5092,6 +5092,50 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 761249808}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &767122678
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 767122680}
+  - component: {fileID: 767122679}
+  m_Layer: 0
+  m_Name: DataManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &767122679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 767122678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57be4416f2d56673bab1ce42cf727046, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &767122680
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 767122678}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &816781650
 GameObject:
   m_ObjectHideFlags: 0
@@ -7193,7 +7237,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1134876560}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 767122679}
+        m_TargetAssemblyTypeName: DataManager, Assembly-CSharp
+        m_MethodName: save
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1134876560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13343,7 +13399,7 @@ MonoBehaviour:
   coinsSavedText: {fileID: 1056421782}
   coinsDroppableText: {fileID: 40550502}
   fireRate: 0
-  projType: Gems
+  projName: 
   reloadingStatus: 0
   enableCheats: 0
   reloadSound: {fileID: 8300000, guid: 77d31d90ba6eb94448789ca723915147, type: 3}
@@ -15082,3 +15138,4 @@ SceneRoots:
   - {fileID: 30674729}
   - {fileID: 1701716361}
   - {fileID: 1752224295}
+  - {fileID: 767122680}
