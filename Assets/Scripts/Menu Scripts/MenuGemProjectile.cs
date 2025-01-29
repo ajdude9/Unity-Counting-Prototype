@@ -36,14 +36,14 @@ public class MenuGemProjectile : MonoBehaviour
     private int scoreValue;//How valuable the gem is when scored
     private string projType;//The type of projectile to fire
 
-    private CounterController gameManager;//The game controller
+    private MenuController menuManager;//The game controller
 
     private Dictionary<string, Material> materials;//A key:value list to store all the materials used for projectiles
 
     // Start is called before the first frame update
     void Start()
     {
-        //gameManager = GameObject.Find("Game Manager").GetComponent<CounterController>();//Find the game controller
+        menuManager = GameObject.Find("Menu Canvas").GetComponent<MenuController>();//Find the game controller
         //projType = gameManager.getProjectileType();//Get the currently selected projectile from the game controller
 
         materials = new Dictionary<string, Material>()//Set up the material list of gem materials
@@ -67,7 +67,7 @@ public class MenuGemProjectile : MonoBehaviour
         //Debug.Log("Calculated Power: " + (calculateThrowPower(mousePos) / 100));
         //transform.position = new Vector3(15.6f, 3.2f, -0.22f);//Set the projectile to the bottom of the screen
         //projRb.transform.LookAt(worldPos);//Look toward where the cursor is on the screen
-        Debug.Log("Attempting to add force.");
+        //Debug.Log("Attempting to add force.");
         int randomInt = Random.Range(0, 4);
         switch(randomInt)
         {
@@ -85,10 +85,11 @@ public class MenuGemProjectile : MonoBehaviour
             break;
         }
         projRb.AddRelativeForce(projRb.transform.up * throwPower, ForceMode.Impulse);//Launch the projectile upwards
-        Debug.Log("Force added.");
+        //Debug.Log("Force added.");
         //projRb.AddRelativeForce(Vector3.up * (worldPos.y / 4), ForceMode.Impulse);//Give the projectile upwards force to lift it
         projRb.AddTorque(RandomTorque(), RandomTorque(), RandomTorque(), ForceMode.Impulse);//Apply random torque to the projectile to make it spin
         StartCoroutine(tilDeath(6));
+        setSilent(menuManager.getSilencedStatus());        
     }
 
     // Update is called once per frame
