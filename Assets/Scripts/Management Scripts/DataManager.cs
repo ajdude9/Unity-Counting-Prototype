@@ -122,24 +122,29 @@ public class DataManager : MonoBehaviour
             string savePath = Application.persistentDataPath + "/save_slot_" + i + ".json";//Define the path as the path set in the save data   
             Debug.Log("Looking for Slot" + i + "GemsText");
             //TextMeshPro gemSlot = GameObject.Find("Slot" + i + "GemsText").GetComponent<TextMeshPro>();
-            TextMeshProUGUI gemSlot = GameObject.Find("Slot1GemsText").gameObject.GetComponent<TextMeshProUGUI>();            
+            TextMeshProUGUI gemSlot = GameObject.Find("Slot" + i + "GemsText").gameObject.GetComponent<TextMeshProUGUI>();            
             TextMeshProUGUI coinsSlot = GameObject.Find("Slot" + i + "CoinsText").GetComponent<TextMeshProUGUI>();
             TextMeshProUGUI bankSlot = GameObject.Find("Slot" + i + "BankText").GetComponent<TextMeshProUGUI>();
             if (File.Exists(savePath))//If we find a file in the filepath
             {
                 string json = File.ReadAllText(savePath);
                 SaveData data = JsonUtility.FromJson<SaveData>(json);
-                gemSlot.text = "Gems: " + data.gemsSaved;
+                gemSlot.text = "Gems: " + data.gemsSaved[0] + ", " + data.gemsSaved[1] + ", " + data.gemsSaved[2] + ", " + data.gemsSaved[3];
                 coinsSlot.text = "Coins: " + data.coinsWon;
                 bankSlot.text = "Bank: " + data.coinsSaved;
             }
             else
             {
                 gemSlot.text = "Gems: ";
-                coinsSlot.text = "Coins:";
-                bankSlot.text = "Bank:";
+                coinsSlot.text = "Coins: ";
+                bankSlot.text = "Bank: ";
             }
         }
+    }
+
+    private void countGems(int[] gemArray)
+    {
+
     }
 }
  
