@@ -65,6 +65,8 @@ public class CounterController : MonoBehaviour
     private UnityEngine.UI.Button[] inventoryButtons;//An array containing each button for ease of access (unused due to buggy behaviour)
     private Dictionary<string, Material> materials;//A key:value list to store all the materials used for projectiles
     private Canvas pauseMenu;
+    private DataManager dataManager;
+    private bool saveOrLoad;
     // Start is called before the first frame update
     void Start()
     {
@@ -113,6 +115,7 @@ public class CounterController : MonoBehaviour
         pauseCamera.enabled = false;
         pauseMenu = GameObject.Find("Pause Canvas").GetComponent<Canvas>();
         pauseMenu.enabled = false;
+        dataManager = GameObject.Find("DataManager").GetComponent<DataManager>();
         switchToThrow();//Switch to the throw viewtype, if it wasn't already being viewed.
 
     }
@@ -538,8 +541,7 @@ public class CounterController : MonoBehaviour
     {        
         pauseMenu.enabled = status;
         if(status)
-        {
-            
+        {            
             storeView(true);
             viewType = "paused";
             gemSelectCamera.enabled = false;
@@ -575,6 +577,17 @@ public class CounterController : MonoBehaviour
     public void unpause()
     {
         toggleGamePause(false);
+    }
+
+    public void openSaveLoad(string function)
+    {
+
+        dataManager.loadSlots();
+    }
+
+    public void saveLoad(string function)
+    {
+        saveOrLoad = function;
     }
 
     private string storeView(bool function)
