@@ -68,6 +68,7 @@ public class CounterController : MonoBehaviour
     private Canvas saveSlotCanvas;
     private DataManager dataManager;
     private string saveOrLoad;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -586,11 +587,23 @@ public class CounterController : MonoBehaviour
         dataManager.loadSlots();
         saveSlotCanvas.enabled = true;
         pauseMenu.enabled = false;
+        saveOrLoad = function;
     }
 
-    public void saveLoad(string function)
+    public void saveLoad(int slot)
     {
-        saveOrLoad = function;
+        switch(saveOrLoad)
+        {
+            case "save":
+                dataManager.save(slot);
+                dataManager.loadSlots();
+            break;
+            case "load":
+                dataManager.load(slot);
+                saveSlotCanvas.enabled = false;
+                switchToThrow();
+            break;
+        }
     }
 
     private string storeView(bool function)
