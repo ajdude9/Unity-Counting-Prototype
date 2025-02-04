@@ -65,37 +65,17 @@ public class CounterController : MonoBehaviour
     private UnityEngine.UI.Button[] inventoryButtons;//An array containing each button for ease of access (unused due to buggy behaviour)
     private Dictionary<string, Material> materials;//A key:value list to store all the materials used for projectiles
     private Canvas pauseMenu;
+    private Canvas saveSlotCanvas;
     private DataManager dataManager;
-    private bool saveOrLoad;
+    private string saveOrLoad;
     // Start is called before the first frame update
     void Start()
     {
+        findObjects();//Find all the objects in the scene and tie to them to their respective variables
         //get the game audio and set the default values for variables
         projectileType = "ruby";//Set the default projectile to ruby
         projName = "Gems";
-        gameAudio = gameObject.GetComponent<AudioSource>();//Find the game's audio source
-        coinDropController = GameObject.Find("Coin Dropper").GetComponent<CoinDropController>();//Find the coin drop controller
-        writeDictionaries();//Fill out all the dictionary variables.
-        changeButton = GameObject.Find("Change Button").GetComponent<UnityEngine.UI.Button>();//The button for changing gems
-        rubyButton = GameObject.Find("Ruby Select Button").GetComponent<UnityEngine.UI.Button>();//The button for changing to rubies
-        emeraldButton = GameObject.Find("Emerald Select Button").GetComponent<UnityEngine.UI.Button>();//The button for changing to emeralds
-        amethystButton = GameObject.Find("Amethyst Select Button").GetComponent<UnityEngine.UI.Button>();//The button for changing to amethysts
-        diamondButton = GameObject.Find("Diamond Select Button").GetComponent<UnityEngine.UI.Button>();//The button for changing to diamonds
-        //Unused inventory buttons array assignment text, as accessing an object in an array to disable it does not properly disable it and instead bugs out
-        /**
-        inventoryButtons[0] = rubyButton;
-        inventoryButtons[1] = emeraldButton;
-        inventoryButtons[2] = amethystButton;
-        inventoryButtons[3] = diamondButton;
-        */
-        //GameObject[] inventoryButtonHolder = GameObject.FindGameObjectsWithTag("Inventory Button");
-        /**
-        for(int i = 0; i < inventoryButtonHolder.Length; i++)
-        {
-            Debug.Log(inventoryButtonHolder[i]);
-            //inventoryButtons[i] = inventoryButtonHolder[i].GetComponent<UnityEngine.UI.Button>();
-        }
-        */
+        writeDictionaries();//Fill out all the dictionary variables.        
         loadedTotal = 6;//Set the total amount of projectiles the player currently has loaded to 6
         reloadMax = 6;//Set the maximum amount of projectiles that can be reloaded to 6
         reloadSpeed = 0.15f;//Set the reload speed to 0.15
@@ -107,17 +87,30 @@ public class CounterController : MonoBehaviour
         coinsSavedText.text = "Coins Won: " + coinsSaved;//Change the coins saved text to show how many coins the player has won
         coinsDroppableText.text = "Droppable Coins: " + coinsDroppable;//Change the coins droppable text to show how many coins the player can drop
         reloadNotify.color = new Color(reloadNotify.color.r, reloadNotify.color.g, reloadNotify.color.b, 0);//Chane the reload notify colour to red
+        pauseCamera.enabled = false;
+        pauseMenu.enabled = false;
+        saveSlotCanvas.enabled = false;
+        switchToThrow();//Switch to the throw viewtype, if it wasn't already being viewed.
+
+    }
+
+    void findObjects()
+    {
+        gameAudio = gameObject.GetComponent<AudioSource>();//Find the game's audio source
+        coinDropController = GameObject.Find("Coin Dropper").GetComponent<CoinDropController>();//Find the coin drop controller
+        changeButton = GameObject.Find("Change Button").GetComponent<UnityEngine.UI.Button>();//The button for changing gems
+        rubyButton = GameObject.Find("Ruby Select Button").GetComponent<UnityEngine.UI.Button>();//The button for changing to rubies
+        emeraldButton = GameObject.Find("Emerald Select Button").GetComponent<UnityEngine.UI.Button>();//The button for changing to emeralds
+        amethystButton = GameObject.Find("Amethyst Select Button").GetComponent<UnityEngine.UI.Button>();//The button for changing to amethysts
+        diamondButton = GameObject.Find("Diamond Select Button").GetComponent<UnityEngine.UI.Button>();//The button for changing to diamonds
         throwCamera = GameObject.Find("Main Camera").GetComponent<Camera>();//Find the camera for viewing the box to throw gems into
         coinCamera = GameObject.Find("Machine Watcher").GetComponent<Camera>();//Find the camera for viewing the coin pushing machine
         shopCamera = GameObject.Find("Shop Camera").GetComponent<Camera>();//Find the camera for viewing the shop
         gemSelectCamera = GameObject.Find("Select Camera").GetComponent<Camera>();//Find the camera for changing the currently selected gem
         pauseCamera = GameObject.Find("Pause Camera").GetComponent<Camera>();//Find the camera for viewing the pause menu
-        pauseCamera.enabled = false;
         pauseMenu = GameObject.Find("Pause Canvas").GetComponent<Canvas>();
-        pauseMenu.enabled = false;
         dataManager = GameObject.Find("DataManager").GetComponent<DataManager>();
-        switchToThrow();//Switch to the throw viewtype, if it wasn't already being viewed.
-
+        saveSlotCanvas = GameObject.Find("SaveSlotCanvas").GetComponent<Canvas>();
     }
 
     void writeDictionaries()//Set up the dictionary variables
@@ -231,7 +224,14 @@ public class CounterController : MonoBehaviour
             }
             else
             {
-                toggleGamePause(false);
+                if(saveSlotCanvas.enabled)
+                {
+                    toggleGamePause(true);
+                }
+                else
+                {
+                    toggleGamePause(false);
+                }
             }
         }
     }
@@ -539,17 +539,18 @@ public class CounterController : MonoBehaviour
 
     private void toggleGamePause(bool status)
     {        
-        pauseMenu.enabled = status;
+        pauseMenu.enabled = status;        
         if(status)
         {            
             storeView(true);
             viewType = "paused";
+            saveSlotCanvas.enabled = false;
             gemSelectCamera.enabled = false;
             pauseCamera.enabled = true;
             changeButton.gameObject.SetActive(false);
             silence("coin", true);
             silence("gem", true);
-            toggleInventoryButtons(false);            
+            toggleInventoryButtons(false);
         }
         else
         {
@@ -583,6 +584,8 @@ public class CounterController : MonoBehaviour
     {
 
         dataManager.loadSlots();
+        saveSlotCanvas.enabled = true;
+        pauseMenu.enabled = false;
     }
 
     public void saveLoad(string function)
@@ -594,7 +597,10 @@ public class CounterController : MonoBehaviour
     {                
         if(function)//If true, meaning you are storing the view
         {
-            lastView = viewType;
+            if(viewType != "paused")//Don't store the view if it's the paused view
+            {
+                lastView = viewType;
+            }
         }
         
         return lastView;
