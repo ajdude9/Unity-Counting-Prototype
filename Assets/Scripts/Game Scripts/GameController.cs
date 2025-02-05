@@ -74,6 +74,7 @@ public class CounterController : MonoBehaviour
     void Start()
     {
         findObjects();//Find all the objects in the scene and tie to them to their respective variables
+        dataManager.refresh();
         selectedSlot = dataManager.getCurrentProfile();        
         //get the game audio and set the default values for variables
         projectileType = "ruby";//Set the default projectile to ruby

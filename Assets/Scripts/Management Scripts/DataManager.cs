@@ -31,10 +31,9 @@ public class DataManager : MonoBehaviour
         sceneName = m_Scene.name;
         if(sceneName == "Main Game")
         {
+            Debug.Log("Searching for game controller.");
             gameController = GameObject.Find("Game Manager").GetComponent<CounterController>();
-        }
-        
-
+        }        
 
     }
 
@@ -148,9 +147,11 @@ public class DataManager : MonoBehaviour
         return currentProfile;
     }
 
-    public void validate()
+    public void refresh()
     {
-        Debug.Log("Data Manager found.");
+        gameController = GameObject.Find("Game Manager").GetComponent<CounterController>();
     }
+
+    
 }
  

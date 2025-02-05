@@ -92,4 +92,10 @@ public class MenuController : MonoBehaviour
     {
         return silencedStatus;
     }
+
+    public void loadGameSlot(int slot)
+    {
+        dataManager.setCurrentProfile(slot);
+        StartNew();
+    }
 }
