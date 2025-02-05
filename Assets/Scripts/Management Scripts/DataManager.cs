@@ -10,17 +10,13 @@ using UnityEngine.UI;
 public class DataManager : MonoBehaviour
 {
     public static DataManager instance;
-    private CounterController gameController;
-    private Canvas SaveSlotCanvas;
-    private GameObject SaveSlotButtons;
-    private Button SaveSlot1;
-    private Button SaveSlot2;
-    private Button SaveSlot3;
+    private CounterController gameController;   
     private Scene m_Scene;
     private string sceneName;
+    private int currentProfile;
     private void Awake()
     {
-        /**
+        
         if(instance != null)//If Instance already exists; so has already been created
         {            
             Destroy(gameObject);//Destroy this game object; to prevent duplication.
@@ -30,7 +26,7 @@ public class DataManager : MonoBehaviour
             instance = this;//Set the MainManager script variable, Instance, to this current instance
             DontDestroyOnLoad(gameObject);//Don't destroy this game object when changing scenes            
         }
-        */
+        
         m_Scene = SceneManager.GetActiveScene();
         sceneName = m_Scene.name;
         if(sceneName == "Main Game")
@@ -141,10 +137,20 @@ public class DataManager : MonoBehaviour
             }
         }
     }
-
-    private void countGems(int[] gemArray)
+    
+    public void setCurrentProfile(int newValue)
     {
+        currentProfile = newValue;
+    }
 
+    public int getCurrentProfile()
+    {
+        return currentProfile;
+    }
+
+    public void validate()
+    {
+        Debug.Log("Data Manager found.");
     }
 }
  

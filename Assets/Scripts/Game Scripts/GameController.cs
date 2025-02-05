@@ -67,20 +67,19 @@ public class CounterController : MonoBehaviour
     private Canvas pauseMenu;
     private Canvas saveSlotCanvas;
     private DataManager dataManager;
-    private string saveOrLoad;
+    private string saveOrLoad;//Whether or not the player is saving or loading with the saveLoad function
+    private int selectedSlot;//The currently selected save slot; '0' indicates a new game.
 
     // Start is called before the first frame update
     void Start()
     {
         findObjects();//Find all the objects in the scene and tie to them to their respective variables
+        selectedSlot = dataManager.getCurrentProfile();        
         //get the game audio and set the default values for variables
         projectileType = "ruby";//Set the default projectile to ruby
         projName = "Gems";
-        writeDictionaries();//Fill out all the dictionary variables.        
-        loadedTotal = 6;//Set the total amount of projectiles the player currently has loaded to 6
-        reloadMax = 6;//Set the maximum amount of projectiles that can be reloaded to 6
-        reloadSpeed = 0.15f;//Set the reload speed to 0.15
-        fireRate = 0.35f;//Set the firerate to 0.35
+        writeDictionaries();//Fill out all the dictionary variables.               
+        loadStats();         
         counterText.enabled = true;//Enable the counter text
         loadedText.enabled = true;//Enable the loaded text
         counterText.text = "Available " + projName + ": " + heldProjectiles[projectileType];//Change the counter text to show how many of the currently selected projectile type the player has
@@ -93,6 +92,23 @@ public class CounterController : MonoBehaviour
         saveSlotCanvas.enabled = false;
         switchToThrow();//Switch to the throw viewtype, if it wasn't already being viewed.
 
+    }
+
+    void loadStats()
+    {
+        loadedTotal = 6;//Set the total amount of projectiles the player currently has loaded to 6
+        reloadMax = 6;//Set the maximum amount of projectiles that can be reloaded to 6
+        reloadSpeed = 0.15f;//Set the reload speed to 0.15
+        fireRate = 0.35f;//Set the firerate to 0.35
+        if(selectedSlot == 0)
+        {
+            setCounter(54, "total", "ruby");
+        }
+        else
+        {
+            saveOrLoad = "load";
+            saveLoad(selectedSlot);
+        }
     }
 
     void findObjects()
@@ -112,6 +128,8 @@ public class CounterController : MonoBehaviour
         pauseMenu = GameObject.Find("Pause Canvas").GetComponent<Canvas>();
         dataManager = GameObject.Find("DataManager").GetComponent<DataManager>();
         saveSlotCanvas = GameObject.Find("SaveSlotCanvas").GetComponent<Canvas>();
+
+        
     }
 
     void writeDictionaries()//Set up the dictionary variables
@@ -120,7 +138,7 @@ public class CounterController : MonoBehaviour
         gemNames = gemNameList;
         heldProjectiles = new Dictionary<string, int>()//Set up each projectile the player can hold, and give the player 54 rubies to start (with 6 already loaded, for 60 total)
         {
-            {"ruby", 54},
+            {"ruby", 0},
             {"emerald", 0},
             {"amethyst", 0},
             {"diamond", 0}
@@ -590,7 +608,7 @@ public class CounterController : MonoBehaviour
         saveOrLoad = function;
     }
 
-    public void saveLoad(int slot)
+    public void saveLoad(int slot)//Save or load the game.
     {
         switch(saveOrLoad)
         {
