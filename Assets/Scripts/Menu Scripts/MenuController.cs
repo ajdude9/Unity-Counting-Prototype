@@ -98,4 +98,10 @@ public class MenuController : MonoBehaviour
         dataManager.setCurrentProfile(slot);
         StartNew();
     }
+
+    public void continueGame()
+    {
+        dataManager.quickLoad();
+        StartNew();
+    }
 }

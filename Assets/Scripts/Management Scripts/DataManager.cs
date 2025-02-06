@@ -91,22 +91,12 @@ public class DataManager : MonoBehaviour
 
     public void quickLoad()
     {
-        string persPath = Application.persistentDataPath + "/persistentData.json";
-        int selectedFile = 0;
+        string persPath = Application.persistentDataPath + "/persistentData.json";        
         if (File.Exists(persPath))
         {
             string persJson = File.ReadAllText(persPath);
             PersistentData persistence = JsonUtility.FromJson<PersistentData>(persJson);
-            selectedFile = persistence.lastSavedSlot;
-        }
-
-        if (selectedFile != 0)
-        {
-            load(selectedFile);
-        }
-        else
-        {
-            //No saves exist and/or save slot hasn't been recorded
+            setCurrentProfile(persistence.lastSavedSlot);
         }
     }
 
