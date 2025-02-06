@@ -1770,10 +1770,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 586b7db8104c37d7e98b2107dd775284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetLocationA: {x: 0, y: 0, z: -16.5}
-  targetLocationB: {x: 0, y: 0, z: 16.5}
-  boxObject: {fileID: 145979411}
-  speed: 2.5
   pause: 0
 --- !u!1 &153525661
 GameObject:
@@ -9878,10 +9874,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 586b7db8104c37d7e98b2107dd775284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetLocationA: {x: 59.73465, y: 37.21, z: 53.121}
-  targetLocationB: {x: 73.97, y: 37.21, z: 53.121}
-  boxObject: {fileID: 1212374175}
-  speed: 4
   pause: 0
 --- !u!65 &1212374178
 BoxCollider:

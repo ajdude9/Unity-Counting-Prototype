@@ -622,6 +622,7 @@ public class CounterController : MonoBehaviour
             case "load":
                 dataManager.load(slot);
                 saveSlotCanvas.enabled = false;
+                unpause();
                 switchToThrow();
             break;
         }

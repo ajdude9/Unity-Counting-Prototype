@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
 using TMPro;
 using Unity.VisualScripting;
@@ -11,6 +12,8 @@ public class DataManager : MonoBehaviour
 {
     public static DataManager instance;
     private CounterController gameController;   
+    private BoxMovement box;
+
     private Scene m_Scene;
     private string sceneName;
     private int currentProfile;
@@ -33,6 +36,8 @@ public class DataManager : MonoBehaviour
         {
             Debug.Log("Searching for game controller.");
             gameController = GameObject.Find("Game Manager").GetComponent<CounterController>();
+            box = GameObject.Find("Box").GetComponent<BoxMovement>();
+
         }        
 
     }
@@ -41,11 +46,13 @@ public class DataManager : MonoBehaviour
     [System.Serializable]
     class SaveData
     {
-        public string gemSelected;
-        public int[] gemsSaved;
-        public int gemsLoaded;
-        public int coinsSaved;
-        public int coinsWon;
+        public string gemSelected;//The currently selected gem
+        public int[] gemsSaved;//All the gems the player has
+        public int gemsLoaded;//The amount of gems that are loaded
+        public int coinsBanked;//The amount of coins the player can spend
+        public int coinsWon;//The amount of gems the player can drop        
+        public Vector3 boxLocation;//Where the box currently is.
+        public Vector3[] boxDestinations;//Where the box is moving to.
     }
 
     [System.Serializable]
@@ -61,8 +68,10 @@ public class DataManager : MonoBehaviour
         data.gemSelected = gameController.getProjectileType();
         data.gemsSaved = gameController.gatherGems();
         data.gemsLoaded = gameController.getCounter("loaded", "");
-        data.coinsSaved = gameController.getCounter("bank", "");
+        data.coinsBanked = gameController.getCounter("bank", "");
         data.coinsWon = gameController.getCounter("coins", "");
+        data.boxLocation = box.getPos();
+        data.boxDestinations = box.getDestinations();
 
         pers.lastSavedSlot = saveSlot;
 
@@ -84,10 +93,16 @@ public class DataManager : MonoBehaviour
             gameController.setProjectileType(data.gemSelected);
             gameController.depositGems(data.gemsSaved);
             gameController.setCounter(data.gemsLoaded, "loaded", "");
-            gameController.setCounter(data.coinsSaved, "bank", "");
+            gameController.setCounter(data.coinsBanked, "bank", "");
             gameController.setCounter(data.coinsWon, "coins", "");
+
+            box.setPos(data.boxLocation);
+            box.setDestinations(data.boxDestinations[0], data.boxDestinations[1]);
+
         }
     }
+
+    
 
     public void quickLoad()
     {
@@ -116,7 +131,7 @@ public class DataManager : MonoBehaviour
                 SaveData data = JsonUtility.FromJson<SaveData>(json);
                 gemSlot.text = "Gems: " + data.gemsSaved[0] + ", " + data.gemsSaved[1] + ", " + data.gemsSaved[2] + ", " + data.gemsSaved[3];
                 coinsSlot.text = "Coins: " + data.coinsWon;
-                bankSlot.text = "Bank: " + data.coinsSaved;
+                bankSlot.text = "Bank: " + data.coinsBanked;
             }
             else
             {
@@ -140,6 +155,8 @@ public class DataManager : MonoBehaviour
     public void refresh()
     {
         gameController = GameObject.Find("Game Manager").GetComponent<CounterController>();
+        box = GameObject.Find("Box").GetComponent<BoxMovement>();
+
     }
 
     
