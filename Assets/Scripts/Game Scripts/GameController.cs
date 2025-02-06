@@ -571,10 +571,12 @@ public class CounterController : MonoBehaviour
             silence("coin", true);
             silence("gem", true);
             toggleInventoryButtons(false);
+            Time.timeScale = 0;
         }
         else
         {
             pauseCamera.enabled = false;
+            Time.timeScale = 1;
             switch(storeView(false))
             {
                 case "throw":
