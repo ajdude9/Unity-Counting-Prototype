@@ -37,6 +37,8 @@ public class BallForward : MonoBehaviour
 
     private CounterController gameManager;//The game controller
 
+    private bool recreated;//If the projectile is new or loaded from a save
+
     private Dictionary<string, Material> materials;//A key:value list to store all the materials used for projectiles
 
     // Start is called before the first frame update
@@ -44,7 +46,7 @@ public class BallForward : MonoBehaviour
     {
         gameManager = GameObject.Find("Game Manager").GetComponent<CounterController>();//Find the game controller
         projType = gameManager.getProjectileType();//Get the currently selected projectile from the game controller
-
+        projRb = gameObject.GetComponent<Rigidbody>();//Get the projectile's rigidbody
         materials = new Dictionary<string, Material>()//Set up the material list of gem materials
         {
             {"ruby", Resources.Load("Ruby", typeof(Material)) as Material},
@@ -53,9 +55,8 @@ public class BallForward : MonoBehaviour
             {"diamond", Resources.Load("Diamond", typeof(Material)) as Material},
         };
         scoreValue = gameManager.getProjectileValue(projType);//Get the current projectile's value from the game manager by using the current projectile type
-        gameObject.GetComponent<Renderer>().material = materials[projType];//Get the current material for the projectile from the game manager using the the material key:value list as reference
-        projRb = gameObject.GetComponent<Rigidbody>();//Get the projectile's rigidbody
         projRenderer = gameObject.GetComponent<Renderer>();//Get the projectile's material renderer
+        projRenderer.material = materials[projType];//Get the current material for the projectile from the game manager using the the material key:value list as reference                
         projAudio = gameObject.GetComponent<AudioSource>();//Get the projectile's audio source
         mousePos = Input.mousePosition;//The current mouse position is the literal position on the screen
         mousePos.z = Camera.main.nearClipPlane + 5;//Set the mouse position's z axis to be slightly forward, for accuracy purposes
@@ -65,10 +66,19 @@ public class BallForward : MonoBehaviour
         transform.position = new Vector3(15.6f, 3.2f, -0.22f);//Set the projectile to the bottom of the screen
         projRb.transform.LookAt(worldPos);//Look toward where the cursor is on the screen
 
-        projRb.AddRelativeForce(projRb.transform.forward * calculateThrowPower(mousePos), ForceMode.Impulse);//Launch the projectile forwards
-        projRb.AddRelativeForce(Vector3.up * (worldPos.y / 4), ForceMode.Impulse);//Give the projectile upwards force to lift it
-        projRb.AddTorque(RandomTorque(), RandomTorque(), RandomTorque(), ForceMode.Impulse);//Apply random torque to the projectile to make it spin
+        fire();
 
+    }
+
+    void fire()
+    {
+        if(!recreated)
+        {
+            projRb.AddRelativeForce(projRb.transform.forward * calculateThrowPower(mousePos), ForceMode.Impulse);//Launch the projectile forwards
+            projRb.AddRelativeForce(Vector3.up * (worldPos.y / 4), ForceMode.Impulse);//Give the projectile upwards force to lift it
+            projRb.AddTorque(RandomTorque(), RandomTorque(), RandomTorque(), ForceMode.Impulse);//Apply random torque to the projectile to make it spin
+            recreated = true;
+        }        
     }
 
     // Update is called once per frame
@@ -166,8 +176,65 @@ public class BallForward : MonoBehaviour
         silent = value;
     }
 
+    public void setScored(bool newValue)
+    {
+        scored = newValue;
+    }
+
     public bool getScored()//Return if the projectile has been scored or not
     {
         return scored;
     }
+
+    public void setRecreated(bool newValue)
+    {
+        recreated = newValue;
+    }
+
+    public bool getRecreated()
+    {
+        return recreated;
+    }
+    
+    public void setVelocity(Vector3 newVelocity)
+    {
+        projRb.velocity = newVelocity;
+    }
+
+    public Vector3 getVelocity()
+    {
+        return projRb.velocity;
+    }
+
+    public void setLocation(Vector3 newLocation)
+    {
+        transform.position = newLocation;
+    }
+
+    public Vector3 getLocation()
+    {
+        return transform.position;
+    }
+
+    public void setTorque(Vector3 newTorque)
+    {
+        projRb.AddTorque(newTorque);
+    }
+    /**
+    public Vector3 getTorque()
+    {
+        ¯\_(ツ)_/¯
+    }
+    */
+    public void setProjType(string newMaterial)
+    {
+        projType = newMaterial;
+        projRenderer.material = materials[newMaterial];
+    }
+
+    public string getProjType()
+    {
+        return projType;
+    }
+
 }

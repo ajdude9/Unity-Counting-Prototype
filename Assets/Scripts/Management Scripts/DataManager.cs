@@ -53,6 +53,7 @@ public class DataManager : MonoBehaviour
         public int coinsWon;//The amount of gems the player can drop        
         public Vector3 boxLocation;//Where the box currently is.
         public Vector3[] boxDestinations;//Where the box is moving to.
+        public GameObject[] allGems;//All of the gems present in the scene
     }
 
     [System.Serializable]
@@ -72,6 +73,7 @@ public class DataManager : MonoBehaviour
         data.coinsWon = gameController.getCounter("coins", "");
         data.boxLocation = box.getPos();
         data.boxDestinations = box.getDestinations();
+        
 
         pers.lastSavedSlot = saveSlot;
 
@@ -98,6 +100,8 @@ public class DataManager : MonoBehaviour
 
             box.setPos(data.boxLocation);
             box.setDestinations(data.boxDestinations[0], data.boxDestinations[1]);
+
+            
 
         }
     }
@@ -159,6 +163,10 @@ public class DataManager : MonoBehaviour
 
     }
 
+    public void logObjects()
+    {
+        GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");
+    }
     
 }
  
