@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -53,7 +54,10 @@ public class DataManager : MonoBehaviour
         public int coinsWon;//The amount of gems the player can drop        
         public Vector3 boxLocation;//Where the box currently is.
         public Vector3[] boxDestinations;//Where the box is moving to.
-        public GameObject[] allGems;//All of the gems present in the scene
+        
+        public bool[][] projectileBooleans;//An array containing every projectile and its three boolean values
+        public Vector3[][] projectileVectors;//An array containing every projectile and its location and velocity
+        public string[] projectileTypes;//An array containing every projectile and its material type
     }
 
     [System.Serializable]
@@ -74,6 +78,16 @@ public class DataManager : MonoBehaviour
         data.boxLocation = box.getPos();
         data.boxDestinations = box.getDestinations();
         
+        GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");
+        int i = 0;
+        foreach(GameObject gems in allGems)
+        {
+            BallForward gem = gems.GetComponent<BallForward>();
+            data.projectileBooleans[i] = gem.gatherBooleans();
+            data.projectileVectors[i] = gem.gatherVectors();
+            data.projectileTypes[i] = gem.getProjType();
+            i++;
+        }
 
         pers.lastSavedSlot = saveSlot;
 
@@ -91,16 +105,16 @@ public class DataManager : MonoBehaviour
         {
             string json = File.ReadAllText(savePath);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
-
+            //Load game data
             gameController.setProjectileType(data.gemSelected);
             gameController.depositGems(data.gemsSaved);
             gameController.setCounter(data.gemsLoaded, "loaded", "");
             gameController.setCounter(data.coinsBanked, "bank", "");
             gameController.setCounter(data.coinsWon, "coins", "");
-
+            //Load box data
             box.setPos(data.boxLocation);
             box.setDestinations(data.boxDestinations[0], data.boxDestinations[1]);
-
+            //Load projectiles
             
 
         }
@@ -165,7 +179,7 @@ public class DataManager : MonoBehaviour
 
     public void logObjects()
     {
-        GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");
+        
     }
     
 }

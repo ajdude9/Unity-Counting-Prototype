@@ -176,6 +176,12 @@ public class BallForward : MonoBehaviour
         silent = value;
     }
 
+
+    public bool getSilent()
+    {
+        return silent;
+    }
+
     public void setScored(bool newValue)
     {
         scored = newValue;
@@ -236,5 +242,30 @@ public class BallForward : MonoBehaviour
     {
         return projType;
     }
+
+    /**
+    * Essential Values:
+    * Silent (Boolean) - Whether or not it can make noise
+    * Scored (Boolean) - Whether or not it has been scored
+    * Recreated (Boolean) - Whether or not this is the original or it has been reloaded
+    * Velocity (Vector3) - How fast its moving and in which direction it's going
+    * Location (Vector3) - Where it is in the world
+    * ProjType (string) - What type of gem it is (Ruby, Emerald, Amethyst or Diamond)
+    */
+
+    public bool[] gatherBooleans()
+    {
+        bool[] booleans = {getSilent(), getScored(), getRecreated()};
+        return booleans;
+    }
+
+    public Vector3[] gatherVectors()
+    {
+        Vector3[] vectors = {getLocation(), getVelocity()};
+        return vectors;
+    }
+
+
+
 
 }
