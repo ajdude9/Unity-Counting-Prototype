@@ -69,6 +69,7 @@ public class CounterController : MonoBehaviour
     private DataManager dataManager;
     private string saveOrLoad;//Whether or not the player is saving or loading with the saveLoad function
     private int selectedSlot;//The currently selected save slot; '0' indicates a new game.
+    [SerializeField] private GameObject projectilePrefab;//The prefab that holds the projectile
 
     // Start is called before the first frame update
     void Start()
@@ -876,4 +877,8 @@ public class CounterController : MonoBehaviour
         }
     }
 
+    public void createGem(bool silent, bool scored, bool recreated, Vector3 location, Vector3 velocity, string type)
+    {
+        //Transform newGem = GameObject.Instantiate(projectilePrefab) as Transform;
+    }
 }
