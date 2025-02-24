@@ -879,6 +879,13 @@ public class CounterController : MonoBehaviour
 
     public void createGem(bool silent, bool scored, bool recreated, Vector3 location, Vector3 velocity, string type)
     {
-        //Transform newGem = GameObject.Instantiate(projectilePrefab) as Transform;
+        GameObject newGem = GameObject.Instantiate(projectilePrefab);
+        BallForward newGemScript = newGem.GetComponent<BallForward>();
+        newGemScript.setSilent(silent);
+        newGemScript.setScored(scored);
+        newGemScript.setRecreated(recreated);
+        newGemScript.setLocation(location);
+        newGemScript.setVelocity(velocity);
+        newGemScript.setProjType(type);
     }
 }
