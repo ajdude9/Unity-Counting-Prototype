@@ -266,6 +266,9 @@ public class BallForward : MonoBehaviour
     }
 
 
-
+    public void sanityCheck()
+    {
+        Debug.Log("Successful Check.");
+    }
 
 }

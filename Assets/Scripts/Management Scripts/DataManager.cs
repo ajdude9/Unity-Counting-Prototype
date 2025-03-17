@@ -79,10 +79,12 @@ public class DataManager : MonoBehaviour
         data.boxDestinations = box.getDestinations();
         
         GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");
+        
         int i = 0;
         foreach(GameObject gems in allGems)
-        {
-            BallForward gem = gems.GetComponent<BallForward>();
+        {            
+            BallForward gem = gems.GetComponent<BallForward>();     
+            gem.sanityCheck();       
             data.projectileBooleans[i] = gem.gatherBooleans();
             data.projectileVectors[i] = gem.gatherVectors();
             data.projectileTypes[i] = gem.getProjType();
