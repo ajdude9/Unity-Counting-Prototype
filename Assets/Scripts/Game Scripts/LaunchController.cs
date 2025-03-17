@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class LaunchController : MonoBehaviour
 {
 
-    public GameObject projectilePrefab;//The prefab that holds the projectile
+    [SerializeField] private GameObject projectilePrefab;//The prefab that holds the projectile
     private CounterController gameManager;//The game controller
 
 

@@ -15867,6 +15867,7 @@ MonoBehaviour:
   viewType: 
   firstSwitch: 0
   fadeValue: 0
+  projectilePrefab: {fileID: 8419925198574976218, guid: f9e67930e6daf1f1797f12bf930acf2b, type: 3}
 --- !u!82 &1973707358
 AudioSource:
   m_ObjectHideFlags: 0

@@ -116,6 +116,16 @@ public class DataManager : MonoBehaviour
             box.setDestinations(data.boxDestinations[0], data.boxDestinations[1]);
             //Load projectiles
             
+            for(int i = 0; i < data.projectileBooleans.Length; i++)
+            {
+                bool loadedSilent = data.projectileBooleans[i][0];
+                bool loadedScored = data.projectileBooleans[i][1];
+                bool loadedRecreated = data.projectileBooleans[i][2];
+                Vector3 loadedLocation = data.projectileVectors[i][0];
+                Vector3 loadedVelocity = data.projectileVectors[i][1];
+                string loadedType = data.projectileTypes[i];
+                gameController.createGem(loadedSilent, loadedScored, loadedRecreated, loadedLocation, loadedVelocity, loadedType);
+            }
 
         }
     }
@@ -149,7 +159,7 @@ public class DataManager : MonoBehaviour
                 SaveData data = JsonUtility.FromJson<SaveData>(json);
                 gemSlot.text = "Gems: " + data.gemsSaved[0] + ", " + data.gemsSaved[1] + ", " + data.gemsSaved[2] + ", " + data.gemsSaved[3];
                 coinsSlot.text = "Coins: " + data.coinsWon;
-                bankSlot.text = "Bank: " + data.coinsBanked;
+                bankSlot.text = "Bank: " + data.coinsBanked;                
             }
             else
             {
