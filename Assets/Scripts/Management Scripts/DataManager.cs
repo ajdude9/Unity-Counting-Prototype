@@ -55,9 +55,9 @@ public class DataManager : MonoBehaviour
         public Vector3 boxLocation;//Where the box currently is.
         public Vector3[] boxDestinations;//Where the box is moving to.
         
-        public bool[][] projectileBooleans;//An array containing every projectile and its three boolean values
-        public Vector3[][] projectileVectors;//An array containing every projectile and its location and velocity
-        public string[] projectileTypes;//An array containing every projectile and its material type
+        public List<List<bool>> projectileBooleans;//An array containing every projectile and its three boolean values
+        public List<List<Vector3>> projectileVectors;//An array containing every projectile and its location and velocity
+        public List<string> projectileTypes;//An array containing every projectile and its material type
     }
 
     [System.Serializable]
