@@ -253,15 +253,15 @@ public class BallForward : MonoBehaviour
     * ProjType (string) - What type of gem it is (Ruby, Emerald, Amethyst or Diamond)
     */
 
-    public bool[] gatherBooleans()
+    public List<bool> gatherBooleans()
     {
-        bool[] booleans = {getSilent(), getScored(), getRecreated()};
+        List<bool> booleans = new List<bool>{getSilent(), getScored(), getRecreated()};
         return booleans;
     }
 
-    public Vector3[] gatherVectors()
+    public List<Vector3> gatherVectors()
     {
-        Vector3[] vectors = {getLocation(), getVelocity()};
+        List<Vector3> vectors = new List<Vector3>{getLocation(), getVelocity()};
         return vectors;
     }
 

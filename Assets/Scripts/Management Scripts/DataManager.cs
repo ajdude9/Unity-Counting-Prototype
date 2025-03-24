@@ -81,6 +81,7 @@ public class DataManager : MonoBehaviour
         GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");
         
         int i = 0;
+        
         foreach(GameObject gems in allGems)
         {            
             BallForward gem = gems.GetComponent<BallForward>();     
@@ -90,6 +91,7 @@ public class DataManager : MonoBehaviour
             data.projectileTypes[i] = gem.getProjType();
             i++;
         }
+        
 
         pers.lastSavedSlot = saveSlot;
 
@@ -118,7 +120,7 @@ public class DataManager : MonoBehaviour
             box.setDestinations(data.boxDestinations[0], data.boxDestinations[1]);
             //Load projectiles
             
-            for(int i = 0; i < data.projectileBooleans.Length; i++)
+            for(int i = 0; i < data.projectileBooleans.Count; i++)
             {
                 bool loadedSilent = data.projectileBooleans[i][0];
                 bool loadedScored = data.projectileBooleans[i][1];
@@ -128,6 +130,7 @@ public class DataManager : MonoBehaviour
                 string loadedType = data.projectileTypes[i];
                 gameController.createGem(loadedSilent, loadedScored, loadedRecreated, loadedLocation, loadedVelocity, loadedType);
             }
+            
 
         }
     }
