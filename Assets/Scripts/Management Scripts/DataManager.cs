@@ -80,16 +80,17 @@ public class DataManager : MonoBehaviour
         
         GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");
         
-        int i = 0;
+        
         
         foreach(GameObject gems in allGems)
         {            
             BallForward gem = gems.GetComponent<BallForward>();     
-            gem.sanityCheck();       
-            data.projectileBooleans[i] = gem.gatherBooleans();
-            data.projectileVectors[i] = gem.gatherVectors();
-            data.projectileTypes[i] = gem.getProjType();
-            i++;
+            gem.sanityCheck();                   
+            Debug.Log(gem.getLocation());
+            data.projectileBooleans.Add(gem.gatherBooleans());
+            data.projectileVectors.Add(gem.gatherVectors());
+            data.projectileTypes.Add(gem.getProjType());
+            
         }
         
 
