@@ -84,9 +84,7 @@ public class DataManager : MonoBehaviour
         
         foreach(GameObject gems in allGems)
         {            
-            BallForward gem = gems.GetComponent<BallForward>();     
-            gem.sanityCheck();                   
-            Debug.Log(gem.getLocation());
+            BallForward gem = gems.GetComponent<BallForward>();                 
             data.projectileBooleans.Add(gem.gatherBooleans());
             data.projectileVectors.Add(gem.gatherVectors());
             data.projectileTypes.Add(gem.getProjType());
