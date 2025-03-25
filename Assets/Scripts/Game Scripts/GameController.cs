@@ -888,4 +888,13 @@ public class CounterController : MonoBehaviour
         newGemScript.setVelocity(velocity);
         newGemScript.setProjType(type);
     }
+
+    public void runDebug()
+    {
+        GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");
+        foreach(GameObject gem in allGems)
+        {
+            Debug.Log(gem);
+        }
+    }
 }
