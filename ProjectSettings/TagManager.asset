@@ -17,6 +17,7 @@ TagManager:
   - Inventory Button
   - PusherTrigger
   - DropperExit
+  - MenuGem
   layers:
   - Default
   - TransparentFX

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BoxMovement : MonoBehaviour
 {
@@ -12,11 +13,23 @@ public class BoxMovement : MonoBehaviour
     private GameObject boxObject;//The box
     private float speed = 2.5f;//How fast the box moves
     [SerializeField] private bool pause = false;//Whether the box is stopped or not
+    private Scene m_Scene;//The current scene
+    private string sceneName;//The name of the current scene
     // Start is called before the first frame update
     void Start()
     {        
-        targetLocationA = new Vector3(0, 0, -16.5f);
-        targetLocationB = new Vector3(0, 0, 16.5f);
+        m_Scene = SceneManager.GetActiveScene();
+        sceneName = m_Scene.name;
+        if(sceneName == "Main Game")
+        {
+            targetLocationA = new Vector3(0, 0, -16.5f);
+            targetLocationB = new Vector3(0, 0, 16.5f);
+        }
+        else
+        {
+            targetLocationA = new Vector3(1, -4, 15);
+            targetLocationB = new Vector3(9, -4, 15);
+        }
         boxObject = GameObject.Find("Box");
         int randomSwitch = Random.Range(0, 1);//Randomly decide to move left or right to start with
         if(Random.Range(0, 2) == 1)
