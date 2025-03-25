@@ -84,9 +84,16 @@ public class DataManager : MonoBehaviour
         
         foreach(GameObject gems in allGems)
         {            
-            BallForward gem = gems.GetComponent<BallForward>();                 
-            data.projectileBooleans.Add(gem.gatherBooleans());
-            data.projectileVectors.Add(gem.gatherVectors());
+            BallForward gem = gems.GetComponent<BallForward>();
+            List<bool> tempBools = gem.gatherBooleans();
+            List<Vector3> tempVector3s = gem.gatherVectors();       
+            for(int i = 0; i < tempVector3s.Count; i++)     
+            {
+                Debug.Log("Evaluating gem" + i);
+                Debug.Log(tempVector3s[i]);
+            }
+            data.projectileBooleans.Add(tempBools);
+            data.projectileVectors.Add(tempVector3s);
             data.projectileTypes.Add(gem.getProjType());
             
         }

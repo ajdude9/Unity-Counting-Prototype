@@ -2455,7 +2455,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 862863791}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 0}
@@ -4289,10 +4289,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 586b7db8104c37d7e98b2107dd775284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetLocationA: {x: 0, y: -4, z: 15}
-  targetLocationB: {x: 9.25, y: -4, z: 15}
-  boxObject: {fileID: 1609858956}
-  speed: 1.5
   pause: 0
 --- !u!65 &1609858958
 BoxCollider:
