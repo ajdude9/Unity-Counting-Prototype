@@ -894,7 +894,19 @@ public class CounterController : MonoBehaviour
         GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");
         foreach(GameObject gem in allGems)
         {
-            Debug.Log(gem);
+            BallForward gemScript = gem.GetComponent<BallForward>();
+            //Debug.Log(gemScript.getLocation());
+            List<List<Vector3>> testList = new List<List<Vector3>>();
+            testList.Add(gemScript.gatherVectors());
+            for(int i = 0; i < testList.Count; i++)
+            {
+                //Debug.Log(testList[i]);
+                for(int j = 0; j < testList[i].Count; j++)
+                {
+                    Debug.Log(i + "-" + j + ": " + testList[j]);
+                }
+            }
+
         }
     }
 }
