@@ -81,23 +81,31 @@ public class DataManager : MonoBehaviour
         GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");
         
         
-        
+        List<List<Vector3>> tempVector3s = new List<List<Vector3>>();
+        List<List<bool>> tempBools = new List<List<bool>>();
+        List<string> tempTypes = new List<string>();
         foreach(GameObject gems in allGems)
         {            
-            BallForward gem = gems.GetComponent<BallForward>();
-            List<bool> tempBools = gem.gatherBooleans();
-            List<Vector3> tempVector3s = gem.gatherVectors();       
-            for(int i = 0; i < tempVector3s.Count; i++)     
-            {
-                Debug.Log("Evaluating gem" + i);
-                Debug.Log(tempVector3s[i]);
-            }
+            BallForward gem = gems.GetComponent<BallForward>();               
+            
+            tempBools.Add(gem.gatherBooleans());
+            tempVector3s.Add(gem.gatherVectors());
+            tempTypes.Add(gem.getProjType());
+            
+            /**
             data.projectileBooleans.Add(tempBools);
             data.projectileVectors.Add(tempVector3s);
             data.projectileTypes.Add(gem.getProjType());
+            */
             
         }
-        
+        data.projectileBooleans = tempBools;
+        data.projectileVectors = tempVector3s;
+        data.projectileTypes = tempTypes;
+        for(int i = 0; i < data.projectileBooleans.Count; i++)
+        {
+            
+        }
 
         pers.lastSavedSlot = saveSlot;
 

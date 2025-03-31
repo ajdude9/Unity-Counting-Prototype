@@ -900,10 +900,10 @@ public class CounterController : MonoBehaviour
             testList.Add(gemScript.gatherVectors());
             for(int i = 0; i < testList.Count; i++)
             {
-                //Debug.Log(testList[i]);
+                Debug.Log(testList[i]);
                 for(int j = 0; j < testList[i].Count; j++)
-                {
-                    Debug.Log(i + "-" + j + ": " + testList[j]);
+                {                                        
+                    Debug.Log(i + "-" + j + ": " + testList[i][j]);
                 }
             }
 
