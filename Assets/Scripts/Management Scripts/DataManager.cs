@@ -43,6 +43,19 @@ public class DataManager : MonoBehaviour
 
     }
 
+    [System.Serializable]
+    public class BoolListWrapper
+    {
+        public List<bool> boolList;
+    }
+
+    [System.Serializable]
+    public class VectorListWrapper
+    {
+        public List<Vector3> vectorList;
+    }
+
+
 
     [System.Serializable]
     class SaveData
@@ -55,8 +68,8 @@ public class DataManager : MonoBehaviour
         public Vector3 boxLocation;//Where the box currently is.
         public Vector3[] boxDestinations;//Where the box is moving to.
         
-        public List<List<bool>> projectileBooleans;//An array containing every projectile and its three boolean values
-        public List<List<Vector3>> projectileVectors;//An array containing every projectile and its location and velocity
+        public List<BoolListWrapper> projectileBooleans;//An array containing every projectile and its three boolean values
+        public List<VectorListWrapper> projectileVectors;//An array containing every projectile and its location and velocity
         public List<string> projectileTypes;//An array containing every projectile and its material type
     }
 
@@ -99,12 +112,17 @@ public class DataManager : MonoBehaviour
             */
             
         }
-        data.projectileBooleans = tempBools;
-        data.projectileVectors = tempVector3s;
+        //data.projectileBooleans = tempBools;
+        //data.projectileVectors = tempVector3s;
         data.projectileTypes = tempTypes;
-        for(int i = 0; i < data.projectileBooleans.Count; i++)
-        {
-            
+        for(int i = 0; i < data.projectileVectors.Count; i++)
+        {       
+            /**     
+            for(int j = 0; j < data.projectileVectors[i].Count; j++)
+            {                                        
+                Debug.Log("Vector " + i + "-" + j + ": " + data.projectileVectors[i][j]);
+            }
+            */
         }
 
         pers.lastSavedSlot = saveSlot;
@@ -136,13 +154,15 @@ public class DataManager : MonoBehaviour
             
             for(int i = 0; i < data.projectileBooleans.Count; i++)
             {
+                /**
                 bool loadedSilent = data.projectileBooleans[i][0];
                 bool loadedScored = data.projectileBooleans[i][1];
                 bool loadedRecreated = data.projectileBooleans[i][2];
                 Vector3 loadedLocation = data.projectileVectors[i][0];
                 Vector3 loadedVelocity = data.projectileVectors[i][1];
+                */
                 string loadedType = data.projectileTypes[i];
-                gameController.createGem(loadedSilent, loadedScored, loadedRecreated, loadedLocation, loadedVelocity, loadedType);
+                //gameController.createGem(loadedSilent, loadedScored, loadedRecreated, loadedLocation, loadedVelocity, loadedType);
             }
             
 
@@ -167,7 +187,7 @@ public class DataManager : MonoBehaviour
         for (int i = 1; i < 4; i++)
         {
             string savePath = Application.persistentDataPath + "/save_slot_" + i + ".json";//Define the path as the path set in the save data   
-            Debug.Log("Looking for Slot" + i + "GemsText");
+            //Debug.Log("Looking for Slot" + i + "GemsText");
             //TextMeshPro gemSlot = GameObject.Find("Slot" + i + "GemsText").GetComponent<TextMeshPro>();
             TextMeshProUGUI gemSlot = GameObject.Find("Slot" + i + "GemsText").gameObject.GetComponent<TextMeshProUGUI>();            
             TextMeshProUGUI coinsSlot = GameObject.Find("Slot" + i + "CoinsText").GetComponent<TextMeshProUGUI>();
