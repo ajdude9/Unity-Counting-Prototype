@@ -60,6 +60,10 @@ public class DataManager : MonoBehaviour
         {
             boolList[pos] = newValue;
         }
+        public void inherit(List<bool> newList)
+        {
+            boolList = newList;
+        }
     }
 
     [System.Serializable]
@@ -78,6 +82,10 @@ public class DataManager : MonoBehaviour
         public void replace(Vector3 newValue, int pos)
         {
             vectorList[pos] = newValue;
+        }
+        public void inherit(List<Vector3> newList)
+        {
+            vectorList = newList;
         }
     }
 
@@ -119,16 +127,22 @@ public class DataManager : MonoBehaviour
         
         GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");
         
-        
+        /**
         List<List<Vector3>> tempVector3s = new List<List<Vector3>>();
         List<List<bool>> tempBools = new List<List<bool>>();
         List<string> tempTypes = new List<string>();
+        */
+        List<Vector3> tempVector3s = new List<Vector3>();
+        List<bool> tempBools = new List<bool>();
+        List<string> tempTypes = new List<string>();
+        int k = 0;
         foreach(GameObject gems in allGems)
         {            
             BallForward gem = gems.GetComponent<BallForward>();               
             
-            tempBools.Add(gem.gatherBooleans());
-            tempVector3s.Add(gem.gatherVectors());
+            
+            tempBools = gem.gatherBooleans();
+            tempVector3s = gem.gatherVectors();
             tempTypes.Add(gem.getProjType());
             
             /**
@@ -136,7 +150,10 @@ public class DataManager : MonoBehaviour
             data.projectileVectors.Add(tempVector3s);
             data.projectileTypes.Add(gem.getProjType());
             */
-            
+            data.projectileBooleans[k].inherit(tempBools);
+            data.projectileVectors[k].inherit(gem.gatherVectors());
+            data.projectileTypes.Add(gem.getProjType());
+            k++;
         }
         //data.projectileBooleans = tempBools;
         //data.projectileVectors = tempVector3s;
@@ -176,7 +193,7 @@ public class DataManager : MonoBehaviour
             //Load box data
             box.setPos(data.boxLocation);
             box.setDestinations(data.boxDestinations[0], data.boxDestinations[1]);
-            //Load projectiles
+            //Load projectile data, one at a time
             
             for(int i = 0; i < data.projectileBooleans.Count; i++)
             {
