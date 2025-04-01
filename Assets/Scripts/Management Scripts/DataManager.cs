@@ -47,12 +47,38 @@ public class DataManager : MonoBehaviour
     public class BoolListWrapper
     {
         public List<bool> boolList;
+
+        public void add(bool newValue)
+        {
+            boolList.Add(newValue);
+        }
+        public bool retrieve(int pos)
+        {
+            return boolList[pos];
+        }
+        public void replace(bool newValue, int pos)
+        {
+            boolList[pos] = newValue;
+        }
     }
 
     [System.Serializable]
     public class VectorListWrapper
     {
         public List<Vector3> vectorList;
+
+        public void add(Vector3 newValue)
+        {
+            vectorList.Add(newValue);
+        }
+        public Vector3 retrieve(int pos)
+        {
+            return vectorList[pos];
+        }
+        public void replace(Vector3 newValue, int pos)
+        {
+            vectorList[pos] = newValue;
+        }
     }
 
 
