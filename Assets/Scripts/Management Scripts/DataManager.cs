@@ -49,10 +49,11 @@ public class DataManager : MonoBehaviour
     [System.Serializable]
     public class BoolListWrapper
     {
-        public List<bool> boolList;
+        public List<bool> boolList = new List<bool>();        
 
         public void add(bool newValue)
         {
+            Debug.Log("Attempting to add to Boolean wrapper list");
             boolList.Add(newValue);
         }
         public bool retrieve(int pos)
@@ -83,10 +84,11 @@ public class DataManager : MonoBehaviour
     [System.Serializable]
     public class VectorListWrapper
     {
-        public List<Vector3> vectorList;
+        public List<Vector3> vectorList = new List<Vector3>();
 
         public void add(Vector3 newValue)
         {
+            Debug.Log("Attempting to add to VectorList wrapper list");
             vectorList.Add(newValue);
         }
         public Vector3 retrieve(int pos)
@@ -152,8 +154,8 @@ public class DataManager : MonoBehaviour
         data.boxDestinations = box.getDestinations();
 
         GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");
-        Debug.Log("Test Wrapper Test: ");
-        data.testWrapper.checkExistence();
+        //Debug.Log("Test Wrapper Test: ");
+        //data.testWrapper.checkExistence();
 
         /**
         List<List<Vector3>> tempVector3s = new List<List<Vector3>>();
@@ -163,19 +165,32 @@ public class DataManager : MonoBehaviour
         List<Vector3> tempVector3s = new List<Vector3>();
         List<bool> tempBools = new List<bool>();
         List<string> tempTypes = new List<string>();
-         int k = 0;
+        int k = 0;
         try
         {
-           
+            Debug.Log("Assigning values to List containers");
             data.projectileBooleans = new List<BoolListWrapper>();
             data.projectileVectors = new List<VectorListWrapper>();
+            data.projectileTypes = new List<string>();
+            Debug.Log("List Sizes:");
+            Debug.Log("Boolean: " + data.projectileBooleans.Count);
+            Debug.Log("Vector: " + data.projectileBooleans.Count);
+            Debug.Log("Running ForEach");
             foreach (GameObject gems in allGems)
             {
+                Debug.Log("Adding new main lists");
                 data.projectileBooleans.Add(new BoolListWrapper());
                 data.projectileVectors.Add(new VectorListWrapper());
                 BallForward gem = gems.GetComponent<BallForward>();
+                Debug.Log("New List Sizes:");
+                Debug.Log("Boolean: " + data.projectileBooleans.Count);
+                Debug.Log("Vector: " + data.projectileBooleans.Count);
+                Debug.Log("Item contained in Boolean List: " + data.projectileBooleans[0]);
+                data.projectileBooleans[0].checkExistence();
+                //Debug.Log("Test Addition");
+                //data.projectileBooleans[0].add(true);
 
-
+                Debug.Log("Gathering Data");
                 tempBools = gem.gatherBooleans();
                 tempVector3s = gem.gatherVectors();
                 tempTypes.Add(gem.getProjType());
@@ -186,7 +201,7 @@ public class DataManager : MonoBehaviour
                 data.projectileTypes.Add(gem.getProjType());
                 */
 
-                
+                Debug.Log("Assigning Data");
                 data.projectileBooleans[k].add(gem.getSilent());
                 data.projectileBooleans[k].add(gem.getScored());
                 data.projectileBooleans[k].add(gem.getRecreated());
