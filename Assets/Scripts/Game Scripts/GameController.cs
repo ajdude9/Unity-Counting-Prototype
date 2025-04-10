@@ -879,8 +879,17 @@ public class CounterController : MonoBehaviour
 
     public void createGem(bool silent, bool scored, bool recreated, Vector3 location, Vector3 velocity, string type)
     {
+        Debug.Log("Creating new gem.");
+        Debug.Log("BOOL: Silence: " + silent);
+        Debug.Log("BOOL: Scored: " + scored);
+        Debug.Log("BOOL: Recreated: " + recreated);
+        Debug.Log("VECTOR: Location: " + location);
+        Debug.Log("VECTOR: Velocity: " + velocity);
+        Debug.Log("STRING: Type: " + type);
         GameObject newGem = GameObject.Instantiate(projectilePrefab);
         BallForward newGemScript = newGem.GetComponent<BallForward>();
+        Debug.Log("Gem Sanity Check: " + newGemScript.sanityCheckReturn());
+        newGemScript.resetValues();
         newGemScript.setSilent(silent);
         newGemScript.setScored(scored);
         newGemScript.setRecreated(recreated);

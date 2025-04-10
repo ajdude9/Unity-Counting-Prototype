@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using TMPro;
 using Unity.VisualScripting;
@@ -132,7 +133,7 @@ public class DataManager : MonoBehaviour
         public List<BoolListWrapper> projectileBooleans;//An array containing every projectile and its three boolean values
         public List<VectorListWrapper> projectileVectors;//An array containing every projectile and its location and velocity
         public List<string> projectileTypes;//An array containing every projectile and its material type
-        public BoolListWrapper testWrapper;
+        public int projectilesSaved;
     }
 
     [System.Serializable]
@@ -152,8 +153,10 @@ public class DataManager : MonoBehaviour
         data.coinsWon = gameController.getCounter("coins", "");
         data.boxLocation = box.getPos();
         data.boxDestinations = box.getDestinations();
+        
 
         GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");
+        data.projectilesSaved = allGems.Length;//We know the total number of gems we'll save based on the number of gems that exist
         //Debug.Log("Test Wrapper Test: ");
         //data.testWrapper.checkExistence();
 
@@ -168,29 +171,29 @@ public class DataManager : MonoBehaviour
         int k = 0;
         try
         {
-            Debug.Log("Assigning values to List containers");
+            //Debug.Log("Assigning values to List containers");
             data.projectileBooleans = new List<BoolListWrapper>();
             data.projectileVectors = new List<VectorListWrapper>();
             data.projectileTypes = new List<string>();
-            Debug.Log("List Sizes:");
-            Debug.Log("Boolean: " + data.projectileBooleans.Count);
-            Debug.Log("Vector: " + data.projectileBooleans.Count);
-            Debug.Log("Running ForEach");
+            //Debug.Log("List Sizes:");
+            //Debug.Log("Boolean: " + data.projectileBooleans.Count);
+            //Debug.Log("Vector: " + data.projectileBooleans.Count);
+            //Debug.Log("Running ForEach");
             foreach (GameObject gems in allGems)
             {
-                Debug.Log("Adding new main lists");
+                //Debug.Log("Adding new main lists");
                 data.projectileBooleans.Add(new BoolListWrapper());
                 data.projectileVectors.Add(new VectorListWrapper());
                 BallForward gem = gems.GetComponent<BallForward>();
-                Debug.Log("New List Sizes:");
-                Debug.Log("Boolean: " + data.projectileBooleans.Count);
-                Debug.Log("Vector: " + data.projectileBooleans.Count);
-                Debug.Log("Item contained in Boolean List: " + data.projectileBooleans[0]);
+                //Debug.Log("New List Sizes:");
+                //Debug.Log("Boolean: " + data.projectileBooleans.Count);
+                //Debug.Log("Vector: " + data.projectileBooleans.Count);
+                //Debug.Log("Item contained in Boolean List: " + data.projectileBooleans[0]);
                 data.projectileBooleans[0].checkExistence();
                 //Debug.Log("Test Addition");
                 //data.projectileBooleans[0].add(true);
 
-                Debug.Log("Gathering Data");
+                //Debug.Log("Gathering Data");
                 tempBools = gem.gatherBooleans();
                 tempVector3s = gem.gatherVectors();
                 tempTypes.Add(gem.getProjType());
@@ -201,7 +204,7 @@ public class DataManager : MonoBehaviour
                 data.projectileTypes.Add(gem.getProjType());
                 */
 
-                Debug.Log("Assigning Data");
+                //Debug.Log("Assigning Data");
                 data.projectileBooleans[k].add(gem.getSilent());
                 data.projectileBooleans[k].add(gem.getScored());
                 data.projectileBooleans[k].add(gem.getRecreated());
@@ -263,19 +266,25 @@ public class DataManager : MonoBehaviour
             box.setDestinations(data.boxDestinations[0], data.boxDestinations[1]);
             //Load projectile data, one at a time
 
+            /**
             for (int i = 0; i < data.projectileBooleans.Count; i++)
             {
-                /**
+            
                 bool loadedSilent = data.projectileBooleans[i][0];
                 bool loadedScored = data.projectileBooleans[i][1];
                 bool loadedRecreated = data.projectileBooleans[i][2];
                 Vector3 loadedLocation = data.projectileVectors[i][0];
-                Vector3 loadedVelocity = data.projectileVectors[i][1];
-                */
+                Vector3 loadedVelocity = data.projectileVectors[i][1];                
                 string loadedType = data.projectileTypes[i];
                 //gameController.createGem(loadedSilent, loadedScored, loadedRecreated, loadedLocation, loadedVelocity, loadedType);
             }
-
+            */
+            int i = 0;
+            while(i < data.projectilesSaved)
+            {
+                gameController.createGem(data.projectileBooleans[i].retrieve(0), data.projectileBooleans[i].retrieve(1), data.projectileBooleans[i].retrieve(2), data.projectileVectors[i].retrieve(0), data.projectileVectors[i].retrieve(1), data.projectileTypes[i]);
+                i++;
+            }
 
         }
     }

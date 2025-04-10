@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class BallForward : MonoBehaviour
 {
@@ -47,6 +50,45 @@ public class BallForward : MonoBehaviour
         gameManager = GameObject.Find("Game Manager").GetComponent<CounterController>();//Find the game controller
         projType = gameManager.getProjectileType();//Get the currently selected projectile from the game controller
         projRb = gameObject.GetComponent<Rigidbody>();//Get the projectile's rigidbody
+        writeMaterials();
+        scoreValue = gameManager.getProjectileValue(projType);//Get the current projectile's value from the game manager by using the current projectile type
+        projRenderer = gameObject.GetComponent<Renderer>();//Get the projectile's material renderer
+        projRenderer.material = materials[projType];//Get the current material for the projectile from the game manager using the the material key:value list as reference                
+        projAudio = gameObject.GetComponent<AudioSource>();//Get the projectile's audio source
+        if (!recreated)
+        {
+            mousePos = Input.mousePosition;//The current mouse position is the literal position on the screen
+            mousePos.z = Camera.main.nearClipPlane + 5;//Set the mouse position's z axis to be slightly forward, for accuracy purposes
+            worldPos = Camera.main.ScreenToWorldPoint(mousePos);//Figure out where the mouse is actually pointing in the 3D environment
+            boxFloor = GameObject.Find("Box Floor");//Find the box's bottom face
+            //Debug.Log("Calculated Power: " + (calculateThrowPower(mousePos) / 100));
+            transform.position = new Vector3(15.6f, 3.2f, -0.22f);//Set the projectile to the bottom of the screen
+            projRb.transform.LookAt(worldPos);//Look toward where the cursor is on the screen
+
+            fire();
+        }
+
+    }
+
+    void fire()
+    {
+
+        projRb.AddRelativeForce(projRb.transform.forward * calculateThrowPower(mousePos), ForceMode.Impulse);//Launch the projectile forwards
+        projRb.AddRelativeForce(Vector3.up * (worldPos.y / 4), ForceMode.Impulse);//Give the projectile upwards force to lift it
+        projRb.AddTorque(RandomTorque(), RandomTorque(), RandomTorque(), ForceMode.Impulse);//Apply random torque to the projectile to make it spin
+        recreated = true;
+
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    private void writeMaterials()
+    {
         materials = new Dictionary<string, Material>()//Set up the material list of gem materials
         {
             {"ruby", Resources.Load("Ruby", typeof(Material)) as Material},
@@ -54,37 +96,6 @@ public class BallForward : MonoBehaviour
             {"amethyst", Resources.Load("Amethyst", typeof(Material)) as Material},
             {"diamond", Resources.Load("Diamond", typeof(Material)) as Material},
         };
-        scoreValue = gameManager.getProjectileValue(projType);//Get the current projectile's value from the game manager by using the current projectile type
-        projRenderer = gameObject.GetComponent<Renderer>();//Get the projectile's material renderer
-        projRenderer.material = materials[projType];//Get the current material for the projectile from the game manager using the the material key:value list as reference                
-        projAudio = gameObject.GetComponent<AudioSource>();//Get the projectile's audio source
-        mousePos = Input.mousePosition;//The current mouse position is the literal position on the screen
-        mousePos.z = Camera.main.nearClipPlane + 5;//Set the mouse position's z axis to be slightly forward, for accuracy purposes
-        worldPos = Camera.main.ScreenToWorldPoint(mousePos);//Figure out where the mouse is actually pointing in the 3D environment
-        boxFloor = GameObject.Find("Box Floor");//Find the box's bottom face
-        //Debug.Log("Calculated Power: " + (calculateThrowPower(mousePos) / 100));
-        transform.position = new Vector3(15.6f, 3.2f, -0.22f);//Set the projectile to the bottom of the screen
-        projRb.transform.LookAt(worldPos);//Look toward where the cursor is on the screen
-
-        fire();
-
-    }
-
-    void fire()
-    {
-        if(!recreated)
-        {
-            projRb.AddRelativeForce(projRb.transform.forward * calculateThrowPower(mousePos), ForceMode.Impulse);//Launch the projectile forwards
-            projRb.AddRelativeForce(Vector3.up * (worldPos.y / 4), ForceMode.Impulse);//Give the projectile upwards force to lift it
-            projRb.AddTorque(RandomTorque(), RandomTorque(), RandomTorque(), ForceMode.Impulse);//Apply random torque to the projectile to make it spin
-            recreated = true;
-        }        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     IEnumerator tilDeath(int lifetime)//Destroy the game object after a certain amount of time
@@ -106,7 +117,7 @@ public class BallForward : MonoBehaviour
             {
                 //Debug.Log("Box trigger activated.");
                 projRenderer.material.SetColor("_Color", scoreColour);//Set the colour to the score colour
-                if(!silent)//If its not been silenced
+                if (!silent)//If its not been silenced
                 {
                     projAudio.pitch = Random.Range(0.9f, 1.2f);
                     projAudio.PlayOneShot(convertSound, 0.8f);//Play the sound of being scored
@@ -201,10 +212,25 @@ public class BallForward : MonoBehaviour
     {
         return recreated;
     }
-    
+
     public void setVelocity(Vector3 newVelocity)
     {
-        projRb.velocity = newVelocity;
+        try
+        {
+            projRb.velocity = newVelocity;
+        }
+        catch (NullReferenceException e)
+        {
+            Debug.Log("An error has ocurred when attemtping to assign Velocity.");
+            Debug.Log("The error is: " + e);
+            Debug.Log("Printing Values: ");
+            Debug.Log("Silent: " + getSilent());
+            Debug.Log("Scored: " + getScored());
+            Debug.Log("Recreated: " + getRecreated());
+            Debug.Log("Location: " + getLocation());
+            Debug.Log("Velocity: " + getVelocity());
+            Debug.Log("Type: " + getProjType());
+        }
     }
 
     public Vector3 getVelocity()
@@ -255,20 +281,32 @@ public class BallForward : MonoBehaviour
 
     public List<bool> gatherBooleans()
     {
-        List<bool> booleans = new List<bool>{getSilent(), getScored(), getRecreated()};
+        List<bool> booleans = new List<bool> { getSilent(), getScored(), getRecreated() };
         return booleans;
     }
 
     public List<Vector3> gatherVectors()
     {
-        List<Vector3> vectors = new List<Vector3>{getLocation(), getVelocity()};
+        List<Vector3> vectors = new List<Vector3> { getLocation(), getVelocity() };
         return vectors;
     }
 
 
     public void sanityCheck()
     {
-        Debug.Log("Successful Check.");        
+        Debug.Log("Successful Check.");
+    }
+
+    public string sanityCheckReturn()
+    {
+        return "Successful Check.";
+    }
+
+    public void resetValues()
+    {
+        projRb = gameObject.GetComponent<Rigidbody>();
+        projRenderer = gameObject.GetComponent<Renderer>();
+        writeMaterials();
     }
 
 }
