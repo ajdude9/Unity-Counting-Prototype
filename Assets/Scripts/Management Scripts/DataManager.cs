@@ -255,6 +255,8 @@ public class DataManager : MonoBehaviour
         {
             string json = File.ReadAllText(savePath);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
+            //Clear the current field of any lingering objects
+            gameController.clear();
             //Load game data
             gameController.setProjectileType(data.gemSelected);
             gameController.depositGems(data.gemsSaved);

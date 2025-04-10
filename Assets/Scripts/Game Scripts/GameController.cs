@@ -918,4 +918,13 @@ public class CounterController : MonoBehaviour
 
         }
     }
+
+    public void clear()
+    {
+        GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");
+        foreach(GameObject gem in allGems)
+        {
+            Destroy(gem);
+        }
+    }
 }
