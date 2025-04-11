@@ -20,6 +20,7 @@ public class CoinController : MonoBehaviour
     public PhysicMaterial highFriction;//A high friction physic material
     public PhysicMaterial repelling;//A physic material that's low friction and bouncy
     public bool stuck = true;//If the coin is stuck in the machine
+    private int stuckTimer;//How long to wait to consider the coin truly stuck in the machine
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +30,7 @@ public class CoinController : MonoBehaviour
         coinCollider = gameObject.GetComponent<Collider>();//Find the coin's collider
         coinCollider.material = highFriction;//Set the coin's physic material to high friction
         gameManager = GameObject.Find("Game Manager").GetComponent<CounterController>();//Find the game manager object  
+        stuckTimer = 16;
         StartCoroutine(stuckPrevention());//Start the counter for detecting if the coin is stuck
     }
 
@@ -126,6 +128,11 @@ public class CoinController : MonoBehaviour
         silent = value;
     }
 
+    public bool getSilent()
+    {
+        return silent;
+    }
+
     public bool getParentable()//Get the parentable status
     {
         return parentable;
@@ -134,6 +141,38 @@ public class CoinController : MonoBehaviour
     public void setParentable(bool parentableValue)//Set the parentable status
     {
         parentable = parentableValue;
+    }
+
+    public int getStuckTimer()
+    {
+        return stuckTimer;
+    }
+
+    public void setStuckTimer(int newValue)
+    {
+        stuckTimer = newValue;
+    }
+
+     public void setVelocity(Vector3 newVelocity)
+    {
+  
+        coinRb.velocity = newVelocity;
+    
+    }
+
+    public Vector3 getVelocity()
+    {
+        return coinRb.velocity;
+    }
+
+    public void setLocation(Vector3 newLocation)
+    {
+        transform.position = newLocation;
+    }
+
+    public Vector3 getLocation()
+    {
+        return transform.position;
     }
 
     void raycastCheck()//Call a raycast downwards
@@ -154,8 +193,12 @@ public class CoinController : MonoBehaviour
 
     IEnumerator stuckPrevention()//If the coin is still in the machine after X seconds of being dropped, destroy it as it is likely stuck and return the coin to the player
     {
-        yield return new WaitForSeconds(16);
-        if (stuck)
+        while(stuckTimer > 0)
+        {
+            yield return new WaitForSeconds(1);
+            stuckTimer = stuckTimer - 1;
+        }        
+        if(stuck)
         {
             if (!gameManager.getCheatStatus())
             {
