@@ -122,6 +122,7 @@ public class DataManager : MonoBehaviour
     [System.Serializable]
     class SaveData
     {
+        //Basic Saving Variables
         public string gemSelected;//The currently selected gem
         public int[] gemsSaved;//All the gems the player has
         public int gemsLoaded;//The amount of gems that are loaded
@@ -130,10 +131,16 @@ public class DataManager : MonoBehaviour
         public Vector3 boxLocation;//Where the box currently is.
         public Vector3[] boxDestinations;//Where the box is moving to.
 
+        //Projectile Object Saving Variables
         public List<BoolListWrapper> projectileBooleans;//An array containing every projectile and its three boolean values
         public List<VectorListWrapper> projectileVectors;//An array containing every projectile and its location and velocity
         public List<string> projectileTypes;//An array containing every projectile and its material type
         public int projectilesSaved;
+
+        //Coin Object Saving Variables
+        public List<BoolListWrapper> coinBooleans;
+        public List<VectorListWrapper> coinVectors;
+        public int coinsSaved;
     }
 
     [System.Serializable]

@@ -21,6 +21,7 @@ public class CoinController : MonoBehaviour
     public PhysicMaterial repelling;//A physic material that's low friction and bouncy
     public bool stuck = true;//If the coin is stuck in the machine
     private int stuckTimer;//How long to wait to consider the coin truly stuck in the machine
+    private bool recreated = false;
 
     // Start is called before the first frame update
     void Start()
@@ -123,6 +124,7 @@ public class CoinController : MonoBehaviour
         Destroy(gameObject);
     }
 
+    //Variable getters and setters
     public void setSilent(bool value)//Stop the object from making sound
     {
         silent = value;
@@ -175,6 +177,46 @@ public class CoinController : MonoBehaviour
         return transform.position;
     }
 
+    public bool getStuck()
+    {
+        return stuck;
+    }
+
+    public void setStuck(bool newValue)
+    {
+        stuck = newValue;
+    }
+
+    public bool getPushable()
+    {
+        return pushable;
+    }
+
+    public void setPushable(bool newValue)
+    {
+        pushable = newValue;
+    }
+
+    public bool getRecreated()
+    {
+        return recreated;
+    }
+
+    public void setRecreated(bool newValue)
+    {
+        recreated = newValue;
+    }
+
+    public PhysicMaterial getMaterial()
+    {
+        return coinCollider.material;
+    }
+
+    public void setMaterial(PhysicMaterial newValue)
+    {
+        coinCollider.material = newValue;
+    }
+
     void raycastCheck()//Call a raycast downwards
     {
         if (Physics.Raycast(transform.position, -Vector3.up, out hit))
@@ -207,5 +249,7 @@ public class CoinController : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    
 
 }
