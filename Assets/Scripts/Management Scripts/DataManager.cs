@@ -140,6 +140,8 @@ public class DataManager : MonoBehaviour
         //Coin Object Saving Variables
         public List<BoolListWrapper> coinBooleans;
         public List<VectorListWrapper> coinVectors;
+        public List<int> coinDelays;
+        public List<PhysicMaterial> coinMaterials;
         public int coinsSaved;
     }
 
@@ -162,8 +164,10 @@ public class DataManager : MonoBehaviour
         data.boxDestinations = box.getDestinations();
         
 
-        GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");
+        GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");//Find all the gems in the scene
+        GameObject[] allCoins = GameObject.FindGameObjectsWithTag("Coin");//Find all the coins in the scene
         data.projectilesSaved = allGems.Length;//We know the total number of gems we'll save based on the number of gems that exist
+        data.coinsSaved = allCoins.Length;//Same with coins
         //Debug.Log("Test Wrapper Test: ");
         //data.testWrapper.checkExistence();
 
@@ -182,6 +186,13 @@ public class DataManager : MonoBehaviour
             data.projectileBooleans = new List<BoolListWrapper>();
             data.projectileVectors = new List<VectorListWrapper>();
             data.projectileTypes = new List<string>();
+
+            data.coinBooleans = new List<BoolListWrapper>();
+            data.coinVectors = new List<VectorListWrapper>();
+            data.coinDelays = new List<int>();
+            data.coinMaterials = new List<PhysicMaterial>();
+
+
             //Debug.Log("List Sizes:");
             //Debug.Log("Boolean: " + data.projectileBooleans.Count);
             //Debug.Log("Vector: " + data.projectileBooleans.Count);
@@ -189,21 +200,24 @@ public class DataManager : MonoBehaviour
             foreach (GameObject gems in allGems)
             {
                 //Debug.Log("Adding new main lists");
-                data.projectileBooleans.Add(new BoolListWrapper());
+                // -- Projectile Data Lists
+                data.projectileBooleans.Add(new BoolListWrapper());//Add a new instance of a nested list, as natural nested lists don't work
                 data.projectileVectors.Add(new VectorListWrapper());
                 BallForward gem = gems.GetComponent<BallForward>();
+                
+
                 //Debug.Log("New List Sizes:");
                 //Debug.Log("Boolean: " + data.projectileBooleans.Count);
                 //Debug.Log("Vector: " + data.projectileBooleans.Count);
                 //Debug.Log("Item contained in Boolean List: " + data.projectileBooleans[0]);
-                data.projectileBooleans[0].checkExistence();
+                //data.projectileBooleans[0].checkExistence();
                 //Debug.Log("Test Addition");
                 //data.projectileBooleans[0].add(true);
 
                 //Debug.Log("Gathering Data");
-                tempBools = gem.gatherBooleans();
-                tempVector3s = gem.gatherVectors();
-                tempTypes.Add(gem.getProjType());
+                //tempBools = gem.gatherBooleans();
+                //tempVector3s = gem.gatherVectors();
+                //tempTypes.Add(gem.getProjType());
 
                 /**
                 data.projectileBooleans.Add(tempBools);
@@ -220,21 +234,45 @@ public class DataManager : MonoBehaviour
                 data.projectileTypes.Add(gem.getProjType());
                 k++;
             }
+            k = 0;//Reset k for use with coins
+            foreach(GameObject coins in allCoins)
+            {
+                data.coinBooleans.Add(new BoolListWrapper());
+                data.coinVectors.Add(new VectorListWrapper());
+                CoinController coin = coins.GetComponent<CoinController>();
+
+                data.coinBooleans[k].add(coin.getSilent());
+                data.coinBooleans[k].add(coin.getCollected());
+                data.coinBooleans[k].add(coin.getRecreated());
+                data.coinBooleans[k].add(coin.getStuck());
+                data.coinBooleans[k].add(coin.getParentable());
+
+                data.coinVectors[k].add(coin.getLocation());
+                data.coinVectors[k].add(coin.getVelocity());
+
+                data.coinDelays.Add(coin.getStuckTimer());
+                data.coinMaterials.Add(coin.getMaterial());
+
+                k++;
+            }
         }
         catch (NullReferenceException e)
         {
             Debug.Log("An error has occurred: " + e);                        
+            /**
             Debug.Log("Data List Count: " + k);
             Debug.Log("Existence Check: ");            
             data.projectileBooleans[k].checkExistence();
             data.projectileVectors[k].checkExistence();
             Debug.Log("Data Lists: " + data.projectileBooleans + ", and " + data.projectileVectors);
             Debug.Log("Data List Information: " + data.projectileBooleans[k] + ", and " + data.projectileVectors[k]);
-            
+            */
             
         }
         //data.projectileBooleans = tempBools;
         //data.projectileVectors = tempVector3s;
+
+
         data.projectileTypes = tempTypes;
         for (int i = 0; i < data.projectileVectors.Count; i++)
         {

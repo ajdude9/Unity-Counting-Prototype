@@ -217,6 +217,16 @@ public class CoinController : MonoBehaviour
         coinCollider.material = newValue;
     }
 
+    public void setCollected(bool newValue)
+    {
+        collected = newValue;
+    }
+
+    public bool getCollected()
+    {
+        return collected;
+    }
+
     void raycastCheck()//Call a raycast downwards
     {
         if (Physics.Raycast(transform.position, -Vector3.up, out hit))
@@ -250,6 +260,33 @@ public class CoinController : MonoBehaviour
         }
     }
 
-    
+    /**
+    * Key Variables to gather:
+    Vector3: Position
+    Vector3: Velocity
+
+    Bool: Silent
+    Bool: Collected
+    Bool: Stuck
+    Bool: Parentable
+    Bool: Recreated
+
+    int: DestroyDelay
+
+    PhysicMaterial: Material
+
+    */
+
+    public List<Vector3> gatherVectors()
+    {
+        List<Vector3> vectors = new List<Vector3> { getLocation(), getVelocity() };
+        return vectors;
+    }
+
+    public List<bool> gatherBooleans()
+    {
+        List<bool> bools = new List<bool> { getSilent(), getCollected(), getRecreated(), getParentable(), getStuck() };
+        return bools;
+    }
 
 }
