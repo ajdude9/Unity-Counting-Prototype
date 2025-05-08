@@ -332,6 +332,11 @@ public class DataManager : MonoBehaviour
                 gameController.createGem(data.projectileBooleans[i].retrieve(0), data.projectileBooleans[i].retrieve(1), data.projectileBooleans[i].retrieve(2), data.projectileVectors[i].retrieve(0), data.projectileVectors[i].retrieve(1), data.projectileTypes[i]);
                 i++;
             }
+            i = 0;//Reset i for use with coins
+            while(i < data.coinsSaved)
+            {
+                //gameController.createCoin();
+            }
 
         }
     }

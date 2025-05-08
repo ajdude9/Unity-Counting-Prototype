@@ -70,6 +70,7 @@ public class CounterController : MonoBehaviour
     private string saveOrLoad;//Whether or not the player is saving or loading with the saveLoad function
     private int selectedSlot;//The currently selected save slot; '0' indicates a new game.
     [SerializeField] private GameObject projectilePrefab;//The prefab that holds the projectile
+    [SerializeField] private GameObject coinPrefab;//The prefab that holds the coin
 
     // Start is called before the first frame update
     void Start()
@@ -896,6 +897,21 @@ public class CounterController : MonoBehaviour
         newGemScript.setLocation(location);
         newGemScript.setVelocity(velocity);
         newGemScript.setProjType(type);
+    }
+
+    public void createCoin(bool silent, bool collected, bool recreated, bool stuck, bool parentable, Vector3 location, Vector3 velocity, int destroyDelay, PhysicMaterial material)
+    {
+        GameObject newCoin = GameObject.Instantiate(coinPrefab);
+        CoinController newCoinScript = newCoin.GetComponent<CoinController>();
+        newCoinScript.setSilent(silent);
+        newCoinScript.setCollected(collected);
+        newCoinScript.setRecreated(recreated);
+        newCoinScript.setStuck(stuck);
+        newCoinScript.setParentable(parentable);
+        newCoinScript.setLocation(location);
+        newCoinScript.setVelocity(velocity);
+        newCoinScript.setStuckTimer(destroyDelay);
+        newCoinScript.setMaterial(material);
     }
 
     public void runDebug()
