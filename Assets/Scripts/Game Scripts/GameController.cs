@@ -848,6 +848,15 @@ public class CounterController : MonoBehaviour
         return enableCheats;//Returns 'true' if cheats are enabled.
     }
 
+    public bool getFirstSwitch()
+    {
+        return firstSwitch;
+    }
+
+    public void setFirstSwitch(bool newValue)
+    {
+        firstSwitch = newValue;
+    }
 
     public void changeScene(int scenePos)
     {
@@ -903,6 +912,7 @@ public class CounterController : MonoBehaviour
     {
         GameObject newCoin = GameObject.Instantiate(coinPrefab);
         CoinController newCoinScript = newCoin.GetComponent<CoinController>();
+        newCoinScript.resetValues();
         newCoinScript.setSilent(silent);
         newCoinScript.setCollected(collected);
         newCoinScript.setRecreated(recreated);

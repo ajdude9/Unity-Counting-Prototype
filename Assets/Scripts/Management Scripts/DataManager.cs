@@ -130,6 +130,7 @@ public class DataManager : MonoBehaviour
         public int coinsWon;//The amount of gems the player can drop        
         public Vector3 boxLocation;//Where the box currently is.
         public Vector3[] boxDestinations;//Where the box is moving to.
+        public bool firstSwitch;//If the player has switched to the coin view for the first time, and whether or not to create coins.
 
         //Projectile Object Saving Variables
         public List<BoolListWrapper> projectileBooleans;//An array containing every projectile and its three boolean values
@@ -162,6 +163,7 @@ public class DataManager : MonoBehaviour
         data.coinsWon = gameController.getCounter("coins", "");
         data.boxLocation = box.getPos();
         data.boxDestinations = box.getDestinations();
+        data.firstSwitch = gameController.getFirstSwitch();
         
 
         GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");//Find all the gems in the scene
@@ -308,6 +310,7 @@ public class DataManager : MonoBehaviour
             gameController.setCounter(data.gemsLoaded, "loaded", "");
             gameController.setCounter(data.coinsBanked, "bank", "");
             gameController.setCounter(data.coinsWon, "coins", "");
+            gameController.setFirstSwitch(data.firstSwitch);
             //Load box data
             box.setPos(data.boxLocation);
             box.setDestinations(data.boxDestinations[0], data.boxDestinations[1]);

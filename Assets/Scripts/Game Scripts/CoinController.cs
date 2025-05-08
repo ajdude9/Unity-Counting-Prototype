@@ -289,4 +289,11 @@ public class CoinController : MonoBehaviour
         return bools;
     }
 
+    public void resetValues()
+    {
+        coinRb = gameObject.GetComponent<Rigidbody>();
+        coinCollider = gameObject.GetComponent<Collider>();
+        
+    }
+
 }
