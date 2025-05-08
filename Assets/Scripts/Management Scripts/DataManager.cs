@@ -335,7 +335,8 @@ public class DataManager : MonoBehaviour
             i = 0;//Reset i for use with coins
             while(i < data.coinsSaved)
             {
-                //gameController.createCoin();
+                gameController.createCoin(data.coinBooleans[i].retrieve(0), data.coinBooleans[i].retrieve(1), data.coinBooleans[i].retrieve(2), data.coinBooleans[i].retrieve(3), data.coinBooleans[i].retrieve(4), data.coinVectors[i].retrieve(0), data.coinVectors[i].retrieve(1), data.coinDelays[i], data.coinMaterials[i]);
+                i++;
             }
 
         }
