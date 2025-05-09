@@ -46,6 +46,7 @@ public class CounterController : MonoBehaviour
     private Camera shopCamera;//The camera for viewing the shop
     private Camera gemSelectCamera;//The camera for viewing the gem select UI
     private Camera pauseCamera;//The camera for viewing the pause menu
+    private Camera saveLoadCamera;//The camera for viewing the save/load screen
     public string viewType;//Which camera is currently being viewed
     private string lastView;//The camera that was viewed last when paused
     public bool firstSwitch = false;//Whether the switch to the coin camera is the first one since the game started
@@ -128,9 +129,11 @@ public class CounterController : MonoBehaviour
         shopCamera = GameObject.Find("Shop Camera").GetComponent<Camera>();//Find the camera for viewing the shop
         gemSelectCamera = GameObject.Find("Select Camera").GetComponent<Camera>();//Find the camera for changing the currently selected gem
         pauseCamera = GameObject.Find("Pause Camera").GetComponent<Camera>();//Find the camera for viewing the pause menu
-        pauseMenu = GameObject.Find("Pause Canvas").GetComponent<Canvas>();
-        dataManager = GameObject.Find("DataManager").GetComponent<DataManager>();
-        saveSlotCanvas = GameObject.Find("SaveSlotCanvas").GetComponent<Canvas>();
+        saveLoadCamera = GameObject.Find("SaveLoadCamera").GetComponent<Camera>();//Find the camera for viewing the save/load menu
+        pauseMenu = GameObject.Find("Pause Canvas").GetComponent<Canvas>();//Find the canvas for the pause menu
+        dataManager = GameObject.Find("DataManager").GetComponent<DataManager>();//Find the data manager object
+        saveSlotCanvas = GameObject.Find("SaveSlotCanvas").GetComponent<Canvas>();//Find the save/load canvas
+
 
         
     }
@@ -568,6 +571,7 @@ public class CounterController : MonoBehaviour
             viewType = "paused";
             saveSlotCanvas.enabled = false;
             gemSelectCamera.enabled = false;
+            saveLoadCamera.enabled = false;
             pauseCamera.enabled = true;
             changeButton.gameObject.SetActive(false);
             silence("coin", true);
@@ -609,6 +613,8 @@ public class CounterController : MonoBehaviour
 
         dataManager.loadSlots();
         saveSlotCanvas.enabled = true;
+        pauseCamera.enabled = false;
+        saveLoadCamera.enabled = true;
         pauseMenu.enabled = false;
         saveOrLoad = function;
     }
@@ -922,6 +928,7 @@ public class CounterController : MonoBehaviour
         newCoinScript.setVelocity(velocity);
         newCoinScript.setStuckTimer(destroyDelay);
         newCoinScript.setMaterial(material);
+        //newCoinScript.setRotation(rotation);
     }
 
     public void runDebug()

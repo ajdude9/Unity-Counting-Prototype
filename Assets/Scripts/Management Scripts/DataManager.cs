@@ -11,6 +11,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Vector3 = UnityEngine.Vector3;
+using Quaternion = UnityEngine.Quaternion;
 
 
 public class DataManager : MonoBehaviour
@@ -143,6 +144,7 @@ public class DataManager : MonoBehaviour
         public List<VectorListWrapper> coinVectors;
         public List<int> coinDelays;
         public List<PhysicMaterial> coinMaterials;
+        public List<Quaternion> coinRotations;
         public int coinsSaved;
     }
 
@@ -254,6 +256,7 @@ public class DataManager : MonoBehaviour
 
                 data.coinDelays.Add(coin.getStuckTimer());
                 data.coinMaterials.Add(coin.getMaterial());
+                //data.coinRotations.Add(coin.getRotation());
 
                 k++;
             }

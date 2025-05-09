@@ -87,7 +87,7 @@ public class CoinController : MonoBehaviour
     {
         if (other.CompareTag("Collector"))//When entering a collector, add one to the bank
         {
-            if(!gameManager.getCheatStatus())
+            if (!gameManager.getCheatStatus())
             {
                 gameManager.addCounter(1, "bank", "");
             }
@@ -116,7 +116,7 @@ public class CoinController : MonoBehaviour
 
     IEnumerator destroyDelay()//Destroy the object after a short delay, and play the collect sound if not silent
     {
-        if(!silent)
+        if (!silent)
         {
             coinAudio.PlayOneShot(collectSound, 0.8f);
         }
@@ -155,11 +155,11 @@ public class CoinController : MonoBehaviour
         stuckTimer = newValue;
     }
 
-     public void setVelocity(Vector3 newVelocity)
+    public void setVelocity(Vector3 newVelocity)
     {
-  
+
         coinRb.velocity = newVelocity;
-    
+
     }
 
     public Vector3 getVelocity()
@@ -227,6 +227,16 @@ public class CoinController : MonoBehaviour
         return collected;
     }
 
+    public Quaternion getRotation()
+    {        
+        return gameObject.transform.rotation;
+    }
+
+    public void setRotation(Quaternion rotation)
+    {
+        gameObject.transform.rotation = rotation;
+    }
+
     void raycastCheck()//Call a raycast downwards
     {
         if (Physics.Raycast(transform.position, -Vector3.up, out hit))
@@ -245,12 +255,12 @@ public class CoinController : MonoBehaviour
 
     IEnumerator stuckPrevention()//If the coin is still in the machine after X seconds of being dropped, destroy it as it is likely stuck and return the coin to the player
     {
-        while(stuckTimer > 0)
+        while (stuckTimer > 0)
         {
             yield return new WaitForSeconds(1);
             stuckTimer = stuckTimer - 1;
-        }        
-        if(stuck)
+        }
+        if (stuck)
         {
             if (!gameManager.getCheatStatus())
             {
@@ -293,7 +303,7 @@ public class CoinController : MonoBehaviour
     {
         coinRb = gameObject.GetComponent<Rigidbody>();
         coinCollider = gameObject.GetComponent<Collider>();
-        
+
     }
 
 }
