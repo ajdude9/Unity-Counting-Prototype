@@ -90,7 +90,7 @@ public class CoinDropController : MonoBehaviour
     private void spawnCoin(String type)//Spawn a coin of a certain type
     {
         float spawnCheckRadius = 0.33f;//Set the radius for checking if a coin is overlapping
-        Debug.Log("Attempting to spawn coinPrefab");
+        //Debug.Log("Attempting to spawn coinPrefab");
         switch (type)//Depending on the type of command issued
         {
             case "init1"://If initialising the first set

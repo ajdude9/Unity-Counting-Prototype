@@ -22,7 +22,8 @@ public class DataManager : MonoBehaviour
 
     private Scene m_Scene;
     private string sceneName;
-    private int currentProfile;
+    private int currentProfile;//The current selected profile - this is how the GameController knows which profile to load from.
+    private bool loadingFromSave;//Whether or not we're loading from a saved game. This is so the GameController knows which view to change to.
     private void Awake()
     {
 
@@ -55,7 +56,7 @@ public class DataManager : MonoBehaviour
 
         public void add(bool newValue)
         {
-            Debug.Log("Attempting to add to Boolean wrapper list");
+            //Debug.Log("Attempting to add to Boolean wrapper list");
             boolList.Add(newValue);
         }
         public bool retrieve(int pos)
@@ -90,7 +91,7 @@ public class DataManager : MonoBehaviour
 
         public void add(Vector3 newValue)
         {
-            Debug.Log("Attempting to add to VectorList wrapper list");
+            //Debug.Log("Attempting to add to VectorList wrapper list");
             vectorList.Add(newValue);
         }
         public Vector3 retrieve(int pos)
@@ -132,6 +133,8 @@ public class DataManager : MonoBehaviour
         public Vector3 boxLocation;//Where the box currently is.
         public Vector3[] boxDestinations;//Where the box is moving to.
         public bool firstSwitch;//If the player has switched to the coin view for the first time, and whether or not to create coins.
+        public string viewType;//The current view the player is looking at
+        public bool loadedFromSave;//If the game is being loaded from a save
 
         //Projectile Object Saving Variables
         public List<BoolListWrapper> projectileBooleans;//An array containing every projectile and its three boolean values
@@ -166,7 +169,7 @@ public class DataManager : MonoBehaviour
         data.boxLocation = box.getPos();
         data.boxDestinations = box.getDestinations();
         data.firstSwitch = gameController.getFirstSwitch();
-        
+        data.viewType = gameController.getLastViewType();        
 
         GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");//Find all the gems in the scene
         GameObject[] allCoins = GameObject.FindGameObjectsWithTag("Coin");//Find all the coins in the scene
@@ -307,7 +310,9 @@ public class DataManager : MonoBehaviour
             string json = File.ReadAllText(savePath);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
             //Clear the current field of any lingering objects
-            gameController.clear();
+            gameController.clear();            
+            //State that we're loading
+            setLFS(true);
             //Load game data
             gameController.setProjectileType(data.gemSelected);
             gameController.depositGems(data.gemsSaved);
@@ -315,6 +320,7 @@ public class DataManager : MonoBehaviour
             gameController.setCounter(data.coinsBanked, "bank", "");
             gameController.setCounter(data.coinsWon, "coins", "");
             gameController.setFirstSwitch(data.firstSwitch);
+            
             //Load box data
             box.setPos(data.boxLocation);
             box.setDestinations(data.boxDestinations[0], data.boxDestinations[1]);
@@ -346,6 +352,8 @@ public class DataManager : MonoBehaviour
                 i++;
             }
 
+            
+            gameController.setViewType(data.viewType);
         }
     }
 
@@ -362,6 +370,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
+    //Load information about the saved game's data
     public void loadSlots()
     {
         for (int i = 1; i < 4; i++)
@@ -406,10 +415,13 @@ public class DataManager : MonoBehaviour
 
     }
 
-/**
-    public void verifyExistence()
+    public bool getLFS()
     {
-        Debug.Log("Hello world.");
+        return loadingFromSave;
     }
-*/
+
+    public void setLFS(bool newValue)
+    {
+        loadingFromSave = newValue;
+    }
 }

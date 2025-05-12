@@ -30,8 +30,12 @@ public class MenuController : MonoBehaviour
 
     }
 
-    public void StartNew()
+    public void startGame(bool newGame)
     {
+        if(newGame)
+        {
+            dataManager.setLFS(false);
+        }        
         SceneManager.LoadScene(1);//Load the main scene
     }
 
@@ -93,15 +97,15 @@ public class MenuController : MonoBehaviour
         return silencedStatus;
     }
 
-    public void loadGameSlot(int slot)
+    public void loadGameSlot(int slot)//Load the game from a selected slot
     {
-        dataManager.setCurrentProfile(slot);
-        StartNew();
+        dataManager.setCurrentProfile(slot);//Set the current profile to the selected slot
+        startGame(false);//Start the game without it being a new game
     }
 
     public void continueGame()
     {
         dataManager.quickLoad();
-        StartNew();
+        startGame(false);
     }
 }

@@ -15,8 +15,10 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
+using System.Runtime.CompilerServices;
+
 #if UNITY_EDITOR
-    using UnityEditor;
+using UnityEditor;
 #endif
 
 public class CounterController : MonoBehaviour
@@ -72,30 +74,31 @@ public class CounterController : MonoBehaviour
     private int selectedSlot;//The currently selected save slot; '0' indicates a new game.
     [SerializeField] private GameObject projectilePrefab;//The prefab that holds the projectile
     [SerializeField] private GameObject coinPrefab;//The prefab that holds the coin
+    
 
     void Awake()//As soon as we start
     {
         try
         {
-        verifyScene();//See if we have properly entered the scene from the menu
+            verifyScene();//See if we have properly entered the scene from the menu
         }
-        catch(NullReferenceException)//If not, and DataManager has not been created
+        catch (NullReferenceException)//If not, and DataManager has not been created
         {
             SceneManager.LoadScene(0);//Return to the menu so the game can be properly started
         }
     }
     // Start is called before the first frame update
     void Start()
-    {        
+    {
         
         findObjects();//Find all the objects in the scene and tie to them to their respective variables
         dataManager.refresh();
-        selectedSlot = dataManager.getCurrentProfile();        
+        selectedSlot = dataManager.getCurrentProfile();
         //get the game audio and set the default values for variables
         projectileType = "ruby";//Set the default projectile to ruby
         projName = "Gems";
         writeDictionaries();//Fill out all the dictionary variables.               
-        loadStats();         
+        loadStats();
         counterText.enabled = true;//Enable the counter text
         loadedText.enabled = true;//Enable the loaded text
         counterText.text = "Available " + projName + ": " + heldProjectiles[projectileType];//Change the counter text to show how many of the currently selected projectile type the player has
@@ -105,16 +108,28 @@ public class CounterController : MonoBehaviour
         reloadNotify.color = new Color(reloadNotify.color.r, reloadNotify.color.g, reloadNotify.color.b, 0);//Chane the reload notify colour to red
         pauseCamera.enabled = false;
         pauseMenu.enabled = false;
-        saveSlotCanvas.enabled = false;
-        switchToThrow();//Switch to the throw viewtype, if it wasn't already being viewed.
+        saveSlotCanvas.enabled = false;      
+        
+        Debug.Log("Loading from save status: " + dataManager.getLFS());
+
+        if(!dataManager.getLFS())//If we haven't loaded from a saved game
+        {
+            Debug.Log("Switching to throw on start");
+            switchToThrow();//Switch to the throw viewtype, if it wasn't already being viewed.
+        }  
+        else
+        {
+            Debug.Log("Not switching to throw on start");
+        }
+              
 
     }
 
     void verifyScene()//Check to see if the scene has been entered properly through the creation of the DataManager
     {
-        
+
         dataManager = GameObject.Find("DataManager").GetComponent<DataManager>();//Find the data manager object
-        
+
     }
 
     void loadStats()
@@ -123,7 +138,7 @@ public class CounterController : MonoBehaviour
         reloadMax = 6;//Set the maximum amount of projectiles that can be reloaded to 6
         reloadSpeed = 0.15f;//Set the reload speed to 0.15
         fireRate = 0.35f;//Set the firerate to 0.35
-        if(selectedSlot == 0)
+        if (selectedSlot == 0)
         {
             setCounter(54, "total", "ruby");
         }
@@ -135,7 +150,7 @@ public class CounterController : MonoBehaviour
     }
 
     void findObjects()
-    {        
+    {
         gameAudio = gameObject.GetComponent<AudioSource>();//Find the game's audio source
         coinDropController = GameObject.Find("Coin Dropper").GetComponent<CoinDropController>();//Find the coin drop controller
         changeButton = GameObject.Find("Change Button").GetComponent<UnityEngine.UI.Button>();//The button for changing gems
@@ -151,14 +166,14 @@ public class CounterController : MonoBehaviour
         saveLoadCamera = GameObject.Find("SaveLoadCamera").GetComponent<Camera>();//Find the camera for viewing the save/load menu
         pauseMenu = GameObject.Find("Pause Canvas").GetComponent<Canvas>();//Find the canvas for the pause menu        
         saveSlotCanvas = GameObject.Find("SaveSlotCanvas").GetComponent<Canvas>();//Find the save/load canvas
-        
 
-        
+
+
     }
 
     void writeDictionaries()//Set up the dictionary variables
     {
-        string[] gemNameList = {"ruby", "emerald", "amethyst", "diamond"};
+        string[] gemNameList = { "ruby", "emerald", "amethyst", "diamond" };
         gemNames = gemNameList;
         heldProjectiles = new Dictionary<string, int>()//Set up each projectile the player can hold, and give the player 54 rubies to start (with 6 already loaded, for 60 total)
         {
@@ -259,15 +274,15 @@ public class CounterController : MonoBehaviour
             StartCoroutine(textFadeOut(1f, reloadNotify));//Start to fade out the reload text
             reload();//Reload the projectiles to the maximum amount
         }
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if(viewType != "paused")
-            {                
+            if (viewType != "paused")
+            {
                 toggleGamePause(true);
             }
             else
             {
-                if(saveSlotCanvas.enabled)
+                if (saveSlotCanvas.enabled)
                 {
                     toggleGamePause(true);
                 }
@@ -495,6 +510,7 @@ public class CounterController : MonoBehaviour
 
     private void switchToCoin()//Switch to the coin view
     {
+        Debug.Log("Switching to coin");
         //Disable all the cameras except the coin camera
         //-
         throwCamera.enabled = false;
@@ -507,7 +523,7 @@ public class CounterController : MonoBehaviour
         counterText.enabled = false;
         loadedText.enabled = false;
         coinsSavedText.enabled = true;
-        coinsDroppableText.enabled = true;        
+        coinsDroppableText.enabled = true;
         changeButton.gameObject.SetActive(false);
         //-
         //coinsSavedText.transform.position = new Vector3(coinsSavedText.transform.position.x, transform.position.y, coinsSavedText.transform.position.z);//Adjust the coins saved text's position
@@ -581,10 +597,10 @@ public class CounterController : MonoBehaviour
     }
 
     private void toggleGamePause(bool status)
-    {        
-        pauseMenu.enabled = status;        
-        if(status)
-        {            
+    {
+        pauseMenu.enabled = status;
+        if (status)
+        {
             storeView(true);
             viewType = "paused";
             saveSlotCanvas.enabled = false;
@@ -601,7 +617,7 @@ public class CounterController : MonoBehaviour
         {
             pauseCamera.enabled = false;
             Time.timeScale = 1;
-            switch(storeView(false))
+            switch (storeView(false))
             {
                 case "throw":
                     switchToThrow();
@@ -639,31 +655,31 @@ public class CounterController : MonoBehaviour
 
     public void saveLoad(int slot)//Save or load the game.
     {
-        switch(saveOrLoad)
+        switch (saveOrLoad)
         {
             case "save":
                 dataManager.save(slot);
                 dataManager.loadSlots();
-            break;
+                break;
             case "load":
                 dataManager.load(slot);
                 saveSlotCanvas.enabled = false;
                 unpause();
                 switchToThrow();
-            break;
+                break;
         }
     }
 
     private string storeView(bool function)
-    {                
-        if(function)//If true, meaning you are storing the view
+    {
+        if (function)//If true, meaning you are storing the view
         {
-            if(viewType != "paused")//Don't store the view if it's the paused view
+            if (viewType != "paused")//Don't store the view if it's the paused view
             {
                 lastView = viewType;
             }
         }
-        
+
         return lastView;
     }
 
@@ -784,12 +800,12 @@ public class CounterController : MonoBehaviour
                 foreach (GameObject gems in allGems)//For each game object in the array
                 {
                     BallForward gem = gems.GetComponent<BallForward>();//Set 'gem' to the BallForward script of the currently selected gem in the loop ("BallForward" is ProjectileController)
-                    if(!gem.getScored())//If the gem hasn't already been scored
+                    if (!gem.getScored())//If the gem hasn't already been scored
                     {
                         gem.setSilent(silentStatus);//Set the silent status of the gem to the supplied value
                     }
                 }
-            break;
+                break;
             case "coin"://Same as above but with coins
                 GameObject[] allCoins = GameObject.FindGameObjectsWithTag("Coin");
                 foreach (GameObject coins in allCoins)
@@ -797,7 +813,7 @@ public class CounterController : MonoBehaviour
                     CoinController coin = coins.GetComponent<CoinController>();
                     coin.setSilent(silentStatus);
                 }
-            break;
+                break;
 
 
         }
@@ -882,6 +898,46 @@ public class CounterController : MonoBehaviour
         firstSwitch = newValue;
     }
 
+    
+
+    /**
+    * This is an irrelevant function, as the context for its use would always return 'paused'
+    public string getViewType()
+    {
+        return viewType;
+    }
+    */
+
+    public string getLastViewType()
+    {
+        return lastView;
+    }
+
+    public void setViewType(string newViewType)
+    {
+        Debug.Log("Attempting to change viewType to: " + newViewType);
+        switch (newViewType)//Based on the current viewtype
+        {
+            case "throw":
+                Debug.Log("Changed to throw.");
+                switchToThrow();
+                break;
+            case "coin":
+                Debug.Log("Changed to coin.");
+                switchToCoin();
+                break;
+            case "shop":
+                Debug.Log("Changed to shop.");
+                switchToShop();
+                break;            
+            default:
+                Debug.Log("Fell back to throw.");
+                switchToThrow();//If no cases match, fall back to the throw view
+            break;            
+        }        
+        Debug.Log("Done changing viewtype");
+    }
+
     public void changeScene(int scenePos)
     {
         SceneManager.LoadScene(scenePos);
@@ -889,23 +945,23 @@ public class CounterController : MonoBehaviour
 
     public void exit()
     {
-        #if UNITY_EDITOR//Specialised compiler if statement to detected editor mode
-            EditorApplication.ExitPlaymode();//Exit playmode if viewing the editor
-        #else
+#if UNITY_EDITOR//Specialised compiler if statement to detected editor mode
+        EditorApplication.ExitPlaymode();//Exit playmode if viewing the editor
+#else
             Application.Quit();//Quit the game and close the window
-        #endif
-        
+#endif
+
     }
 
     public int[] gatherGems()
     {
-        int[] returnList = {getCounter("total", "ruby"), getCounter("total", "emerald"), getCounter("total", "amethyst"), getCounter("total", "diamond")};        
+        int[] returnList = { getCounter("total", "ruby"), getCounter("total", "emerald"), getCounter("total", "amethyst"), getCounter("total", "diamond") };
         return returnList;
     }
 
     public void depositGems(int[] gemList)
     {
-        for(int i = 0; i < gemNames.Length; i++)
+        for (int i = 0; i < gemNames.Length; i++)
         {
             setCounter(gemList[i], "total", gemNames[i]);
         }
@@ -952,17 +1008,17 @@ public class CounterController : MonoBehaviour
     public void runDebug()
     {
         GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");
-        foreach(GameObject gem in allGems)
+        foreach (GameObject gem in allGems)
         {
             BallForward gemScript = gem.GetComponent<BallForward>();
             //Debug.Log(gemScript.getLocation());
             List<List<Vector3>> testList = new List<List<Vector3>>();
             testList.Add(gemScript.gatherVectors());
-            for(int i = 0; i < testList.Count; i++)
+            for (int i = 0; i < testList.Count; i++)
             {
                 Debug.Log(testList[i]);
-                for(int j = 0; j < testList[i].Count; j++)
-                {                                        
+                for (int j = 0; j < testList[i].Count; j++)
+                {
                     Debug.Log(i + "-" + j + ": " + testList[i][j]);
                 }
             }
@@ -973,7 +1029,7 @@ public class CounterController : MonoBehaviour
     public void clear()
     {
         GameObject[] allGems = GameObject.FindGameObjectsWithTag("Projectile");
-        foreach(GameObject gem in allGems)
+        foreach (GameObject gem in allGems)
         {
             Destroy(gem);
         }
