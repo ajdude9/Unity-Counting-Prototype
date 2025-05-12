@@ -195,6 +195,7 @@ public class DataManager : MonoBehaviour
             data.coinVectors = new List<VectorListWrapper>();
             data.coinDelays = new List<int>();
             data.coinMaterials = new List<PhysicMaterial>();
+            data.coinRotations = new List<Quaternion>();
 
 
             //Debug.Log("List Sizes:");
