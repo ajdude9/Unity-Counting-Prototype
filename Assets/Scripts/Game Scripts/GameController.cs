@@ -99,8 +99,8 @@ public class CounterController : MonoBehaviour
         projName = "Gems";
         writeDictionaries();//Fill out all the dictionary variables.               
         loadStats();
-        counterText.enabled = true;//Enable the counter text
-        loadedText.enabled = true;//Enable the loaded text
+        //counterText.enabled = true;//Enable the counter text
+        //loadedText.enabled = true;//Enable the loaded text
         counterText.text = "Available " + projName + ": " + heldProjectiles[projectileType];//Change the counter text to show how many of the currently selected projectile type the player has
         loadedText.text = "Loaded " + projName + ": " + loadedTotal;//Change the loaded text to show how many of the currently loaded projectile are loaded
         coinsSavedText.text = "Coins Won: " + coinsSaved;//Change the coins saved text to show how many coins the player has won
@@ -664,8 +664,7 @@ public class CounterController : MonoBehaviour
             case "load":
                 dataManager.load(slot);
                 saveSlotCanvas.enabled = false;
-                unpause();
-                switchToThrow();
+                unpause();                
                 break;
         }
     }
