@@ -256,7 +256,7 @@ public class DataManager : MonoBehaviour
 
                 data.coinDelays.Add(coin.getStuckTimer());
                 data.coinMaterials.Add(coin.getMaterial());
-                //data.coinRotations.Add(coin.getRotation());
+                data.coinRotations.Add(coin.getRotation());
 
                 k++;
             }
@@ -341,7 +341,7 @@ public class DataManager : MonoBehaviour
             i = 0;//Reset i for use with coins
             while(i < data.coinsSaved)
             {
-                gameController.createCoin(data.coinBooleans[i].retrieve(0), data.coinBooleans[i].retrieve(1), data.coinBooleans[i].retrieve(2), data.coinBooleans[i].retrieve(3), data.coinBooleans[i].retrieve(4), data.coinVectors[i].retrieve(0), data.coinVectors[i].retrieve(1), data.coinDelays[i], data.coinMaterials[i]);
+                gameController.createCoin(data.coinBooleans[i].retrieve(0), data.coinBooleans[i].retrieve(1), data.coinBooleans[i].retrieve(2), data.coinBooleans[i].retrieve(3), data.coinBooleans[i].retrieve(4), data.coinVectors[i].retrieve(0), data.coinVectors[i].retrieve(1), data.coinDelays[i], data.coinMaterials[i], data.coinRotations[i]);
                 i++;
             }
 
@@ -405,9 +405,9 @@ public class DataManager : MonoBehaviour
 
     }
 
-    public void logObjects()
+    public void verifyExistence()
     {
-
+        Debug.Log("Hello world.");
     }
 
 }

@@ -73,9 +73,21 @@ public class CounterController : MonoBehaviour
     [SerializeField] private GameObject projectilePrefab;//The prefab that holds the projectile
     [SerializeField] private GameObject coinPrefab;//The prefab that holds the coin
 
+    void Awake()//As soon as we start
+    {
+        try
+        {
+        verifyScene();//See if we have properly entered the scene from the menu
+        }
+        catch(NullReferenceException)//If not, and DataManager has not been created
+        {
+            SceneManager.LoadScene(0);//Return to the menu so the game can be properly started
+        }
+    }
     // Start is called before the first frame update
     void Start()
-    {
+    {        
+        
         findObjects();//Find all the objects in the scene and tie to them to their respective variables
         dataManager.refresh();
         selectedSlot = dataManager.getCurrentProfile();        
@@ -98,6 +110,13 @@ public class CounterController : MonoBehaviour
 
     }
 
+    void verifyScene()//Check to see if the scene has been entered properly through the creation of the DataManager
+    {
+        
+        dataManager = GameObject.Find("DataManager").GetComponent<DataManager>();//Find the data manager object
+        
+    }
+
     void loadStats()
     {
         loadedTotal = 6;//Set the total amount of projectiles the player currently has loaded to 6
@@ -116,7 +135,7 @@ public class CounterController : MonoBehaviour
     }
 
     void findObjects()
-    {
+    {        
         gameAudio = gameObject.GetComponent<AudioSource>();//Find the game's audio source
         coinDropController = GameObject.Find("Coin Dropper").GetComponent<CoinDropController>();//Find the coin drop controller
         changeButton = GameObject.Find("Change Button").GetComponent<UnityEngine.UI.Button>();//The button for changing gems
@@ -130,10 +149,9 @@ public class CounterController : MonoBehaviour
         gemSelectCamera = GameObject.Find("Select Camera").GetComponent<Camera>();//Find the camera for changing the currently selected gem
         pauseCamera = GameObject.Find("Pause Camera").GetComponent<Camera>();//Find the camera for viewing the pause menu
         saveLoadCamera = GameObject.Find("SaveLoadCamera").GetComponent<Camera>();//Find the camera for viewing the save/load menu
-        pauseMenu = GameObject.Find("Pause Canvas").GetComponent<Canvas>();//Find the canvas for the pause menu
-        dataManager = GameObject.Find("DataManager").GetComponent<DataManager>();//Find the data manager object
+        pauseMenu = GameObject.Find("Pause Canvas").GetComponent<Canvas>();//Find the canvas for the pause menu        
         saveSlotCanvas = GameObject.Find("SaveSlotCanvas").GetComponent<Canvas>();//Find the save/load canvas
-
+        
 
         
     }
@@ -914,7 +932,7 @@ public class CounterController : MonoBehaviour
         newGemScript.setProjType(type);
     }
 
-    public void createCoin(bool silent, bool collected, bool recreated, bool stuck, bool parentable, Vector3 location, Vector3 velocity, int destroyDelay, PhysicMaterial material)
+    public void createCoin(bool silent, bool collected, bool recreated, bool stuck, bool parentable, Vector3 location, Vector3 velocity, int destroyDelay, PhysicMaterial material, Quaternion rotation)
     {
         GameObject newCoin = GameObject.Instantiate(coinPrefab);
         CoinController newCoinScript = newCoin.GetComponent<CoinController>();
@@ -928,7 +946,7 @@ public class CounterController : MonoBehaviour
         newCoinScript.setVelocity(velocity);
         newCoinScript.setStuckTimer(destroyDelay);
         newCoinScript.setMaterial(material);
-        //newCoinScript.setRotation(rotation);
+        newCoinScript.setRotation(rotation);
     }
 
     public void runDebug()

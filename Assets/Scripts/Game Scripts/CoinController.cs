@@ -229,7 +229,8 @@ public class CoinController : MonoBehaviour
 
     public Quaternion getRotation()
     {        
-        return gameObject.transform.rotation;
+        Quaternion objRotation = gameObject.transform.rotation;
+        return objRotation;
     }
 
     public void setRotation(Quaternion rotation)
