@@ -109,18 +109,12 @@ public class CounterController : MonoBehaviour
         pauseCamera.enabled = false;
         pauseMenu.enabled = false;
         saveSlotCanvas.enabled = false;      
-        
-        Debug.Log("Loading from save status: " + dataManager.getLFS());
 
         if(!dataManager.getLFS())//If we haven't loaded from a saved game
         {
-            Debug.Log("Switching to throw on start");
             switchToThrow();//Switch to the throw viewtype, if it wasn't already being viewed.
         }  
-        else
-        {
-            Debug.Log("Not switching to throw on start");
-        }
+        
               
 
     }
@@ -509,8 +503,7 @@ public class CounterController : MonoBehaviour
     }
 
     private void switchToCoin()//Switch to the coin view
-    {
-        Debug.Log("Switching to coin");
+    {        
         //Disable all the cameras except the coin camera
         //-
         throwCamera.enabled = false;
@@ -914,19 +907,15 @@ public class CounterController : MonoBehaviour
 
     public void setViewType(string newViewType)
     {
-        Debug.Log("Attempting to change viewType to: " + newViewType);
         switch (newViewType)//Based on the current viewtype
         {
             case "throw":
-                Debug.Log("Changed to throw.");
                 switchToThrow();
                 break;
             case "coin":
-                Debug.Log("Changed to coin.");
                 switchToCoin();
                 break;
             case "shop":
-                Debug.Log("Changed to shop.");
                 switchToShop();
                 break;            
             default:
@@ -934,7 +923,6 @@ public class CounterController : MonoBehaviour
                 switchToThrow();//If no cases match, fall back to the throw view
             break;            
         }        
-        Debug.Log("Done changing viewtype");
     }
 
     public void changeScene(int scenePos)
@@ -968,16 +956,16 @@ public class CounterController : MonoBehaviour
 
     public void createGem(bool silent, bool scored, bool recreated, Vector3 location, Vector3 velocity, string type)
     {
-        Debug.Log("Creating new gem.");
-        Debug.Log("BOOL: Silence: " + silent);
-        Debug.Log("BOOL: Scored: " + scored);
-        Debug.Log("BOOL: Recreated: " + recreated);
-        Debug.Log("VECTOR: Location: " + location);
-        Debug.Log("VECTOR: Velocity: " + velocity);
-        Debug.Log("STRING: Type: " + type);
+        //Debug.Log("Creating new gem.");
+        //Debug.Log("BOOL: Silence: " + silent);
+        //Debug.Log("BOOL: Scored: " + scored);
+        //Debug.Log("BOOL: Recreated: " + recreated);
+        //Debug.Log("VECTOR: Location: " + location);
+        //Debug.Log("VECTOR: Velocity: " + velocity);
+        //Debug.Log("STRING: Type: " + type);
         GameObject newGem = GameObject.Instantiate(projectilePrefab);
         BallForward newGemScript = newGem.GetComponent<BallForward>();
-        Debug.Log("Gem Sanity Check: " + newGemScript.sanityCheckReturn());
+        //Debug.Log("Gem Sanity Check: " + newGemScript.sanityCheckReturn());
         newGemScript.resetValues();
         newGemScript.setSilent(silent);
         newGemScript.setScored(scored);
