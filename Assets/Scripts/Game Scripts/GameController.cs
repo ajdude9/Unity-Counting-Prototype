@@ -510,7 +510,7 @@ public class CounterController : MonoBehaviour
         coinsDroppableText.enabled = true;        
         changeButton.gameObject.SetActive(false);
         //-
-        coinsSavedText.transform.position = new Vector3(coinsSavedText.transform.position.x, 1000, coinsSavedText.transform.position.z);//Adjust the coins saved text's position
+        //coinsSavedText.transform.position = new Vector3(coinsSavedText.transform.position.x, transform.position.y, coinsSavedText.transform.position.z);//Adjust the coins saved text's position
         toggleInventoryButtons(false);//Disable the inventory buttons so they can't be clicked
         if (!firstSwitch)//If this is the first time the player is switching to this view
         {
@@ -556,7 +556,7 @@ public class CounterController : MonoBehaviour
         coinsSavedText.enabled = true;
         coinsDroppableText.enabled = false;
         changeButton.gameObject.SetActive(false);
-        coinsSavedText.transform.position = new Vector3(coinsSavedText.transform.position.x, 1100, coinsSavedText.transform.position.z);
+        //coinsSavedText.transform.position = new Vector3(coinsSavedText.transform.position.x, transform.position.y, coinsSavedText.transform.position.z);
         coinsSavedText.text = "Coins Available: " + coinsSaved;
         viewType = "shop";
         toggleInventoryButtons(false);

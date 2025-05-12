@@ -405,9 +405,10 @@ public class DataManager : MonoBehaviour
 
     }
 
+/**
     public void verifyExistence()
     {
         Debug.Log("Hello world.");
     }
-
+*/
 }
