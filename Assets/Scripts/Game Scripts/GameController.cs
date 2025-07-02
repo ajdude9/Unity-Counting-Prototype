@@ -24,20 +24,60 @@ using UnityEditor;
 public class CounterController : MonoBehaviour
 {
     private CoinDropController coinDropController;//The coin drop controller
-    public Text counterText;//Text object to display the number of projectiles
-    public Text loadedText;//Text object to display the number of projectiles ready
-    public TextMeshProUGUI reloadNotify;//Text object to tell the player to reload
-    public TextMeshProUGUI coinsSavedText;//The text saying how many coins the player has saved
-    public TextMeshProUGUI coinsDroppableText;//The text saying how many coins the player can drop
-    private int loadedTotal;//The number of projectiles ready to fire
+    private Text counterText;//Text object to display the number of projectiles
+    private Text loadedText;//Text object to display the number of projectiles ready
+    private TextMeshProUGUI reloadNotify;//Text object to tell the player to reload
+    public TextMeshProUGUI reloadNotifyPub
+    {
+        get{ return reloadNotify; }
+    }
+    
+    private TextMeshProUGUI coinsSavedText;//The text saying how many coins the player has saved
+    private TextMeshProUGUI coinsDroppableText;//The text saying how many coins the player can drop
+    private int loadedTotal;//The number of projectiles ready to fire, kept privately
+    public int loadedTotalPub//A publically accessible variable for loaded total
+    {
+        get { return loadedTotal; }//Getter for loaded total
+        set//Setter for loaded total
+        {
+            if (value < 0)//Ensure that loaded total cannot be set to a negative number
+            {
+                Debug.LogError("loadedTotal cannot be negative.");
+            }
+            else
+            {
+                loadedTotal = value;
+            }
+        }
+    }
     private int reloadMax;//The total number of projectiles that can be loaded at once.
     private int coinsSaved = 0;//The number of coins the player has 'banked'
     private int coinsDroppable = 0;//The number of coins the player can drop.
     private float reloadSpeed;//How long it takes to reload one projectile
-    public float fireRate;//How fast the player can autofire projectiles
-    public string projName;//The name of the projectiles being fired
-    public bool reloadingStatus = false;//Whether the player is currently 'reloading'
-    public bool enableCheats = false;//Whether cheats are enabled
+    private float fireRate;//How fast the player can autofire projectiles
+    public float fireRatePub
+    {
+        get { return fireRate; }
+        set
+        {
+            if (value < 0)
+            {
+                Debug.LogError("fireRate cannot be negative.");
+            }
+            else
+            {
+                fireRate = value;
+            }
+        }
+        
+    }
+    private string projName;//The name of the projectiles being fired
+    private bool reloadingStatus = false;//Whether the player is currently 'reloading'
+    public bool reloadingStatusPub
+    {
+        get { return reloadingStatus; }
+    }
+    private bool enableCheats = false;//Whether cheats are enabled
     private AudioSource gameAudio;//Source for the universal game audio
     public AudioClip reloadSound;//Reloading sound (fully reloaded)
     public AudioClip reloadSingle;//Reloading sound (single projectile)

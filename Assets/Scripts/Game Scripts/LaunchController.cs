@@ -31,7 +31,7 @@ public class LaunchController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))//If the player presses the space bar
             {
-                InvokeRepeating("fire", 0f, gameManager.fireRate);//Begin automatically firing projectiles, the first with no delay, then the second with the firerate delay
+                InvokeRepeating("fire", 0f, gameManager.fireRatePub);//Begin automatically firing projectiles, the first with no delay, then the second with the firerate delay
                 //Being able to spam shots by rapidly pressing the spacebar is intentional; the autofire is an upgradable QOL to prevent RSI
             }
             else if (Input.GetKeyUp(KeyCode.Space))//If the player lets go of the spacebar
@@ -50,12 +50,12 @@ public class LaunchController : MonoBehaviour
     {
         //Debug.Log("Making call to fade in text");
         gameManager.fadeValue = 1;
-        gameManager.callFadeIn(0.25f, gameManager.reloadNotify);
+        gameManager.callFadeIn(0.25f, gameManager.reloadNotifyPub);
     }
 
     void fire()//Fire a projectile
     {
-        if (gameManager.getCounter("loaded", "") > 0 && !gameManager.reloadingStatus || gameManager.getCheatStatus())//If the player has enough ammo loaded and isn't currently reloading, OR is cheating.
+        if (gameManager.getCounter("loaded", "") > 0 && !gameManager.reloadingStatusPub || gameManager.getCheatStatus())//If the player has enough ammo loaded and isn't currently reloading, OR is cheating.
         {
             Instantiate(projectilePrefab, transform.position, projectilePrefab.transform.rotation);//Create a projectile
             if(!gameManager.getCheatStatus())//If the player isn't cheating
@@ -65,7 +65,7 @@ public class LaunchController : MonoBehaviour
         }
         else
         {
-            if(!gameManager.reloadingStatus)//If the player attempts to fire, but has no ammo loaded and isn't currently reloading
+            if(!gameManager.reloadingStatusPub)//If the player attempts to fire, but has no ammo loaded and isn't currently reloading
             {
                 callFade();//Fade in the reload text
             }
