@@ -8,8 +8,8 @@ using Random = UnityEngine.Random;
 public class ShopController : MonoBehaviour
 {
     private AudioSource shopAudio;//The audio controller for the shop's audio
-    public AudioClip buySFX;//The audio for buying an item
-    public AudioClip poorSFX;//The audio for when the player doesn't have enough money
+    [SerializeField] private AudioClip buySFX;//The audio for buying an item
+    [SerializeField] private AudioClip poorSFX;//The audio for when the player doesn't have enough money
     private CounterController gameManager;//The game manager object
     private Dictionary<string, int> shopItems;//A key:value list of the shop's inventory and the item's cost
     // Start is called before the first frame update

@@ -7,8 +7,8 @@ public class CoinController : MonoBehaviour
 {
 
     private AudioSource coinAudio;//The audio source for coins
-    public AudioClip hitSound1;//The sound of colliding with something
-    public AudioClip collectSound;//The sound of being collected
+    private AudioClip hitSound1;//The sound of colliding with something
+    private AudioClip collectSound;//The sound of being collected
     private Rigidbody coinRb;//The coin's rigidbody
     private Collider coinCollider;//The coin's collider
     private bool parentable = false;//If the object can be made the child of another object
@@ -17,11 +17,11 @@ public class CoinController : MonoBehaviour
     private bool collected = false;//If the coin has been collected
     private bool silent = false;//If the coin can make sound or not
     private RaycastHit hit;//The raycast for coins
-    public PhysicMaterial highFriction;//A high friction physic material
-    public PhysicMaterial repelling;//A physic material that's low friction and bouncy
-    public bool stuck = true;//If the coin is stuck in the machine
+    private PhysicMaterial highFriction;//A high friction physic material
+    private PhysicMaterial repelling;//A physic material that's low friction and bouncy
+    private bool stuck = true;//If the coin is stuck in the machine
     private int stuckTimer;//How long to wait to consider the coin truly stuck in the machine
-    private bool recreated = false;
+    private bool recreated = false;//Whether or not the coin has been recreated
 
     // Start is called before the first frame update
     void Start()

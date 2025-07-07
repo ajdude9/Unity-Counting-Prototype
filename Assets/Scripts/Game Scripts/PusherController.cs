@@ -6,16 +6,18 @@ public class PusherController : MonoBehaviour
 {
 
 
-    public Vector3 targetLocationA;//The most forward the pusher should go
-    public Vector3 targetLocationB;//The furthest back the pusher should go
+    private Vector3 targetLocationA;//The most forward the pusher should go
+    private Vector3 targetLocationB;//The furthest back the pusher should go
     private Vector3 targetLocationHold;//A temporary value for allowing the target locations to be switched
     private GameObject boxObject;//The machine pusher itself
-    public float speed;//The speed at which the machine pusher moves
-    public bool pause = false;//Whether or not the machine pusher is stopped
+    private float speed = 3;//The speed at which the machine pusher moves
+    private bool pause = false;//Whether or not the machine pusher is stopped
     // Start is called before the first frame update
     void Start()
-    {        
+    {
         boxObject = GameObject.Find("MachinePusherParent");//Find the machine pusher's parent, as its what actually controls the pusher
+        targetLocationA = new Vector3(66.4f, 16.47f, 41.1f);
+        targetLocationB = new Vector3(66.4f, 16.47f, 47.1f);
     }
 
     // Update is called once per frame
@@ -28,7 +30,7 @@ public class PusherController : MonoBehaviour
         }
     }
 
-    public void movePusher()//Move the pusher back and forth
+    private void movePusher()//Move the pusher back and forth
     {        
         var step = speed * Time.deltaTime;//Step is speed constrained by time in seconds   
         if(!pause)//f the pusher isn't paused

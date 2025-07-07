@@ -11,24 +11,20 @@ public class BallForward : MonoBehaviour
 
     private Rigidbody projRb;//The projectile's rigidbody
     private Vector3 mousePos;//Where the mouse is
-    public Vector3 worldPos;//Where the mouse is relative to the world
-
-    public float torque = 50;//The amount of torque to apply
+    private Vector3 worldPos;//Where the mouse is relative to the world
+    private float torque = 50;//The amount of torque to apply
     private int throwPower;//How much power to put behind a fired projectile
-
-    public Renderer projRenderer;//The renderer for the projectile's current material
-
+    private Renderer projRenderer;//The renderer for the projectile's current material
     private Color missColour = new Color(0.1f, 0.1f, 0.1f, 1.0f);//A dull black colour for when a projectile misses
     private Color scoreColour = new Color(1f, 0.93f, 0f, 1.0f);//A golden yellow colour for when a projectile is scored
     private bool scored = false;//If the projectile has already been scored
-
     // The audio clips for the sounds when the projectile hits something
-    public AudioClip hitSound1;
-    public AudioClip hitSound2;
-    public AudioClip hitSound3;
-    public AudioClip hitSound4;
+    [SerializeField] private AudioClip hitSound1;
+    [SerializeField] private AudioClip hitSound2;
+    [SerializeField] private AudioClip hitSound3;
+    [SerializeField] private AudioClip hitSound4;
     //The audio clip for when the projectile is scored
-    public AudioClip convertSound;
+    [SerializeField] private AudioClip convertSound;
     private AudioSource projAudio;//The audiosource for the projectiles
     private bool silent = false;//If the projectile should make sound or not
 
