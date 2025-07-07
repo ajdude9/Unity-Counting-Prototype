@@ -39,7 +39,7 @@ public class CoinDropController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameManager.viewType == "coin")//If the coin machine is being looked at, allow input
+        if (gameManager.viewTypePub == "coin")//If the coin machine is being looked at, allow input
         {
             inputManager();
         }

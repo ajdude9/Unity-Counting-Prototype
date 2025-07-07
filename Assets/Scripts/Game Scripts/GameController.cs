@@ -16,6 +16,10 @@ using UnityEngine.Audio;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using System.Runtime.CompilerServices;
+using System.Xml.Schema;
+using Unity.VisualScripting.Dependencies.NCalc;
+
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -29,9 +33,9 @@ public class CounterController : MonoBehaviour
     private TextMeshProUGUI reloadNotify;//Text object to tell the player to reload
     public TextMeshProUGUI reloadNotifyPub
     {
-        get{ return reloadNotify; }
+        get { return reloadNotify; }
     }
-    
+
     private TextMeshProUGUI coinsSavedText;//The text saying how many coins the player has saved
     private TextMeshProUGUI coinsDroppableText;//The text saying how many coins the player can drop
     private int loadedTotal;//The number of projectiles ready to fire, kept privately
@@ -69,7 +73,7 @@ public class CounterController : MonoBehaviour
                 fireRate = value;
             }
         }
-        
+
     }
     private string projName;//The name of the projectiles being fired
     private bool reloadingStatus = false;//Whether the player is currently 'reloading'
@@ -79,20 +83,40 @@ public class CounterController : MonoBehaviour
     }
     private bool enableCheats = false;//Whether cheats are enabled
     private AudioSource gameAudio;//Source for the universal game audio
-    public AudioClip reloadSound;//Reloading sound (fully reloaded)
-    public AudioClip reloadSingle;//Reloading sound (single projectile)
-    public AudioClip reloadFail;//Reloading fail sound (no ammo)
-    public AudioClip cheater;//Cheating sound
+    [SerializeField] private AudioClip reloadSound;//Reloading sound (fully reloaded)
+    [SerializeField] private AudioClip reloadSingle;//Reloading sound (single projectile)
+    [SerializeField] private AudioClip reloadFail;//Reloading fail sound (no ammo)
+    [SerializeField] private AudioClip cheater;//Cheating sound
     private Camera throwCamera;//The camera for throwing projectiles into a box
     private Camera coinCamera;//The camera for putting coins in a machine
     private Camera shopCamera;//The camera for viewing the shop
     private Camera gemSelectCamera;//The camera for viewing the gem select UI
     private Camera pauseCamera;//The camera for viewing the pause menu
     private Camera saveLoadCamera;//The camera for viewing the save/load screen
-    public string viewType;//Which camera is currently being viewed
+    private string viewType;//Which camera is currently being viewed
+    public string viewTypePub
+    {
+        get { return viewType; }
+
+    }
     private string lastView;//The camera that was viewed last when paused
-    public bool firstSwitch = false;//Whether the switch to the coin camera is the first one since the game started
-    public int fadeValue;//The opacity of the reload notification text
+    private bool firstSwitch = false;//Whether the switch to the coin camera is the first one since the game started
+    private int fadeValue;//The opacity of the reload notification text
+    public int fadeValuePub
+    {
+        get { return fadeValue; }
+        set
+        {
+            if (value < 0 || value > 1)
+            {
+                Debug.LogError("fadeValue cannot be less than zero or greater than one.");
+            }
+            else
+            {
+                fadeValue = value;
+            }
+        }
+    }
     private string projectileType;//The type of projectile that has been selected
     private Dictionary<string, int> heldProjectiles;//A key:value list to contain the number of a projectile and its name
     private Dictionary<string, int> projectileValues;//A key:value list to contain the name of a projectile and its value in coins when scored
@@ -114,7 +138,7 @@ public class CounterController : MonoBehaviour
     private int selectedSlot;//The currently selected save slot; '0' indicates a new game.
     [SerializeField] private GameObject projectilePrefab;//The prefab that holds the projectile
     [SerializeField] private GameObject coinPrefab;//The prefab that holds the coin
-    
+
 
     void Awake()//As soon as we start
     {
@@ -130,7 +154,7 @@ public class CounterController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
         findObjects();//Find all the objects in the scene and tie to them to their respective variables
         dataManager.refresh();
         selectedSlot = dataManager.getCurrentProfile();
@@ -148,14 +172,14 @@ public class CounterController : MonoBehaviour
         reloadNotify.color = new Color(reloadNotify.color.r, reloadNotify.color.g, reloadNotify.color.b, 0);//Chane the reload notify colour to red
         pauseCamera.enabled = false;
         pauseMenu.enabled = false;
-        saveSlotCanvas.enabled = false;      
+        saveSlotCanvas.enabled = false;
 
-        if(!dataManager.getLFS())//If we haven't loaded from a saved game
+        if (!dataManager.getLFS())//If we haven't loaded from a saved game
         {
             switchToThrow();//Switch to the throw viewtype, if it wasn't already being viewed.
-        }  
-        
-              
+        }
+
+
 
     }
 
@@ -543,7 +567,7 @@ public class CounterController : MonoBehaviour
     }
 
     private void switchToCoin()//Switch to the coin view
-    {        
+    {
         //Disable all the cameras except the coin camera
         //-
         throwCamera.enabled = false;
@@ -697,7 +721,7 @@ public class CounterController : MonoBehaviour
             case "load":
                 dataManager.load(slot);
                 saveSlotCanvas.enabled = false;
-                unpause();                
+                unpause();
                 break;
         }
     }
@@ -930,7 +954,7 @@ public class CounterController : MonoBehaviour
         firstSwitch = newValue;
     }
 
-    
+
 
     /**
     * This is an irrelevant function, as the context for its use would always return 'paused'
@@ -957,12 +981,12 @@ public class CounterController : MonoBehaviour
                 break;
             case "shop":
                 switchToShop();
-                break;            
+                break;
             default:
                 Debug.Log("Fell back to throw.");
                 switchToThrow();//If no cases match, fall back to the throw view
-            break;            
-        }        
+                break;
+        }
     }
 
     public void changeScene(int scenePos)

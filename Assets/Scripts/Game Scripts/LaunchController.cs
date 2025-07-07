@@ -27,7 +27,7 @@ public class LaunchController : MonoBehaviour
     void launchHandler()
     {
 
-        if (gameManager.viewType == "throw")//If the player is looking at the box throw view
+        if (gameManager.viewTypePub == "throw")//If the player is looking at the box throw view
         {
             if (Input.GetKeyDown(KeyCode.Space))//If the player presses the space bar
             {
@@ -39,7 +39,7 @@ public class LaunchController : MonoBehaviour
                 CancelInvoke("fire");//Stop firing
             }            
         }
-        if(gameManager.viewType != "throw")//If the player stops looking at the box throw view
+        if(gameManager.viewTypePub != "throw")//If the player stops looking at the box throw view
         {
             CancelInvoke("fire");//Stop firing, if the player was already firing.
         }
@@ -49,7 +49,7 @@ public class LaunchController : MonoBehaviour
     void callFade()//Call to fade in the reload text when the player is out of ammo
     {
         //Debug.Log("Making call to fade in text");
-        gameManager.fadeValue = 1;
+        gameManager.fadeValuePub = 1;
         gameManager.callFadeIn(0.25f, gameManager.reloadNotifyPub);
     }
 
