@@ -7412,7 +7412,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 862374392}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 1314657143}
@@ -13540,7 +13540,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1701716357}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 1249795408}
@@ -16195,22 +16195,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02a259d62910335e18361d477137b2e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  counterText: {fileID: 598753586}
-  loadedText: {fileID: 1421238529}
-  reloadNotify: {fileID: 1626389378}
-  coinsSavedText: {fileID: 1056421782}
-  coinsDroppableText: {fileID: 40550502}
-  fireRate: 0
-  projName: 
-  reloadingStatus: 0
-  enableCheats: 0
   reloadSound: {fileID: 8300000, guid: 77d31d90ba6eb94448789ca723915147, type: 3}
   reloadSingle: {fileID: 8300000, guid: fc6fff8f1b662be86947bcbe952654b7, type: 3}
   reloadFail: {fileID: 8300000, guid: 249ab4513ab601df49b67de047ffe48e, type: 3}
   cheater: {fileID: 8300000, guid: 41ecc681b7ad3765baab1eace617ff1b, type: 3}
-  viewType: 
-  firstSwitch: 0
-  fadeValue: 0
   projectilePrefab: {fileID: 8419925198574976218, guid: f9e67930e6daf1f1797f12bf930acf2b, type: 3}
   coinPrefab: {fileID: 8607863099644361100, guid: b96291ac6ecdbc212a462eeca8619f16, type: 3}
 --- !u!82 &1973707358
@@ -16624,10 +16612,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e260c9fe52ce3d02b8502b128b2e43bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetLocationA: {x: 66.4, y: 16.47, z: 41.1}
-  targetLocationB: {x: 66.4, y: 16.47, z: 47.1}
-  speed: 3
-  pause: 0
 --- !u!1 &2030143684
 GameObject:
   m_ObjectHideFlags: 0

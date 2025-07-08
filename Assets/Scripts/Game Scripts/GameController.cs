@@ -28,8 +28,8 @@ using UnityEditor;
 public class CounterController : MonoBehaviour
 {
     private CoinDropController coinDropController;//The coin drop controller
-    private Text counterText;//Text object to display the number of projectiles
-    private Text loadedText;//Text object to display the number of projectiles ready
+    [SerializeField] private Text counterText;//Text object to display the number of projectiles
+    [SerializeField] private Text loadedText;//Text object to display the number of projectiles ready
     private TextMeshProUGUI reloadNotify;//Text object to tell the player to reload
     public TextMeshProUGUI reloadNotifyPub
     {
@@ -163,6 +163,7 @@ public class CounterController : MonoBehaviour
         projName = "Gems";
         writeDictionaries();//Fill out all the dictionary variables.               
         loadStats();
+        
         //counterText.enabled = true;//Enable the counter text
         //loadedText.enabled = true;//Enable the loaded text
         counterText.text = "Available " + projName + ": " + heldProjectiles[projectileType];//Change the counter text to show how many of the currently selected projectile type the player has
@@ -224,8 +225,11 @@ public class CounterController : MonoBehaviour
         saveLoadCamera = GameObject.Find("SaveLoadCamera").GetComponent<Camera>();//Find the camera for viewing the save/load menu
         pauseMenu = GameObject.Find("Pause Canvas").GetComponent<Canvas>();//Find the canvas for the pause menu        
         saveSlotCanvas = GameObject.Find("SaveSlotCanvas").GetComponent<Canvas>();//Find the save/load canvas
-
-
+        counterText = GameObject.Find("Ammo Total").GetComponent<Text>();//Find the text for how many projectiles the player has
+        loadedText = GameObject.Find("Ammo Loaded").GetComponent<Text>();//Find the text for how many projectiles the player has that are loaded
+        coinsDroppableText = GameObject.Find("Coins Droppable").GetComponent<TextMeshProUGUI>();//Find the text for how many coins the player can drop
+        coinsSavedText = GameObject.Find("Coins Banked").GetComponent<TextMeshProUGUI>();//Find the text for how many coins the player can spend
+        reloadNotify = GameObject.Find("Reload Notification").GetComponent<TextMeshProUGUI>();//Find the text for the notification that the player needs to reload
 
     }
 

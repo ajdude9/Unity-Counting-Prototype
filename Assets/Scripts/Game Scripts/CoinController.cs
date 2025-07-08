@@ -7,8 +7,8 @@ public class CoinController : MonoBehaviour
 {
 
     private AudioSource coinAudio;//The audio source for coins
-    private AudioClip hitSound1;//The sound of colliding with something
-    private AudioClip collectSound;//The sound of being collected
+    [SerializeField] private AudioClip hitSound1;//The sound of colliding with something
+    [SerializeField] private AudioClip collectSound;//The sound of being collected
     private Rigidbody coinRb;//The coin's rigidbody
     private Collider coinCollider;//The coin's collider
     private bool parentable = false;//If the object can be made the child of another object
